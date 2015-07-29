@@ -1,0 +1,55 @@
+# Inventory for all Servers
+
+# Generic
+webproxy1 ansible_ssh_host=
+webproxy2 ansible_ssh_host=
+
+# Themeproxies
+themeproxy2 ansible_ssh_host=
+themeproxy3 ansible_ssh_host=
+themeproxytest2 ansible_ssh_host=
+
+# IuK-Server
+CMS-LIVE-APP3 ansible_ssh_host=
+CMS-LIVE-APP4 ansible_ssh_host=
+CMS-LIVE-APPDB1 ansible_ssh_host=
+CMS-LIVE-APPDB2 ansible_ssh_host=
+SEARCH3 ansible_ssh_host=
+SEARCH4 ansible_ssh_host=
+
+# Analytics
+PIWIK-DB2 ansible_ssh_host=
+PIWIK-MASTER2 ansible_ssh_host=
+PIWIK-WORKER2 ansible_ssh_host=
+
+# REDMINE
+redmine2 ansible_ssh_host=
+redminetest2 ansible_ssh_host=
+
+
+
+
+[plone-dbs]
+CMS-LIVE-APPDB1
+CMS-LIVE-APPDB2
+
+[plone]
+CMS-LIVE-APP3
+CMS-LIVE-APP4
+
+[searchs]
+SEARCH3
+SEARCH4
+
+[webproxies]
+webproxy1
+webproxy2
+
+[themeproxies]
+themeproxy2
+themeproxy3
+
+[serverraum-ludwig27]
+
+
+[serverraum-martius4]

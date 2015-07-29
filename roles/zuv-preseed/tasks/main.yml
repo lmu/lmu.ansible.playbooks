@@ -1,0 +1,25 @@
+---
+
+- name: Create User "ansible"
+  
+- name: Change Password for "fachadmin"
+
+- name: Make ZUV-Proxy Settings
+
+- name: Make APT respect ZUV-Proxy Settings
+
+- name: Install ZUV-Proxy-CA
+
+- name: Add alias for "pip" to always use ZUV-Proxy-CA
+
+- name: Update apt/source.list
+
+- name: Update sshd_config
+
+- name: Install base-Packages (common)
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - vim
+    - aptitude
+    - update-notifier-common
+  when: ansible_os_family == "Debian"

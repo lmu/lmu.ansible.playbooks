@@ -1,0 +1,13 @@
+- name: Update Apt Package Cache
+  apt: update_cache=yes
+  when: ansible_os_family == "Debian"
+
+- name: Update all Packages
+  apt: upgrade=dist update_cache=yes
+  when: ansible_os_family == "Debian"
+  notify: 
+  - Restart Server
+  - Wait for Server to come back
+
+- stat: path=/var/run/reboot-required
+  register: reboot_required
