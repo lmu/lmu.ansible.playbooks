@@ -50,10 +50,6 @@ ChallengeResponseAuthentication no
 
 # Change to no to disable tunnelled clear text passwords
 PasswordAuthentication yes
-# Disable Password Authetication for Ansible User who will come always over ssh_key
-Match User ansible
-    PasswordAuthentication no
-
 
 # Kerberos options
 #KerberosAuthentication no
@@ -89,3 +85,8 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
+UsePAM yes
+
+# Disable Password Authetication for Ansible User who will come always over ssh_key
+Match User ansible
+    PasswordAuthentication no
