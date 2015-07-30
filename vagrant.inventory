@@ -1,14 +1,72 @@
-# ZUV-PreSeed Inventory
+# Vagrant Inventory for all Servers
 
-webproxy1   ansible_ssh_host=192.168.1.31
-webproxy2   ansible_ssh_host=192.168.1.32
-appdb1      ansible_ssh_host=192.168.1.11
-appdb2      ansible_ssh_host=192.168.1.12
-app3        ansible_ssh_host=192.168.1.15
-app4        ansible_ssh_host=192.168.1.16
-search3     ansible_ssh_host=192.168.1.21
-search4     ansible_ssh_host=192.168.1.22
-special     ansible_ssh_host=192.168.1.5
+# Special Server for Generic Services that ar not under our responsibility
+# * WebFrontEnd
+# * IDP
+# * OMD
+special         ansible_ssh_host=192.168.1.5
+
+# Generic
+webproxy1       ansible_ssh_host=192.168.1.31
+webproxy2       ansible_ssh_host=192.168.1.32
+
+# IuK-Server
+appdb1          ansible_ssh_host=192.168.1.11
+appdb2          ansible_ssh_host=192.168.1.12
+app3            ansible_ssh_host=192.168.1.15
+app4            ansible_ssh_host=192.168.1.16
+search3         ansible_ssh_host=192.168.1.21
+search4         ansible_ssh_host=192.168.1.22
+
+# Themeproxies
+themeproxy2     ansible_ssh_host=10.110.33.21
+themeproxy3     ansible_ssh_host=10.110.33.22
+themeproxytest2 ansible_ssh_host=10.110.33.27
+
+# Analytics
+Piwik-DB2       ansible_ssh_host=10.110.33.
+Piwik-Master2   ansible_ssh_host=10.110.33.
+Piwik-Worker2   ansible_ssh_host=10.110.33.
+
+# REDMINE
+redmine2        ansible_ssh_host=10.110.33.
+redminetest2    ansible_ssh_host=10.110.33.
+
+# Sentry
+sentry1         ansible_ssh_host=10.110.33.
+
+
+[plone-dbs]
+appdb1
+appdb2
+
+[plone]
+app3
+app4
+
+[searchs]
+search3
+search4
+
+[webproxies]
+webproxy1
+webproxy2
+
+[themeproxies]
+themeproxy2
+themeproxy3
+themeproxytest2
+
+[piwik-workers]
+Piwik-Master2
+Piwik-Worker2
+
+[serverraum-ludwig27]
+
+
+[serverraum-martius4]
+redmine2
+redminetest2
 
 [all:vars]
 ansible_ssh_user=ansible
