@@ -1,0 +1,13 @@
+# ZUV-PreSeed Inventory
+
+
+* ansible_ssh_port=22 ansible_user=ansible
+webproxy1 ansible_ssh_host=10.110.33.1
+webproxy2 ansible_ssh_host=10.110.33.2
+appdb1 ansible_ssh_host=10.153.101.230
+appdb2 ansible_ssh_host=10.153.101.231
+app3 ansible_ssh_host=10.153.101.234
+app4 ansible_ssh_host=10.153.101.235
+search3 ansible_ssh_host=10.153.101.232
+search4 ansible_ssh_host=10.153.101.233
+special ansible_ssh_host=192.168.1.5 ansible_user=ansible

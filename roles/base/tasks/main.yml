@@ -1,11 +1,15 @@
-- name: Update Apt Package Cache
-  apt: update_cache=yes
-  when: ansible_os_family == "Debian"
+---
 
-- name: Install base-Packages (common)
-  apt: pkg={{ item }} state=latest
+- name: Install common Packages
+  apt: 
+    pkg={{item}}
+    state=installed
+    update_cache=yes
+    install_recommends=yes
   with_items:
-    - vim
-    - aptitude
-    - update-notifier-common
+  - aptitude
+  - vim
+  - update-notifier-common
+  - build-essential
+  - libssl-dev
   when: ansible_os_family == "Debian"
