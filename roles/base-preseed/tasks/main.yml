@@ -46,4 +46,9 @@
     - vim
     - aptitude
     - update-notifier-common
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - python3-setuptools
+    - python3-pip
   when: ansible_os_family == "Debian"
