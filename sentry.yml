@@ -1,0 +1,24 @@
+- hosts: all
+  sudo: True
+  vars:
+    db_sentry:
+      name: sentry
+      user: sentry
+      password: sentry
+    superuser_sentry:
+      username: admin
+      email: admin@example.com
+      password: admin
+    sentry:
+      server: sentry.local
+      url: http://sentry.local
+      secret_key: 'my69eAMYjzqtmfaRJ107MeXCYDTaxQdNZPr8YOf/zOV5pIUoZa5biA=='
+  roles:
+    - common
+    - python
+    - supervisor
+    - role: nginx
+      nginx_sites: none
+    - postgres
+    - sentry
+

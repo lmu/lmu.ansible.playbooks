@@ -20,9 +20,9 @@
     state=present
 
 - name: Update sshd_config
-  copy:
+  template:
     dest="/etc/ssh/sshd_config"
-    src="../files/sshd_config"
+    src="sshd_config.j2"
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
@@ -30,12 +30,13 @@
     - Reload sshd
 
 - name: Ensure that User "ansible" can sudo with public key
-  copy:
+  template:
     dest="/etc/sudoers"
-    src="../files/sudoers"
+    src="sudoers.j2"
     owner=root
     group=root
     mode="u=r,g=r,o="
+    validate="visudo -cf %s"
 
 - name: Install base-Packages (common)
   apt: 

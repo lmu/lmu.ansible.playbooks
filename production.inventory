@@ -14,8 +14,8 @@ CMS-LIVE-APP3   ansible_ssh_host=10.153.101.234
 CMS-LIVE-APP4   ansible_ssh_host=10.153.101.235
 CMS-LIVE-APPDB1 ansible_ssh_host=10.153.101.230
 CMS-LIVE-APPDB2 ansible_ssh_host=10.153.101.231
-SEARCH3         ansible_ssh_host=10.153.101.232
-SEARCH4         ansible_ssh_host=10.153.101.233
+Search3         ansible_ssh_host=10.153.101.232
+Search4         ansible_ssh_host=10.153.101.233
 
 # Analytics
 Piwik-DB2       ansible_ssh_host=
@@ -23,7 +23,7 @@ Piwik-Master2   ansible_ssh_host=
 Piwik-Worker2   ansible_ssh_host=
 
 # REDMINE
-redmine2 ansible_ssh_host=
+redmine2        ansible_ssh_host=10.153.101.240
 redminetest2    ansible_ssh_host=10.153.101.209
 
 # Sentry
@@ -39,8 +39,8 @@ CMS-LIVE-APP3
 CMS-LIVE-APP4
 
 [searchs]
-SEARCH3
-SEARCH4
+Search3
+Search4
 
 [webproxies]
 webproxy1
@@ -51,9 +51,18 @@ themeproxy2
 themeproxy3
 themeproxytest2
 
+[piwik-dbs]
+Piwik-DB2
+
+[piwik-masters]
+Piwik-Master2
+
 [piwik-workers]
 Piwik-Master2
 Piwik-Worker2
+
+[sentry]
+sentry1
 
 [serverraum-ludwig27]
 

@@ -19,21 +19,21 @@ search3         ansible_ssh_host=192.168.1.21
 search4         ansible_ssh_host=192.168.1.22
 
 # Themeproxies
-themeproxy2     ansible_ssh_host=10.110.33.21
-themeproxy3     ansible_ssh_host=10.110.33.22
-themeproxytest2 ansible_ssh_host=10.110.33.27
+themeproxy2     ansible_ssh_host=192.168.1.60
+themeproxy3     ansible_ssh_host=192.168.1.61
+themeproxytest2 ansible_ssh_host=192.168.1.69
 
 # Analytics
-Piwik-DB2       ansible_ssh_host=10.110.33.
-Piwik-Master2   ansible_ssh_host=10.110.33.
-Piwik-Worker2   ansible_ssh_host=10.110.33.
+Piwik-DB2       ansible_ssh_host=192.168.1.40
+Piwik-Master2   ansible_ssh_host=192.168.1.45
+Piwik-Worker2   ansible_ssh_host=192.168.1.46
 
 # REDMINE
-redmine2        ansible_ssh_host=10.110.33.
-redminetest2    ansible_ssh_host=10.110.33.
+redmine2        ansible_ssh_host=192.168.1.80
+redminetest2    ansible_ssh_host=192.168.1.89
 
 # Sentry
-sentry1         ansible_ssh_host=10.110.33.
+sentry1         ansible_ssh_host=192.168.1.90
 
 
 [plone-dbs]
@@ -57,9 +57,24 @@ themeproxy2
 themeproxy3
 themeproxytest2
 
+[piwik-dbs]
+Piwik-DB2
+
+[piwik-masters]
+Piwik-Master2
+
 [piwik-workers]
 Piwik-Master2
 Piwik-Worker2
+
+[sentry]
+sentry1
+
+[webfrontend]
+special
+
+[monitors]
+special
 
 [serverraum-ludwig27]
 
