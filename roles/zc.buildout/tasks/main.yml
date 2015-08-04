@@ -1,3 +1,31 @@
 ---
 
-- name
+- name: Ensure git, python-dev pip and virtualenv are installed
+  apt: 
+    pkg={{ item }}
+    state=latest
+    update_cache=yes
+  with_items:
+    - python
+    - python-dev
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - git-core
+  when: ansible_os_family == "Debian"
+
+- name: Checkout  buildout from git
+  git:
+    repo={{ buildout.repository }}
+    dest={{ buildout.directory }}
+    update=yes
+
+
+- name: install zc.buildout
+  pip: 
+    name=zc.buildout
+    state=present
+    virtualenv={{ buildout:directory }}
+    virtualenv_python={{ buildout:python }}
+
+

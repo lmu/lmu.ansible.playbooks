@@ -9,3 +9,20 @@ from sentry.models import User
 User.objects.db_manager(database).create_superuser('{{ sentry_superuser.username }}',
                                                    '{{ sentry.superuser_email }}',
                                                    '{{ sentry_superuser.password }}')
+
+text = """Use the account information to log into the Sentry / Django Interface
+The account has full 'Admin' privileges-
+
+  Username: {{ sentry_superuser.username }}
+  Password: {{ sentry_superuser.password }}
+
+This account is created when Ansible has installed Sentry.
+If you change the password later (which you should!), you'll need to use the new password.
+
+This file also prevents Ansible to recreate a superuser on each run, so please don't remove this file.
+"""
+
+with open("/var/sentry/adminPassword.txt") as f:
+    f.write(text)
+    f.flush()
+    f.close()

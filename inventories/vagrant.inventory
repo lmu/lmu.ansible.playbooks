@@ -86,3 +86,4 @@ redminetest2
 [all:vars]
 ansible_ssh_user=ansible
 ansible_ssh_port=22
+ansible_host_key_checking=false

@@ -82,7 +82,7 @@
   shell: create_superuser.py
     executable=/var/sentry/ve/bin/python
     chdir=/var/sentry
-    creates=/var/sentry/superuser.exists
+    creates=/var/sentry/adminPassword.txt
   environment:
     SENTRY_CONF: /var/sentry/sentry_conf.py
   notify:
