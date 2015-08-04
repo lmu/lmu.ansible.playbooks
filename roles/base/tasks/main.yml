@@ -7,9 +7,18 @@
     update_cache=yes
     install_recommends=yes
   with_items:
-  - aptitude
-  - vim
-  - update-notifier-common
-  - build-essential
-  - libssl-dev
+    - vim
+    - aptitude
+    - update-notifier-common
+    - build-essential
+    - libssl-dev
+    - python
+    #- python-dev
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - python3
+    #- python3-dev
+    - python3-setuptools
+    - python3-pip
   when: ansible_os_family == "Debian"

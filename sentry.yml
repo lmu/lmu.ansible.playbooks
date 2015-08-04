@@ -1,24 +1,25 @@
-- hosts: all
+- hosts: sentry
   sudo: True
+
+
   vars:
-    db_sentry:
-      name: sentry
-      user: sentry
-      password: sentry
-    superuser_sentry:
+    supervisor:
       username: admin
-      email: admin@example.com
-      password: admin
+    sentry_superuser:
+      email: Alexander.Loechel@lmu.de
     sentry:
-      server: sentry.local
-      url: http://sentry.local
-      secret_key: 'my69eAMYjzqtmfaRJ107MeXCYDTaxQdNZPr8YOf/zOV5pIUoZa5biA=='
+      server: sentry.verwaltung.uni-muenchen.de
+      url: https://sentry.verwaltung.uni-muenchen.de
+      superuser_email: Alexander.Loechel@lmu.de
+
+  vars_files:
+    - secret.yml
+
   roles:
-    - common
-    - python
+    - base-preseed
+    - maintenance
     - supervisor
     - role: nginx
       nginx_sites: none
     - postgres
     - sentry
-

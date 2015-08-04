@@ -1,0 +1,11 @@
+#!/var/sentry/ve/bin/python 
+
+from sentry.utils.runner import configure
+configure()
+
+from django.db import DEFAULT_DB_ALIAS as database
+from sentry.models import User
+
+User.objects.db_manager(database).create_superuser('{{ sentry_superuser.username }}',
+                                                   '{{ sentry.superuser_email }}',
+                                                   '{{ sentry_superuser.password }}')
