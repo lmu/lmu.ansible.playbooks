@@ -1,0 +1,79 @@
+# Vagrant Inventory for all Servers
+
+# Special Server for Generic Services that ar not under our responsibility
+# * WebFrontEnd
+# * IDP
+# * OMD
+special.verwaltung.uni-muenchen.de         ansible_ssh_host=137.193.211.200
+
+# Generic
+webproxy1.verwaltung.uni-muenchen.de        ansible_ssh_host=137.193.211.201
+webproxy2.verwaltung.uni-muenchen.de        ansible_ssh_host=137.193.211.202
+
+# IuK-Server
+appdb1.verwaltung.uni-muenchen.de           ansible_ssh_host=137.193.211.203
+appdb2.verwaltung.uni-muenchen.de           ansible_ssh_host=137.193.211.204
+app3.verwaltung.uni-muenchen.de             ansible_ssh_host=137.193.211.205
+app4.verwaltung.uni-muenchen.de             ansible_ssh_host=137.193.211.206
+search3.verwaltung.uni-muenchen.de          ansible_ssh_host=137.193.211.208
+search4.verwaltung.uni-muenchen.de          ansible_ssh_host=137.193.211.209
+
+# Themeproxies
+#themeproxy2.verwaltung.uni-muenchen.de     ansible_ssh_host=137.193.211.
+#themeproxy3.verwaltung.uni-muenchen.de     ansible_ssh_host=137.193.211.61
+#themeproxytest2.verwaltung.uni-muenchen.de ansible_ssh_host=137.193.211.69
+
+# Analytics
+piwik.verwaltung.uni-muenchen.de            ansible_ssh_host=137.193.211.218
+
+# REDMINE
+#redmine2.verwaltung.uni-muenchen.de        ansible_ssh_host=137.193.211.80
+#redminetest2.verwaltung.uni-muenchen.de    ansible_ssh_host=137.193.211.89
+
+# Sentry
+sentry1.verwaltung.uni-muenchen.de          ansible_ssh_host=137.193.211.219
+
+
+[plone-dbs]
+appdb1.verwaltung.uni-muenchen.de
+appdb2.verwaltung.uni-muenchen.de
+
+[plone]
+app3.verwaltung.uni-muenchen.de
+app4.verwaltung.uni-muenchen.de
+
+[searchs]
+search3.verwaltung.uni-muenchen.de
+search4.verwaltung.uni-muenchen.de
+
+[webproxies]
+webproxy1.verwaltung.uni-muenchen.de
+webproxy2.verwaltung.uni-muenchen.de
+
+
+[piwik-dbs]
+piwik.verwaltung.uni-muenchen.de
+
+[piwik-masters]
+piwik.verwaltung.uni-muenchen.de
+
+[piwik-workers]
+piwik.verwaltung.uni-muenchen.de
+
+[sentry]
+sentry1.verwaltung.uni-muenchen.de
+
+[webfrontend]
+special.verwaltung.uni-muenchen.de
+
+[monitors]
+special.verwaltung.uni-muenchen.de
+
+[serverraum-ludwig27]
+
+
+[serverraum-martius4]
+
+[all:vars]
+#ansible_ssh_user=vagrant
+ansible_ssh_port=22

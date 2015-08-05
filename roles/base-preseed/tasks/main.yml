@@ -47,6 +47,8 @@
     - vim
     - aptitude
     - update-notifier-common
+    - facter
+    - ohai
     - python
     - python-dev
     - python-setuptools

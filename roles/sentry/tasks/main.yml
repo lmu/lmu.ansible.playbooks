@@ -79,12 +79,14 @@
     mode: "0755"
 
 - name: create admin user
-  shell: create_superuser.py
-    executable=/var/sentry/ve/bin/python
+  shell: /var/sentry/create_superuser.py
     chdir=/var/sentry
     creates=/var/sentry/adminPassword.txt
+    #executable=/var/sentry/ve/bin/python
   environment:
     SENTRY_CONF: /var/sentry/sentry_conf.py
+    VIRTUAL_ENV: /var/sentry/ve
+    PATH: /var/sentry/ve/bin:{{ ansible_env.PATH }}
   notify:
     - restart nginx
     - reload supervisor

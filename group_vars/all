@@ -1,0 +1,5 @@
+---
+
+# group_vars for all Hosts
+
+ansible_ssh_port=22

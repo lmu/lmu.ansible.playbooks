@@ -1,0 +1,60 @@
+---
+
+- hosts: all
+  sudo: true
+
+  gather_facts: true
+
+  roles:
+    - base-preseed
+
+- hosts: all
+  sudo: true
+  #serial: 50%
+
+  roles:
+    - maintenance
+
+- hosts: searchs
+  sudo: true
+
+
+- hosts: webfrontends
+  sudo: true
+
+- hosts: monitors
+  sudo: true
+
+  roles:
+
+- hosts: sentry
+  sudo: true
+
+  vars:
+    supervisor:
+      username: admin
+    sentry_superuser:
+      email: Alexander.Loechel@lmu.de
+    sentry:
+      server: sentry.verwaltung.uni-muenchen.de
+      url: https://sentry.verwaltung.uni-muenchen.de
+      superuser_email: Alexander.Loechel@lmu.de
+
+  vars_files:
+    - secret.yml
+
+  roles:
+    #- base-preseed
+    #- maintenance
+    - supervisor
+    - role: nginx
+      nginx_sites: none
+    - postgres
+    - sentry
+
+- hosts: plone-db
+  sudo: true
+
+- hosts: plone
+  sudo: true
+
