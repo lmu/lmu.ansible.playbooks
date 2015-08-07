@@ -58,3 +58,7 @@ target/
 
 # Vagrant Environment
 .vagrant/
+
+# Ansible specials
+secrets/
+secrets.yml
