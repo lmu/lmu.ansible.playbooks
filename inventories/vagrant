@@ -1,89 +1,120 @@
 # Vagrant Inventory for all Servers
 
-# Special Server for Generic Services that ar not under our responsibility
-# * WebFrontEnd
-# * IDP
-# * OMD
-special         ansible_ssh_host=192.168.1.5
+[zope-dbs-production]
+cms-live-appdb1.verwaltung.uni-muenchen.de
 
-# Generic
-webproxy1       ansible_ssh_host=192.168.1.31
-webproxy2       ansible_ssh_host=192.168.1.32
+[zope-dbs-production-failover]
+cms-live-appdb2.verwaltung.uni-muenchen.de
 
-# IuK-Server
-appdb1          ansible_ssh_host=192.168.1.11
-appdb2          ansible_ssh_host=192.168.1.12
-app3            ansible_ssh_host=192.168.1.15
-app4            ansible_ssh_host=192.168.1.16
-search3         ansible_ssh_host=192.168.1.21
-search4         ansible_ssh_host=192.168.1.22
+[zope-dbs-staging]
+cms-live-appdb2.verwaltung.uni-muenchen.de
 
-# Themeproxies
-themeproxy2     ansible_ssh_host=192.168.1.60
-themeproxy3     ansible_ssh_host=192.168.1.61
-themeproxytest2 ansible_ssh_host=192.168.1.69
+[zope-dbs:children]
+zope-dbs-production
+zope-dbs-production-failover
+zope-dbs-staging
 
-# Analytics
-Piwik-DB2       ansible_ssh_host=192.168.1.40
-Piwik-Master2   ansible_ssh_host=192.168.1.45
-Piwik-Worker2   ansible_ssh_host=192.168.1.46
+[zope-clients-production]
+cms-live-app3.verwaltung.uni-muenchen.de
+cms-live-app4.verwaltung.uni-muenchen.de
 
-# REDMINE
-redmine2        ansible_ssh_host=192.168.1.80
-redminetest2    ansible_ssh_host=192.168.1.89
+[zope-clients-staging]
+cms-live-app4.verwaltung.uni-muenchen.de
 
-# Sentry
-sentry1         ansible_ssh_host=192.168.1.90
+[zope-clients:children]
+zope-clients-production
+zope-clients-staging
 
+[plone:children]
+zope-dbs
+zope-clients
 
-[plone-dbs]
-appdb1
-appdb2
+[search-masters-production]
+search3.verwaltung.uni-muenchen.de
 
-[plone]
-app3
-app4
+[search-slaves-production]
+search4.verwaltung.uni-muenchen.de
 
-[searchs]
-search3
-search4
+[searchs-production:children]
+search-masters-production
+search-slaves-production
 
-[webproxies]
-webproxy1
-webproxy2
+[search-masters-staging]
 
-[themeproxies]
-themeproxy2
-themeproxy3
-themeproxytest2
+[search-slaves-staging]
+
+[searchs-staging:children]
+search-masters-staging
+search-slaves-staging
+
+[webproxies-production]
+webproxy1.verwaltung.uni-muenchen.de
+webproxy2.verwaltung.uni-muenchen.de
+
+[webproxies-staging]
+webproxy2.verwaltung.uni-muenchen.de
+
+[webproxies:children]
+webproxies-production
+webproxies-staging
+
+[themeproxies-production]
+themeproxy2.verwaltung.uni-muenchen.de
+themeproxy3.verwaltung.uni-muenchen.de
+
+[themeproxies-staging]
+themeproxytest2.verwaltung.uni-muenchen.
+
+[themeproxies:children]
+themeproxies-production
+themeproxies-staging
 
 [piwik-dbs]
-Piwik-DB2
+Piwik-DB2.verwaltung.uni-muenchen.de
 
 [piwik-masters]
-Piwik-Master2
+Piwik-Master2.verwaltung.uni-muenchen.de
 
 [piwik-workers]
-Piwik-Master2
-Piwik-Worker2
+Piwik-Master2.verwaltung.uni-muenchen.de
+Piwik-Worker2.verwaltung.uni-muenchen.de
 
-[sentry]
-sentry1
+[analytics:children]
+piwik-dbs
+piwik-masters
+piwik-workers
 
-[webfrontend]
-special
+[redmine-production]
+redmine2.verwaltung.uni-muenchen.de
+
+[redmine-staging]
+redminetest2.verwaltung.uni-muenchen.de
+
+[redmines:children]
+redmine-production
+redmine-staging
+
+[sentries]
+sentry1.verwaltung.uni-muenchen.de
+
+[webfrontends]
+special.verwaltung.uni-muenchen.de
 
 [monitors]
-special
+special.verwaltung.uni-muenchen.de
+
+[infrastructure:children]
+sentries
+webfrontends
+monitors
+redmines
 
 [serverraum-ludwig27]
+special.verwaltung.uni-muenchen.de
 
+[serverraum-ludwig27:children]
+analytics
 
-[serverraum-martius4]
-redmine2
-redminetest2
-
-[all:vars]
-ansible_ssh_user=ansible
-ansible_ssh_port=22
-ansible_host_key_checking=false
+[serverraum-martius4:children]
+redmines
+sentries

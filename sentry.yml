@@ -1,6 +1,8 @@
+
+---
+
 - hosts: sentry
   sudo: true
-
 
   vars:
     supervisor:
@@ -16,10 +18,11 @@
     - secret.yml
 
   roles:
-    - base-preseed
-    - maintenance
     - supervisor
     - role: nginx
       nginx_sites: none
     - postgres
     - sentry
+  dependencies:
+    - { role: base-preseed }
+    - { role: maintenance }
