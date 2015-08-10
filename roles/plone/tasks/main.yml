@@ -11,15 +11,20 @@
     - python-setuptools
     - python-pip
     - python-virtualenv
+    # Dependencies for external Version Control Packages
     - git-core
     - subversion
+    # Dependencies to compile Plone Components
     - build-essential
     - libssl-dev
+    # Dependencies for LDAP-Support
     - libldap2-dev
     - libsasl2-dev
     - libsasl2-modules-ldap
+    # Dependencies for Locales / Translations
     - gettext
     - libexpat-dev
+    # Dependencies for Pillow / PIL (Python Image Library)
     - libz-dev
     - zlib1g-dev
     - libjpeg-dev
@@ -27,13 +32,17 @@
     - libtiff4-dev
     - liblcms2-dev
     - libwebp-dev
-    - libreadline-dev
-    - libxml2-dev
-    - libxslt-dev
     - tcl8.6-dev
     - tk8.6-dev
+    # 
+    - libreadline-dev
+    # Dependencies for lxml
+    - libxml2-dev
+    - libxslt-dev
+    # Dependencies for transformation of Binary Documents (Office, PDF)
     - wv
     - poppler-utils
+    # Base Dependencies from Unified Installer
     - curl
     - wget
     - bzip2
@@ -52,6 +61,3 @@
   with_items:
     - plone_buildout
     - plone_daemon
-
-
-

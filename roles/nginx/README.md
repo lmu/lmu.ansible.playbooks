@@ -1,15 +1,9 @@
 nginx
 =====
 
-This role installs and configures the nginx web server. The user can specify
-any http configuration parameters they wish to apply their site. Any number of
-sites can be added with configurations of your choice.
-
-Requirements
-------------
-
-This role requires Ansible 1.4 or higher and platform requirements are listed
-in the metadata file.
+This role installs and configures the nginx web server.
+The user can specify any http configuration parameters they wish to apply their site.
+Any number of sites can be added with configurations of your choice.
 
 Role Variables
 --------------
@@ -128,11 +122,6 @@ directives.
               location1: {name: /, try_files: "$uri $uri/ /index.html"}
               location2: {name: /images/, try_files: "$uri $uri/ /index.html"}
 
-Dependencies
-------------
-
-None
-
 License
 -------
 
@@ -141,6 +130,4 @@ BSD
 Author Information
 ------------------
 
-Benno Joy
-
-
+Alexander Loechel, based on Ansible Nginx Role of Benno Joy
