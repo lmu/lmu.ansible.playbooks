@@ -12,20 +12,89 @@
     - python-pip
     - python-virtualenv
     - git-core
+    - subversion
   when: ansible_os_family == "Debian"
 
-- name: Checkout  buildout from git
+- name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
+  user:
+    name={{ item }}
+    state=present
+    system=yes
+    group=plone_group
+    shell=/bin/bash
+    createhome=yes
+    comment="User for Plone"
+  with_items:
+    - plone_buildout
+    - plone_daemon
+
+- name: Ensure buildout caches exists
+  file:
+    path={{ item }}
+    owner=plone_buildout
+    group=plone_group
+    mode="u=rwx,g=rx,u=rx"
+    state=directory
+  with_items:
+    - /usr/local/buildout-cache
+    - /usr/local/buildout-cache/downloads
+    - /usr/local/buildout-cache/eggs
+    - /usr/local/buildout-cache/extends
+
+- name: Checkout buildout from git
   git:
     repo={{ buildout.repository }}
     dest={{ buildout.directory }}
     update=yes
 
-
 - name: install zc.buildout
   pip: 
     name=zc.buildout
     state=present
-    virtualenv={{ buildout:directory }}
-    virtualenv_python={{ buildout:python }}
+    virtualenv={{ buildout.directory }}
+    virtualenv_python={{ buildout.python }}
 
+- name: Ensure buildout-directory is owned by user plone_buildout
+  file:
+    path: {{ buildout.directory }}
+    mode="u=rwx,g=rx,o=rx"
+    owner=plone_buildout
+    group=plone_group
+    recurse=yes
+    state=directory
 
+- name: Ensure a data/{{buildout.directory}}/var directory owned by user plone_daemon exists
+  file:
+    path: /data/{{ buildout.directory }}/var
+    mode="u=rwx,g=rx,o=rx"
+    owner=plone_daemon
+    group=plone_group
+    recurse=yes
+    state=directory
+
+- name: Ensure buildout-var-directory is aktually a symlink to data/{{buildout.directory}}/var owned by user plone_daemon
+  file:
+    path: {{ buildout.directory }}/var/.
+    mode="u=rwx,g=rx,o=rx"
+    owner=plone_daemon
+    group=plone_group
+    recurse=yes
+    state=link
+    force=yes
+
+- name: Ensure buildout-var-directory is owned by user plone_daemon
+  file:
+    path: {{ buildout.directory }}/var/.
+    mode="u=rwx,g=rx,o=rx"
+    owner=plone_daemon
+    group=plone_group
+    recurse=yes
+    state=directory
+
+- name: Run buildout
+  cmd: ./bin/buildout -c {{ buildout.config }}
+    chdir: {{ buildout.directory }}
+  environment:
+    VIRTUAL_ENV: {{ buildout.directory }}
+    PATH: {{ buildout.directory }}/bin:{{ ansible_env.PATH }}
+  become_user: plone_buildout

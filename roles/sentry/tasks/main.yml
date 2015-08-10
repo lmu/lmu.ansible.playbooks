@@ -64,6 +64,25 @@
   notify: 
     - reload supervisor
 
+- name: Setup database for sentry
+  sudo_user: postgres
+  postgresql_db:
+    db: "{{ sentry_db.name }}"
+    encoding: 'UTF-8'
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present
+
+- name: grant access for database to user
+  sudo_user: postgres
+  postgresql_user:
+    db: "{{ sentry_db.name }}"
+    user: "{{ sentry_db.user }}"
+    password: "{{ sentry_db.password }}"
+    role_attr_flags: "CREATEDB,SUPERUSER"
+    state: present
+
 - name: sentry upgrade
   shell: /var/sentry/ve/bin/sentry --config=sentry_conf.py upgrade
     executable=/bin/bash

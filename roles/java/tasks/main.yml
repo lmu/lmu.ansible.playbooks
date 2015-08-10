@@ -1,0 +1,56 @@
+---
+
+- name: Install Java OpenJRE 8
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 8
+  with_items:
+  - openjdk-8-jre
+
+- name: Install Java OpenJRE 7
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 7
+  with_items:
+  - openjdk-7-jre
+
+- name: Install Java OpenJRE 6
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 6
+  with_items:
+  - openjdk-6-jre
+
+- name: Install Java OpenJDK 8
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 8 and java.openjdk
+  with_items:
+  - openjdk-8-jdk
+
+- name: Install Java OpenJDK 7
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 7 and java.openjdk
+  with_items:
+  - openjdk-7-jdk
+
+- name: Install Java OpenJDK 6
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  when: java.version == 6 and java.openjdk
+  with_items:
+  - openjdk-6-jdk
+

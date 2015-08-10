@@ -23,4 +23,3 @@
       delay=20
       timeout=300
     sudo: false
-    when: reboot_required.stat.exists

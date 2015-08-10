@@ -1,0 +1,57 @@
+---
+
+- name: Ensure System Dependencies for Plone are installed
+  apt: 
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  with_items:
+    - python
+    - python-dev
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - git-core
+    - subversion
+    - build-essential
+    - libssl-dev
+    - libldap2-dev
+    - libsasl2-dev
+    - libsasl2-modules-ldap
+    - gettext
+    - libexpat-dev
+    - libz-dev
+    - zlib1g-dev
+    - libjpeg-dev
+    - libfreetype6-dev
+    - libtiff4-dev
+    - liblcms2-dev
+    - libwebp-dev
+    - libreadline-dev
+    - libxml2-dev
+    - libxslt-dev
+    - tcl8.6-dev
+    - tk8.6-dev
+    - wv
+    - poppler-utils
+    - curl
+    - wget
+    - bzip2
+    - gzip
+  when: ansible_os_family == "Debian"
+
+- name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
+  user:
+    name={{ item }}
+    state=present
+    system=yes
+    group=plone_group
+    shell=/bin/bash
+    createhome=no
+    comment="User for Plone"
+  with_items:
+    - plone_buildout
+    - plone_daemon
+
+
+

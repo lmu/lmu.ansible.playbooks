@@ -1,0 +1,7 @@
+---
+
+- hosts: monitor-masters
+  sudo: true
+
+  roles:
+  #  - omd

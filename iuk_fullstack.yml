@@ -7,14 +7,8 @@
 
 
 
-
-
-- hosts: searchs
-  sudo: true
-
-
-- hosts: webfrontends
-  sudo: true
+- include: search.yml
+- include: webproxies.yml
 
 # Infrastruktur
 
