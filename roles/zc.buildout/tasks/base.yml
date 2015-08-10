@@ -1,0 +1,42 @@
+---
+
+- name: Ensure git, python-dev pip and virtualenv are installed
+  apt: 
+    pkg={{ item }}
+    state=latest
+    update_cache=yes
+  with_items:
+    - python
+    - python-dev
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - git-core
+    - subversion
+  when: ansible_os_family == "Debian"
+
+- name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
+  user:
+    name={{ item }}
+    state=present
+    system=yes
+    group=plone_group
+    shell=/bin/bash
+    createhome=yes
+    comment="User for Plone"
+  with_items:
+    - plone_buildout
+    - plone_daemon
+
+- name: Ensure buildout caches exists
+  file:
+    path={{ item }}
+    owner=plone_buildout
+    group=plone_group
+    mode="u=rwx,g=rx,u=rx"
+    state=directory
+  with_items:
+    - /usr/local/buildout-cache
+    - /usr/local/buildout-cache/downloads
+    - /usr/local/buildout-cache/eggs
+    - /usr/local/buildout-cache/extends

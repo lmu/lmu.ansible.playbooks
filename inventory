@@ -3,20 +3,20 @@
 [zope-dbs-production]
 cms-live-appdb1.verwaltung.uni-muenchen.de
 
-[zope-dbs-production-failover]
-cms-live-appdb2.verwaltung.uni-muenchen.de
-
-[zope-dbs-staging]
+[zope-dbs-failover-production]
 cms-live-appdb2.verwaltung.uni-muenchen.de
 
 [zope-dbs:children]
 zope-dbs-production
-zope-dbs-production-failover
+zope-dbs-failover-production
 zope-dbs-staging
 
 [zope-clients-production]
 cms-live-app3.verwaltung.uni-muenchen.de
 cms-live-app4.verwaltung.uni-muenchen.de
+
+[zope-dbs-staging]
+cms-live-appdb2.verwaltung.uni-muenchen.de
 
 [zope-clients-staging]
 cms-live-app4.verwaltung.uni-muenchen.de
@@ -58,63 +58,22 @@ webproxy2.verwaltung.uni-muenchen.de
 webproxies-production
 webproxies-staging
 
-[themeproxies-production]
-themeproxy2.verwaltung.uni-muenchen.de
-themeproxy3.verwaltung.uni-muenchen.de
+[sentry-dbs]
+sentry1.verwaltung.uni-muenchen.de
 
-[themeproxies-staging]
-themeproxytest2.verwaltung.uni-muenchen.
+[sentry-workers]
+sentry1.verwaltung.uni-muenchen.de
 
-[themeproxies:children]
-themeproxies-production
-themeproxies-staging
-
-[piwik-dbs]
-Piwik-DB2.verwaltung.uni-muenchen.de
-
-[piwik-masters]
-Piwik-Master2.verwaltung.uni-muenchen.de
-
-[piwik-workers]
-Piwik-Master2.verwaltung.uni-muenchen.de
-Piwik-Worker2.verwaltung.uni-muenchen.de
-
-[analytics:children]
-piwik-dbs
-piwik-masters
-piwik-workers
-
-[redmine-production]
-redmine2.verwaltung.uni-muenchen.de
-
-[redmine-staging]
-redminetest2.verwaltung.uni-muenchen.de
-
-[redmines:children]
-redmine-production
-redmine-staging
-
-[sentries]
+[sentry]
 sentry1.verwaltung.uni-muenchen.de
 
 [webfrontends]
 special.verwaltung.uni-muenchen.de
 
-[monitors]
+[monitor-masters]
 special.verwaltung.uni-muenchen.de
 
 [infrastructure:children]
-sentries
+sentry
 webfrontends
-monitors
-redmines
-
-[serverraum-ludwig27]
-special.verwaltung.uni-muenchen.de
-
-[serverraum-ludwig27:children]
-analytics
-
-[serverraum-martius4:children]
-redmines
-sentries
+monitor-masters
