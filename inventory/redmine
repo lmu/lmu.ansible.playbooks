@@ -1,0 +1,26 @@
+# Inventory for Redmine
+
+[redmine-dbs-production]
+redmine2.verwaltung.uni-muenchen.de
+
+[redmine-workers-production]
+redmine2.verwaltung.uni-muenchen.de
+
+[redmine-production:children]
+redmine-dbs-production
+redmine-workers-production
+
+[redmine-dbs-staging]
+redminetest2.verwaltung.uni-muenchen.de
+
+[redmine-workers-staging]
+redminetest2.verwaltung.uni-muenchen.de
+
+[redmine-staging:children]
+redmine-dbs-staging
+redmine-workers-staging
+
+[redmine:children]
+redmine-production
+redmine-staging
+

@@ -8,21 +8,51 @@
 
 - name: Make ZUV-Proxy Settings
   template:
-    dest=/etc/apt/source.list
-    src=zuv_source.list
+    dest=/etc/profile.d/zuv_proxy.sh
+    src=zuv_proxy.sh.j2
     mode="o=rw,g=r,u=r"
     owner=root
     group=root
 
 - name: Make APT respect ZUV-Proxy Settings
+  # Clerifiy if this is the best way.
+  copy:
+    dest=/etc/apt/apt.conf.d/zuv_proxy.conf
+    src=zuv_proxy_apt.conf
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
+
+- name: copy ZUV-Proxy-CA and Chain
+  copy:
+    dest=/usr/share/ca-certificates/lmu/{{ item }}
+    src=certs/{{ item }}
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
+  with_items:
+    - ZUV-CA.crt
+    - LMU-CA.crt
+    - lmu-proxy-CA.crt
 
 - name: Install ZUV-Proxy-CA
+  command: update-ca-certificates
 
 - name: Add alias for "pip" to always use ZUV-Proxy-CA
+  copy:
+    dest=/etc/profile.d/zuv_proxy_alias.sh
+    src=zuv_proxy_alias.sh
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
 
 - name: Update apt/source.list
-
-- name: Update sshd_config
+  template:
+    dest=/etc/apt/source.list
+    src=zuv_source.list
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
 
 - name: Install base-Packages (common)
   apt: pkg={{ item }} state=present update_cache=yes

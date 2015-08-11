@@ -1,0 +1,6 @@
+
+proxy:
+  no_proxy: 
+    - "www.scm.verwaltung.uni-muenchen.de"
+    - "*.zuv.uni-munechen.de"
+    - "172.23.0.0/24"
