@@ -41,7 +41,7 @@
 - name: Install base-Packages (common)
   apt: 
     pkg={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   with_items:
     - vim

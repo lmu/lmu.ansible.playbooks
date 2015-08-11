@@ -4,38 +4,39 @@
 
 - name: Checkout buildout from git
   git:
-    repo={{ buildout.repository }}
-    dest={{ buildout.directory }}
+    repo={{ buildout.src.src }}
+    dest="{{ buildout.path }}{{ buildout.directory }}"
     clone=yes
     remote=origin
     update=yes
-    version=rev
-  when: buildout.src.type|lower == git
+    version={{ buildout.src.rev }}
+    force=yes
+  when: buildout.src.type|lower == "git"
 
 - name: Checkout buildout from subversion
   subversion:
-    repo={{ buildout.repository }}
-    dest={{ buildout.directory }}
-    revision={{ buildout.src.rev   }}
-  when: buildout.src.type|lower == svn
+    repo={{ buildout.src.src }}
+    dest="{{ buildout.path }}{{ buildout.directory }}"
+    revision={{ buildout.src.rev }}
+  when: buildout.src.type|lower == "svn"
 
 - name: install zc.buildout
   pip: 
     name=zc.buildout
     state=present
-    virtualenv={{ buildout.directory }}
-    virtualenv_python={{ buildout.python }}
+    virtualenv="{{ buildout.path }}{{ buildout.directory }}"
+    #virtualenv_python={{ buildout.python }}
 
 - name: Ensure buildout-directory is owned by user plone_buildout
   file:
-    path={{ buildout.directory }}
+    path="{{ buildout.path }}{{ buildout.directory }}"
     mode="u=rwx,g=rx,o=rx"
     owner=plone_buildout
     group=plone_group
     recurse=yes
     state=directory
 
-- name: Ensure a data/{{buildout.directory}}/var directory owned by user plone_daemon exists
+- name: Ensure a /data/{{buildout.directory}}/var directory owned by user plone_daemon exists
   file:
     path=/data/{{ buildout.directory }}/var
     mode="u=rwx,g=rx,o=rx"
@@ -44,9 +45,9 @@
     recurse=yes
     state=directory
 
-- name: Ensure buildout-var-directory is aktually a symlink to data/{{buildout.directory}}/var owned by user plone_daemon
+- name: Ensure buildout-var-directory is aktually a symlink to /data/{{buildout.directory}}/var owned by user plone_daemon
   file:
-    path={{ buildout.directory }}/var
+    path="{{ buildout.path }}{{ buildout.directory }}/var"
     src=/data/{{ buildout.directory }}/var
     owner=plone_daemon
     group=plone_group
@@ -55,24 +56,24 @@
 
 - name: Ensure buildout-var-directory is owned by user plone_daemon
   file:
-    path={{ buildout.directory }}/var/.
+    path="{{ buildout.path }}{{ buildout.directory }}/var/."
     mode="u=rwx,g=rx,o=rx"
     owner=plone_daemon
     group=plone_group
     recurse=yes
     state=directory
 
-- name: Preset Buildout config:
+- name: Preset Buildout config
   file:
-    path={{ buildout.directory }}/buildout.cfg
-    src={{ buildout.directory }}/{{ buildout.config }}
+    path="{{ buildout.path }}{{ buildout.directory }}/buildout.cfg"
+    src="{{ buildout.path }}{{ buildout.directory }}/{{ buildout.config }}"
     state=link
     owner=plone_buildout
     group_plone_group
 
 - name: Copy secrets.cfg if provided
   copy:
-    dest={{ buildout.directory }}/secrets.cfg
+    dest="{{ buildout.path }}{{ buildout.directory }}/secrets.cfg"
     src={{ buildout.secrets }}
     owner=plone.buildout
     group=plone_group
@@ -80,9 +81,9 @@
   when: buildout.requires_secrets
 
 - name: Run buildout
-  cmd: ./bin/buildout
-    chdir: {{ buildout.directory }}
+  command: ./bin/buildout
+    chdir="{{ buildout.path }}{{ buildout.directory }}"
   environment:
-    VIRTUAL_ENV: {{ buildout.directory }}
-    PATH: {{ buildout.directory }}/bin:{{ ansible_env.PATH }}
+    VIRTUAL_ENV: "{{ buildout.directory }}"
+    PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
   become_user: plone_buildout

@@ -1,10 +1,18 @@
 ---
 
-- name: Create User "ansible"
-  
 - name: Change Password for "fachadmin"
+  user:
+    name=fachadmin
+    password={{ fachadmin_password }}
+    update_password=always
 
 - name: Make ZUV-Proxy Settings
+  template:
+    dest=/etc/apt/source.list
+    src=zuv_source.list
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
 
 - name: Make APT respect ZUV-Proxy Settings
 
@@ -17,7 +25,7 @@
 - name: Update sshd_config
 
 - name: Install base-Packages (common)
-  apt: pkg={{ item }} state=latest update_cache=yes
+  apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     - vim
     - aptitude

@@ -3,8 +3,8 @@
 - name: Ensure System Dependencies for Plone are installed
   apt: 
     name={{ item }}
-    state=latest
-    update_cache=yes
+    state=present
+    update_cache=no
   with_items:
     - python
     - python-dev
@@ -47,7 +47,15 @@
     - wget
     - bzip2
     - gzip
+  register: dependency
+  changed_when: "' 0 newly installed' not in dependency.stdout"
   when: ansible_os_family == "Debian"
+
+- name: Ensure Group plone_group exists
+  group:
+    name=plone_group
+    state=present
+    system=yes
 
 - name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
   user:

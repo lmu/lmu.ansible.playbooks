@@ -9,3 +9,15 @@
 
 - stat: path=/var/run/reboot-required
   register: reboot_required
+
+- name: Check if anything needs autoremoving
+  shell: apt-get -y --dry-run autoremove | grep -q " 0 to remove"
+  register: check_autoremove
+  ignore_errors: True
+  changed_when: False
+  always_run: True
+
+- name: Autoremove unused Packages
+  command: apt-get autoremove -y
+  when: "check_autoremove.rc != 0"
+  changed_when: False

@@ -1,44 +1,46 @@
 ---
 
-- hosts: zope-dbs-poduction
+- hosts: zope-dbs-production
   sudo: true
 
   roles:
     - plone-base
-    -  { role:zc.buildout,
+    -  { role: zc.buildout,
          buildout: {
-            directory: /usr/local/Plone/production.buildout,
+            path: /usr/local/Plone/,
+            directory: production.buildout,
             src: {
                 type: git,
-                src: https://github.com/loechel/lmu-iuk.buildout.git
-                rev: master
-            }
-            config: zope-clients-production.cfg
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                rev: HEAD,
+            },
+            config: zope-clients-production.cfg,
             python: python2.7,
-            buildout_user: plone_buildout
-            requires_secrets: true
-            secrets: files/secrets.cfg
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: files/secrets.cfg,
          }}
 
 
-- hosts: zope-dbs-failover-poduction
+- hosts: zope-dbs-failover-production
   sudo: true
 
   roles:
     - plone-base
-    -  { role:zc.buildout,
+    -  { role: zc.buildout,
          buildout: {
-            directory: /usr/local/Plone/production.buildout,
+            path: /usr/local/Plone/,
+            directory: production.buildout,
             src: {
                 type: git,
-                src: https://github.com/loechel/lmu-iuk.buildout.git
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
                 rev: master
-            }
-            config: zeoserver-failover-production.cfg
+            },
+            config: zeoserver-failover-production.cfg,
             python: python2.7,
-            buildout_user: plone_buildout
-            requires_secrets: false
-            secrets: files/secrets.cfg
+            buildout_user: plone_buildout,
+            requires_secrets: false,
+            secrets: files/secrets.cfg,
          }}
 
 - hosts: zope-clients-production
@@ -46,17 +48,18 @@
 
   roles:
     - plone-base
-    -  { role:zc.buildout,
+    -  { role: zc.buildout,
          buildout: {
-            directory: /usr/local/Plone/production.buildout,
+            path: /usr/local/Plone/,
+            directory: production.buildout,
             src: {
                 type: git,
-                src: https://github.com/loechel/lmu-iuk.buildout.git
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
                 rev: master
-            }
-            config: zeoserver-failover-production.cfg
+            },
+            config: zeoserver-failover-production.cfg,
             python: python2.7,
-            buildout_user: plone_buildout
-            requires_secrets: false
-            secrets: files/secrets.cfg
+            buildout_user: plone_buildout,
+            requires_secrets: false,
+            secrets: files/secrets.cfg,
          }}

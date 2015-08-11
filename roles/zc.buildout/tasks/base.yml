@@ -3,8 +3,8 @@
 - name: Ensure git, python-dev pip and virtualenv are installed
   apt: 
     pkg={{ item }}
-    state=latest
-    update_cache=yes
+    state=present
+    update_cache=no
   with_items:
     - python
     - python-dev
@@ -14,6 +14,12 @@
     - git-core
     - subversion
   when: ansible_os_family == "Debian"
+
+- name: Ensure Group plone_group exists
+  group:
+    name=plone_group
+    state=present
+    system=yes
 
 - name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
   user:
