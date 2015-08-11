@@ -48,7 +48,7 @@
 
 - name: Update apt/source.list
   template:
-    dest=/etc/apt/source.list
+    dest=/etc/apt/source.list.j2
     src=zuv_source.list
     mode="o=rw,g=r,u=r"
     owner=root

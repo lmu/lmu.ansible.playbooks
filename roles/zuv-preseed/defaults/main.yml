@@ -4,3 +4,7 @@ proxy:
     - "www.scm.verwaltung.uni-muenchen.de"
     - "*.zuv.uni-munechen.de"
     - "172.23.0.0/24"
+
+apt:
+  use_partner=false
+  use_extras=false
