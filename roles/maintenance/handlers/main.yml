@@ -5,7 +5,11 @@
   async: 0
   poll: 0
   ignore_errors: true
-  when: reboot_required.stat.exists and ansible_os_family == "Debian"
+  when: reboot_required.stat.exists and ansible_os_family == "Debian" and maintenance.allow_reboot
+
+- name: Inform that Server needs restart and is disallowed
+  debug: "Server: {{ inventory_hostname }} needs restart, please perform / start this manually."
+  when: reboot_required.stat.exists and not maintenance.allow_reboot
 
 - name: Wait for Server to come back
   local_action: 

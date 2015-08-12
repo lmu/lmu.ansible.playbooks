@@ -1,7 +1,7 @@
 ---
 
-- name: Update all Packages
-  apt: upgrade=full update_cache=yes
+- name: "Update all Packages (Mode: {{ maintenance.upgrade_type }})"
+  apt: upgrade={{ maintenance.upgrade_type }} update_cache=yes
   when: ansible_os_family == "Debian"
   notify: 
   - Restart Server

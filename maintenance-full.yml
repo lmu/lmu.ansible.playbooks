@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  sudo: true
+  gather_facts: true
+
+  roles:
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "safe",
+          allow_reboot: false
+        }
+      }

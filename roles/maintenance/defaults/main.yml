@@ -1,0 +1,4 @@
+
+maintenance:
+  upgrade_type: "full"
+  allow: true
