@@ -1,0 +1,12 @@
+# Webproxies
+
+[webproxies-production]
+webproxy1.verwaltung.uni-muenchen.de
+webproxy2.verwaltung.uni-muenchen.de
+
+[webproxies-staging]
+webproxy2.verwaltung.uni-muenchen.de
+
+[webproxies:children]
+webproxies-production
+webproxies-staging

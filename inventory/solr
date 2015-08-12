@@ -1,0 +1,19 @@
+# Search Servers with Solr
+
+[solr-masters-production]
+solr3.verwaltung.uni-muenchen.de
+
+[solr-slaves-production]
+solr4.verwaltung.uni-muenchen.de
+
+[solrs-production:children]
+solr-masters-production
+solr-slaves-production
+
+[solr-masters-staging]
+
+[solr-slaves-staging]
+
+[solrs-staging:children]
+solr-masters-staging
+solr-slaves-staging

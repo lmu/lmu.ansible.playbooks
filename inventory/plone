@@ -58,15 +58,6 @@ webproxy2.verwaltung.uni-muenchen.de
 webproxies-production
 webproxies-staging
 
-[sentry-dbs]
-sentry1.verwaltung.uni-muenchen.de
-
-[sentry-workers]
-sentry1.verwaltung.uni-muenchen.de
-
-[sentry]
-sentry1.verwaltung.uni-muenchen.de
-
 [webfrontends]
 special.verwaltung.uni-muenchen.de
 

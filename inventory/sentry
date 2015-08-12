@@ -1,0 +1,10 @@
+# Sentry - Live Log Aggregation
+
+[sentry-dbs]
+sentry1.verwaltung.uni-muenchen.de
+
+[sentry-workers]
+sentry1.verwaltung.uni-muenchen.de
+
+[sentry]
+sentry1.verwaltung.uni-muenchen.de
