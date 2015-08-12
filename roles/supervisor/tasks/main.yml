@@ -21,3 +21,10 @@
     group=root
     mode="u=rw,g=r,o=r"
     validate=""
+
+- name: "Start the Supervisor service and enable on boot"
+  service:
+    name=supervisor
+    state=started
+    enabled=yes
+

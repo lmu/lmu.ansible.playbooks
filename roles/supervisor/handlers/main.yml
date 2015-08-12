@@ -1,0 +1,11 @@
+---
+
+- name: "Restart Supervisor"
+  service:
+    name=supervisor
+    state=restarted
+
+- name: "Reload Supervisor"
+  service:
+    name=supervisor
+    state=reloaded

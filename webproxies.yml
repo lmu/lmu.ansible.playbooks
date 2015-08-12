@@ -12,6 +12,7 @@
           allow_reboot: true
         }
       }
+    - supervisor
     - apache_httpd
     - haproxy
 
