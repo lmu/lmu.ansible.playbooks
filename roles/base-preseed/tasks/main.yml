@@ -38,7 +38,7 @@
     mode="u=r,g=r,o="
     validate="visudo -cf %s"
 
-- name: Install base-Packages (common)
+- name: Ensure Base-Packages (common) are installed
   apt: 
     pkg={{ item }}
     state=present
