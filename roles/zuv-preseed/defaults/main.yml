@@ -5,6 +5,10 @@ proxy:
     - "*.zuv.uni-munechen.de"
     - "172.23.0.0/24"
 
-apt:
-  use_partner=false
-  use_extras=false
+apt: {
+  use_partner: false,
+  use_extras: false
+}
+user: {
+  fachadmin_password=None
+}

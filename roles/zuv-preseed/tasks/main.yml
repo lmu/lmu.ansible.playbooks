@@ -23,9 +23,17 @@
     owner=root
     group=root
 
+- name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
+  file:
+    name=/usr/local/share/ca-certificates/lmu/
+    state=directory
+    mode="u=rwx,g=rx,o=rx"
+    owner=root
+    group=root
+
 - name: copy ZUV-Proxy-CA and Chain
   copy:
-    dest=/usr/share/ca-certificates/lmu/{{ item }}
+    dest=/usr/local/share/ca-certificates/lmu/{{ item }}
     src=certs/{{ item }}
     mode="o=rw,g=r,u=r"
     owner=root
@@ -48,8 +56,8 @@
 
 - name: Update apt/source.list
   template:
-    dest=/etc/apt/source.list.j2
-    src=zuv_source.list
+    dest=/etc/apt/source.list
+    src=zuv_source.list.j2
     mode="o=rw,g=r,u=r"
     owner=root
     group=root
