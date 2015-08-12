@@ -46,6 +46,7 @@
   with_items:
     - vim
     - aptitude
+    - ssl-cert
     - update-notifier-common
     - facter
     - ohai

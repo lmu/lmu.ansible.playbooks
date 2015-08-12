@@ -1,0 +1,33 @@
+---
+
+- name: "Install the haproxy packages"
+  apt: name={{ item }} state=present update_cache=no
+  with_items:
+    - haproxy
+  when: ansible_os_family == "Debian"
+
+
+- name: "Ensure the directories (/etc/haproxy/haproxy.cfg.d)is present"
+  file: 
+    path=/etc/haproxy/haproxy.conf.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+
+- name: "Copy the base config for HAProxy"
+  template:
+    dest="/etc/haproxy/haproxy.conf.d/00-base.cfg"
+    src="00-base.cfg.j2"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+  notify: 
+    - "Assemble HAProxy Config"
+
+
+- name: "Start the HAProxy service and enable on boot"
+  service:
+    name=haproxy
+    state=started
+    enabled=yes

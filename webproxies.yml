@@ -1,0 +1,17 @@
+---
+
+- hosts: webproxies
+  sudo: true
+  gather_facts: true
+
+  roles:
+    - base-preseed
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: true
+        }
+      }
+    - apache_httpd
+    - haproxy
+

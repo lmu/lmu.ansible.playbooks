@@ -1,20 +1,20 @@
 ---
 
 - name: Install the nginx packages 
-  apt: name={{ item }} state=present update_cache=yes
+  apt: name={{ item }} state=present update_cache=no
   with_items:
     - nginx
     - python-selinux
   environment: env
   when: ansible_os_family == "Debian"
 
-- name: Create the directories for site specific configurations
+- name: Ensure the directories for site specific configurations are present
   file: 
     path=/etc/nginx/{{ item }}
     state=directory
     owner=root
     group=root
-    mode=0755
+    mode="u=rwx,g=rx,o=rx"
   with_items:
     - "sites-available"
     - "sites-enabled"

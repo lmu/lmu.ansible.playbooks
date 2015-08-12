@@ -32,8 +32,8 @@ frontend lb-master
     bind 127.0.0.1:8001
 
     stats enable
-    stats uri /haproxy-status
+    stats uri {{ haproxy.stats.path }}
     stats realm HAProxy statistics
-    stats auth admin:admin
+    stats auth {{ haproxy.stats.user }}:{{ haproxy.stats.password }}
 
-    monitor-uri /haproxy-ping
+    {% if haproxy.monitor.enabled %}monitor-uri {{ haproxy.monitor.path }}{% endif %}
