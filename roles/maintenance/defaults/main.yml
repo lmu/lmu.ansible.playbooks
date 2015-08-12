@@ -1,4 +1,4 @@
 
 maintenance:
   upgrade_type: "full"
-  allow: true
+  allow_reboot: true

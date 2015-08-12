@@ -13,6 +13,6 @@
         }
       }
     - supervisor
-    - apache_httpd
     - haproxy
-
+    #- varnish
+    - apache_httpd

@@ -1,6 +1,6 @@
 ---
 
 java:
-  version: 7
+  version: default
   jdk: false
   type: OpenJDK

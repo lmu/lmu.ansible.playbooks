@@ -10,3 +10,9 @@
   roles:
     - base-preseed
     - zuv-preseed
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: true
+        }
+      }

@@ -1,11 +1,11 @@
 ---
 
-- name: Restart Apache httpd
+- name: "Restart Apache httpd"
   service:
     name=apache2
     state=restarted
 
-- name: Reload Apache httpd
+- name: "Reload Apache httpd"
   service:
     name=apache2
     state=reloaded

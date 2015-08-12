@@ -25,8 +25,7 @@
   notify: 
     - "Assemble HAProxy Config"
 
-
-- name: "Start the HAProxy service and enable on boot"
+- name: "Ensure the HAProxy service is started and enable on boot"
   service:
     name=haproxy
     state=started

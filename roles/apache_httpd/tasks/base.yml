@@ -16,7 +16,7 @@
     - apachetop
   when: ansible_os_family == "Debian"
 
-- name: "Enable commen used Apache httpd modules"
+- name: "Enable common used Apache httpd modules"
   apache2_module:
     name={{ item }}
     state=present
@@ -37,7 +37,7 @@
     - "sites-available"
     - "sites-enabled"
 
-- name: "Start the Apache httpd service and enable on boot"
+- name: "Ensure the Apache httpd service is started and enable on boot"
   service:
     name=apache2
     state=started

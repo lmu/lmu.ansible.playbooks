@@ -54,7 +54,7 @@
     owner=root
     group=root
 
-- name: Install base-Packages (common)
+- name: Ensure Base-Packages (common) are installed
   apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     - vim
