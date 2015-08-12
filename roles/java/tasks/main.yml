@@ -3,7 +3,7 @@
 - name: Install Default Java JRE
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == default
   with_items:
@@ -12,7 +12,7 @@
 - name: Install Java OpenJDK 7
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == default and java.jdk and java.openjdk
   with_items:
@@ -21,7 +21,7 @@
 - name: Install Java OpenJRE 8
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 8
   with_items:
@@ -30,7 +30,7 @@
 - name: Install Java OpenJRE 7
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 7
   with_items:
@@ -39,7 +39,7 @@
 - name: Install Java OpenJRE 6
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 6
   with_items:
@@ -48,7 +48,7 @@
 - name: Install Java OpenJDK 8
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 8 and java.jdk and java.openjdk
   with_items:
@@ -57,7 +57,7 @@
 - name: Install Java OpenJDK 7
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 7 and java.jdk and java.openjdk
   with_items:
@@ -66,7 +66,7 @@
 - name: Install Java OpenJDK 6
   apt: 
     name={{ item }}
-    state=latest
+    state=present
     update_cache=yes
   when: java.version == 6 and java.jdk and java.openjdk
   with_items:
