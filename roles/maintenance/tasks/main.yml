@@ -12,13 +12,14 @@
   register: reboot_required
 
 - name: "Check if anything needs autoremoving"
-  shell: apt-get -y --dry-run autoremove | grep -q " 0 to remove"
+  shell: apt-get autoremove -y --dry-run
+  sudo: True
   register: check_autoremove
-  ignore_errors: True
-  changed_when: False
+  changed_when: "' 0 zu entfernen' not in check_autoremove.stdout"
+  failed_when: "check_autoremove.rc != 0"
   always_run: True
 
 - name: "Autoremove unused Packages"
   command: apt-get autoremove -y
-  when: "check_autoremove.rc != 0"
-  changed_when: False
+  when: "check_autoremove.rc == 0 and ' 0 zu entfernen' not in check_autoremove.stdout"
+  register: autoremove
