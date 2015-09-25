@@ -3,6 +3,7 @@ ProxyPass /Shibboleth.sso !
 
 
 
-ProxyPass /manage !
+ProxyPass manage !
+ProxyPass /++resource++ !
 
 

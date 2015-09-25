@@ -1,1 +1,2 @@
-plone
+
+RewriteRule manage(.*) - [L, NC]

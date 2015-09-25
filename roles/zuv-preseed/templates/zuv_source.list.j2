@@ -54,3 +54,6 @@ deb-src http://apt.verwaltung.uni-muenchen.de/ubuntu trusty-security multiverse
 ## developers who want to ship their latest software.
 {% if not apt.use_extras %}# {% endif %}deb http://extras.ubuntu.com/ubuntu trusty main
 {% if not apt.use_extras %}# {% endif %}deb-src http://extras.ubuntu.com/ubuntu trusty main
+
+## LMU Own Specific Archive
+deb http://apt.verwaltung.uni-muenchen.de/ZUV-DEB/ ZUV-DEB main
