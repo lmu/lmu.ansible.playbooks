@@ -1,0 +1,8 @@
+
+ProxyPass /Shibboleth.sso !
+
+
+
+ProxyPass /manage !
+
+
