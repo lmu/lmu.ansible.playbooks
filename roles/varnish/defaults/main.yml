@@ -1,0 +1,12 @@
+
+haproxy: {
+  stats: {
+    user: admin,
+    password: admin,
+    path: "/haproxy-status"
+  },
+  monitor: {
+    enabled: true,
+    path: "/haproxy-ping"
+  }
+}

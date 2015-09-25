@@ -1,0 +1,13 @@
+---
+
+- hosts: search-masters-production
+  sudo: true
+
+  vars:
+    java:
+      version: 7
+      type: OpenJDK
+      jdk: false
+
+  roles:
+   - java

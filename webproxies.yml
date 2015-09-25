@@ -14,5 +14,5 @@
       }
     - supervisor
     - haproxy
-    #- varnish
+    - varnish
     - apache_httpd
