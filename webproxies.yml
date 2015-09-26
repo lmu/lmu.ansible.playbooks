@@ -9,10 +9,75 @@
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",
-          allow_reboot: true
+          allow_reboot: false
         }
       }
-    - supervisor
+#    - supervisor
     - haproxy
     - varnish
     - apache_httpd
+
+  handlers:
+    - include: roles/apache_httpd/handlers/main.yml
+
+  tasks:
+
+    - name: "Ensure Apache2 default Enabled VHost is absent"
+      file:
+         state=absent
+         path=/etc/apache2/sites-enabled/000-default.conf
+
+    - name: "Ensure the log directories are present"
+      file: 
+        path=/var/log/apache2/{{ item }}
+        state=directory
+        owner=root
+        group=adm
+        mode="u=rwx,g=rx,o=rx"
+      with_items:
+        - "zuv-intranet"
+        - "zuv-serviceportal"
+
+    - name: "Copy includes"
+      copy: 
+        src=files/{{ item }}
+        dest=/etc/apache2/includes/{{ item }}
+        force=yes
+        mode="u=rw,g=r,o=r"
+        owner=root
+        group=root
+      with_items:
+        - blacklist_proxy.include
+        - fiona_intranet_blacklist.include
+        - fiona_serviceportal_blacklist.include
+        - plone_blacklist_rewrite.include
+
+    - name: "Install vhost.confs for sites"
+      template: 
+        src=templates/{{ item }}.j2
+        dest=/etc/apache2/sites-available/{{ item }}
+        force=yes
+        mode="u=rw,g=r,o=r"
+        owner=root
+        group=root
+      with_items:
+        - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
+        - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
+      notify:
+        - "Restart Apache httpd"
+        - "Reload Apache httpd"
+
+    - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
+      file:
+        src=/etc/apache2/sites-available/{{ item }}
+        path=/etc/apache2/sites-enabled/{{ item }}
+        force=yes
+        state=link
+        owner=root
+        group=root
+      with_items:
+        - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
+        - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
+      notify:
+        - "Restart Apache httpd"
+        - "Reload Apache httpd"

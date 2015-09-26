@@ -36,6 +36,7 @@
   with_items:
     - "sites-available"
     - "sites-enabled"
+    - "includes"
 
 - name: "Ensure the Apache httpd service is started and enable on boot"
   service:

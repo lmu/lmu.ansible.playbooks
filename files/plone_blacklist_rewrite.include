@@ -1,2 +1,1 @@
-
-RewriteRule manage(.*) - [L, NC]
+RewriteRule manage - [L,NC]

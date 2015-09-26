@@ -9,20 +9,19 @@
     DocumentRoot /var/www/html
 
     # Vollständiger ServerName (FQDN)
-    #ServerName www.intranet.verwaltung.uni-muenchen.de
+    #ServerName www.serviceportal.verwaltung.uni-muenchen.de
     ServerName zuv-serviceportal.webproxy1.verwaltung.uni-muenchen.de
     # Sonsitige Namen des Server, mehrere können konfiguriert werden:
-    # ServerAlias
+    ServerAlias www.serviceportal.verwaltung.uni-muenchen.de
 
     # 
     UseCanonicalName on
 
     # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
-    ErrorLog "/var/log/apache/zuv_serviceportal/error_log"
+    ErrorLog "/var/log/apache2/zuv-serviceportal/error_log"
     # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
-    CustomLog "/var/log/apache/zuv_serviceportal/access_log"
-    TransferLog "/var/log/apache/zuv_serviceportal/transfer.log"
-    RewriteLog "/var/log/apache2/zuv_serviceportal/rewrite.log"
+    CustomLog "/var/log/apache2/zuv-serviceportal/access_log" "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i" 
+    #TransferLog "/var/log/apache2/zuv-serviceportal/transfer.log"
 
     # Welches Log-Detaillevel wollen wir
     LogLevel info
@@ -77,23 +76,35 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
     </LocationMatch>
 
     RewriteEngine on
-    RewriteLogLevel info
-
-    # RewriteRule ^/functions/extras.css$  https://www.serviceportal.verwaltung.uni-muenchen.de/++resource++lmu.theme.serviceportal.css/extras.css [R=301,L]
-    # RewriteRule ^/functions/extras.js$  https://www.serviceportal.verwaltung.uni-muenchen.de/++resource++lmu.theme.serviceportal.js/extras.js [R=301,L]
 
     # Blacklist Fiona Pfade so das Plone auf Root Path / lauscht
-    RewriteRule ^/index.html - [L,NC]
 
-    include fiona_serviceportal_backlist.include
-    include plone_blacklist_rewrite.include
-    include blacklist_proxy.inlcude 
+    include /etc/apache2/includes/fiona_serviceportal_blacklist.include
+    include /etc/apache2/includes/plone_blacklist_rewrite.include
+    include /etc/apache2/includes/blacklist_proxy.include
 
-    # Rewrite everything that is not Blacklisted in fiona_serviceportal_blcklist.include or plone_blacklist_rewrite.include to Plone
-    RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/serviceportal/VirtualHostRoot/$1 [P,L,E=X-Backend-For:Plone]
+    # Rewrite everything that is not Blacklisted in fiona_intranet_blcklist.include or plone_blacklist_rewrite.include to Plone
+    <Location />
+        RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/serviceportal/VirtualHostRoot/$1 [P,L]  # Varnish
+#        RewriteRule ^/(.*)$ http://127.0.0.1:8000/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/serviceportal/VirtualHostRoot/$1 [P,L]  # HAProxy for Plone
+#        RewriteRule ^/(.*)$ http://cms-live-app3:8080/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/serviceportal/VirtualHostRoot/$1 [P,L]  # direct Plone debug-instance on cms-live-app3
+        Header set X-Backend-For Plone
+        RequestHeader set X-Backend-For Plone
+    </Location>
+
+    <LocationMatch "^/(manage|manage_main|(.*)/manage(.*))" >
+        Deny from all
+    </LocationMatch>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude 
-    ProxyPass / http://127.0.0.1:6081/
-    ProxyPassReverse / http://127.0.0.1:6081/
+    <LocationMatch "^/(index.html|(_assets|_sync|servlet|servlets|resources|footer|system|aktuelles|leitbild|leitbild-startseite|funktionen|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen)/(.*))">
+        ProxyPass http://127.0.0.1:6801
+        ProxyPassReverse http://127.0.0.1:6801
+#        ProxyPass http://cms-live-pm1:80
+#        ProxyPassReverse http://cms-live-pm1:80
+#        RewriteRule ^/(.*)$ http://cms-live-pm1:8080$1 [P]
+        Header set X-Backend-For Fiona
+        RequestHeader set X-Backend-For Fiona
+    </LocationMatch>
 
 </VirtualHost>
