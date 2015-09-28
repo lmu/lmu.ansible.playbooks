@@ -1,5 +1,5 @@
 
-haproxy: {
+varnish: {
   stats: {
     user: admin,
     password: admin,
@@ -8,5 +8,18 @@ haproxy: {
   monitor: {
     enabled: true,
     path: "/haproxy-ping"
+  },
+  default_settings: {
+    start: 'yes',
+    frontend_ip: '',
+    frontend_port: 6081,
+    admin_ip: localhost,
+    admin_port: 6082,
+    backend_ip: localhost,
+    backend_port: 8080,
+    http_req_hdr_len: 65536,
+    http_resp_hdr_len: 65536,
+    http_max_hdr: 256,
+    storage: "malloc,4G",
   }
 }

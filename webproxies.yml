@@ -19,9 +19,28 @@
 
   handlers:
     - include: roles/apache_httpd/handlers/main.yml
+    - include: roles/haproxy/handlers/main.yml
 
   tasks:
+    # HAProxy
+    - name: "Copy HAProxy configs"
+      copy:
+        src=files/{{ item }}
+        dest=/etc/haproxy/haproxy.conf.d/{{ item }}
+        mode="u=rw,g=r,o=r"
+        owner=root
+        group=root
+      with_items:
+        - 10-haproxy-plone-webproxy.cfg
+        - 20-haproxy-fiona-webproxy.cfg
+      notify:
+        - "Assemble HAProxy Config"
 
+    # Varnish
+
+
+
+    # Apache
     - name: "Ensure Apache2 default Enabled VHost is absent"
       file:
          state=absent

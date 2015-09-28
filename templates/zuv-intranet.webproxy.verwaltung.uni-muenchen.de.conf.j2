@@ -77,6 +77,10 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 
     RewriteEngine on
 
+    # Rewrite to https://www.portal.uni-muenchen.de if RequestHeader HTTP_EDUPersonPrincipalName is not set
+    RewriteCond expr "! %{HTTP:HTTP_EDUPersonPrincipalName} -strmatch '*@lmu.de$'" 
+    RewriteRule ^/(.*) https://www.portal.uni-muenchen.de/start/index.html [R=302,L]
+
     # RewriteRule ^/functions/extras.css$  https://www.intranet.verwaltung.uni-muenchen.de/++resource++lmu.theme.intranet.css/extras.css [R=301,L]
     # RewriteRule ^/functions/extras.js$  https://www.intranet.verwaltung.uni-muenchen.de/++resource++lmu.theme.intranet.js/extras.js [R=301,L]
 

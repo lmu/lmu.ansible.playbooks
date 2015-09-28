@@ -1,3 +1,4 @@
+---
 
 haproxy: {
   stats: {
@@ -8,5 +9,9 @@ haproxy: {
   monitor: {
     enabled: true,
     path: "/haproxy-ping"
+  },
+  default_settings: {
+    start: 1,
+    something: 2
   }
 }

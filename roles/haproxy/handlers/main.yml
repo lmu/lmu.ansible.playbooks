@@ -1,13 +1,5 @@
 ---
 
-- name: "Assemble HAProxy Config"
-  assemble:
-    dest=/etc/haproxy/haproxy.cfg
-    src=/etc/haproxy/haproxy.conf.d/
-    mode="u=rw,g=r,o=r"
-    owner=root
-    group=root
-
 - name: "Restart HAProxy"
   service:
     name=haproxy
@@ -17,3 +9,14 @@
   service:
     name=haproxy
     state=reloaded
+
+- name: "Assemble HAProxy Config"
+  assemble:
+    dest=/etc/haproxy/haproxy.cfg
+    src=/etc/haproxy/haproxy.conf.d/
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify: 
+    - "Reload HAProxy"

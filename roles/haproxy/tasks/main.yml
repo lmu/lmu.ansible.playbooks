@@ -6,7 +6,6 @@
     - haproxy
   when: ansible_os_family == "Debian"
 
-
 - name: "Ensure the directories (/etc/haproxy/haproxy.cfg.d)is present"
   file: 
     path=/etc/haproxy/haproxy.conf.d
@@ -15,10 +14,23 @@
     group=root
     mode="u=rwx,g=rx,o=rx"
 
+- name: "Copy the /etc/default/haproxy file"
+  template:
+    src=default-haproxy.j2
+    dest=/etc/default/haproxy
+    force=yes
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+  notify:
+    - "Restart HAProxy"
+
+
 - name: "Copy the base config for HAProxy"
   template:
     dest="/etc/haproxy/haproxy.conf.d/00-base.cfg"
     src="00-base.cfg.j2"
+    force=yes
     owner=root
     group=root
     mode="u=rw,g=r,o=r"

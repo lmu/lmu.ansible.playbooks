@@ -1,39 +1,50 @@
 global
-    log /dev/log    local0
-    log /dev/log    local1 notice
-    chroot /var/lib/haproxy
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
 
-    user haproxy
-    group haproxy
-    daemon
+        user haproxy
+        group haproxy
+        daemon
 
-    stats socket /var/run/haproxy.sock mode 600 level admin
-    stats timeout 2m
+        stats socket /var/run/haproxy.sock mode 600 level admin
+        stats timeout 2m
+
+        tune.chksize 65536
+        tune.bufsize 65536
+
+        description HAProxy on {{ ansible_fqdn }}
 
 defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
 
-    contimeout  5000
-    clitimeout  50000
-    srvtimeout  50000
+        contimeout  5000
+        clitimeout  50000
+        srvtimeout  50000
 
-    errorfile 400 /etc/haproxy/errors/400.http
-    errorfile 403 /etc/haproxy/errors/403.http
-    errorfile 408 /etc/haproxy/errors/408.http
-    errorfile 500 /etc/haproxy/errors/500.http
-    errorfile 502 /etc/haproxy/errors/502.http
-    errorfile 503 /etc/haproxy/errors/503.http
-    errorfile 504 /etc/haproxy/errors/504.http
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
 
-frontend lb-master
-    bind 127.0.0.1:8001
+        option redispatch
 
-    stats enable
-    stats uri {{ haproxy.stats.path }}
-    stats realm HAProxy statistics
-    stats auth {{ haproxy.stats.user }}:{{ haproxy.stats.password }}
+listen haproxy-master
+        bind 0.0.0.0:9000
 
-    {% if haproxy.monitor.enabled %}monitor-uri {{ haproxy.monitor.path }}{% endif %}
+        {% if haproxy.monitor.enabled %}monitor-uri {{ haproxy.monitor.path }}{% endif %}
+        
+        stats enable
+        stats uri {{ haproxy.stats.path }}
+
+        stats show-desc HAProxy on {{ ansible_fqdn }}
+        stats show-legends
+        stats refresh 5s
+
+        stats admin if TRUE

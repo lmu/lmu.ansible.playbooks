@@ -1,0 +1,8 @@
+---
+
+- name: "Restart xinetd"
+  service:
+    name=xinetd
+    state=restarted
+  become_user: root
+  become: yes

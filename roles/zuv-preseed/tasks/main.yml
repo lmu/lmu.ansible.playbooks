@@ -10,7 +10,7 @@
   template:
     dest=/etc/profile.d/zuv_proxy.sh
     src=zuv_proxy.sh.j2
-    mode="o=rw,g=r,u=r"
+    mode="u=rw,g=r,o=r"
     owner=root
     group=root
 
@@ -19,7 +19,7 @@
   copy:
     dest=/etc/apt/apt.conf.d/zuv_proxy.conf
     src=zuv_proxy_apt.conf
-    mode="o=rw,g=r,u=r"
+    mode="u=rw,g=r,o=r"
     owner=root
     group=root
 
@@ -52,15 +52,15 @@
   copy:
     dest=/etc/profile.d/zuv_proxy_alias.sh
     src=zuv_proxy_alias.sh
-    mode="o=rw,g=r,u=r"
+    mode="u=rw,g=r,o=r"
     owner=root
     group=root
 
-- name: Update apt/source.list
+- name: Update apt/sources.list
   template:
-    dest=/etc/apt/source.list
+    dest=/etc/apt/sources.list
     src=zuv_source.list.j2
-    mode="o=rw,g=r,u=r"
+    mode="u=rw,g=r,o=r"
     owner=root
     group=root
 
@@ -78,3 +78,5 @@
     - bginfo-ubuntu
     - certs-zuv-ubuntu
   when: ansible_os_family == "Debian"
+  notify: 
+    - Restart xinetd

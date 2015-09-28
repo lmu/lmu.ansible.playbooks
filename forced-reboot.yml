@@ -11,7 +11,7 @@
     async: 0
     poll: 0
     ignore_errors: true
-    when: ansible_os_family == "Debian"
+    when: ansible_os_family == "Debian" and ansible_hostname != "CZC52447XZ"
 
   - name: Wait for Server to come back
     local_action:
