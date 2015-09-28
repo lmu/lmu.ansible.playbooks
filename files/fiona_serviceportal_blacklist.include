@@ -1,4 +1,4 @@
-
+RewriteRule ^/index.html - [L,NC]
 RewriteRule ^/_assets - [L,NC]
 RewriteRule ^/_sync - [L,NC]
 RewriteRule ^/servlet - [L,NC]

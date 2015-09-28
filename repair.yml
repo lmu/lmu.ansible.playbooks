@@ -1,0 +1,24 @@
+---
+# Repair setup of some Servers
+
+- hosts: all
+  sudo: true
+  gather_facts: true
+
+  tasks:
+
+  - name: Delete Files that makes problems
+    file: 
+      path={{ item }}
+      state=absent
+    with_items:
+      - /etc/porfiles.d/zuv-proxy.sh
+      - /etc/apt/source.list
+      - /etc/apache2/sites-avaliable/zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
+      - /etc/apache2/sites-avaliable/zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
+      - /etc/apache2/sites-enabled/zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
+      - /etc/apache2/sites-enabled/zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
+      - /etc/apache2/includes/blacklist_proxy.include
+      - /etc/apache2/includes/fiona_intranet_proxy.include
+      - /etc/apache2/includes/fiona_serviceportal_blacklist.include
+      - /etc/apache2/includes/plone_blacklist_rewrite.include

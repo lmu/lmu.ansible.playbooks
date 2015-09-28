@@ -10,6 +10,7 @@
   template:
     dest=/etc/profile.d/zuv_proxy.sh
     src=zuv_proxy.sh.j2
+    force=yes
     mode="u=rw,g=r,o=r"
     owner=root
     group=root
