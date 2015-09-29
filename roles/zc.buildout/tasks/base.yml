@@ -13,6 +13,7 @@
     - python-virtualenv
     - git-core
     - subversion
+    - build-essential
   when: ansible_os_family == "Debian"
 
 - name: Ensure Group plone_group exists

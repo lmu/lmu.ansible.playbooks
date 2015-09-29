@@ -1,6 +1,7 @@
 ---
 
-java:
-  version: default
-  jdk: false
-  type: OpenJDK
+java: {
+  version: 'default',
+  jdk: false,
+  type: 'OpenJDK'
+}

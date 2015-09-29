@@ -1,0 +1,14 @@
+---
+
+buildout: {
+  path: '/usr/local/',
+  directory: 'buildout',
+  config: 'buildout.cfg',
+  requires_secrets: false,
+  secrets: '',
+  src: {
+    src: '',
+    type: 'git',
+    rev: ''
+  }
+}

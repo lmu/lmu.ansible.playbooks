@@ -5,7 +5,7 @@
     name={{ item }}
     state=present
     update_cache=yes
-  when: java.version == default
+  when: java.version == 'default'
   with_items:
   - default-jre
 
@@ -14,7 +14,7 @@
     name={{ item }}
     state=present
     update_cache=yes
-  when: java.version == default and java.jdk and java.openjdk
+  when: java.version == 'default' and java.jdk and java.openjdk
   with_items:
   - default-jdk
 

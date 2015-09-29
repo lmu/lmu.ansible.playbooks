@@ -2,6 +2,15 @@
 
 - include: base.yml
 
+
+- name: Ensure buildout directory exists
+  file: 
+    path="{{ buildout.path }}{{ buildout.directory }}"
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+    mode="u=rwx,g=rx,o=rx"
+
 - name: Checkout buildout from git
   git:
     repo={{ buildout.src.src }}
@@ -11,14 +20,15 @@
     update=yes
     version={{ buildout.src.rev }}
     force=yes
-  when: buildout.src.type|lower == "git"
+  when: buildout.src.type|lower == "git" and buildout.src.src
+  become_user: plone_buildout
 
 - name: Checkout buildout from subversion
   subversion:
     repo={{ buildout.src.src }}
     dest="{{ buildout.path }}{{ buildout.directory }}"
     revision={{ buildout.src.rev }}
-  when: buildout.src.type|lower == "svn"
+  when: buildout.src.type|lower == "svn" and buildout.src.src
 
 - name: install zc.buildout
   pip: 

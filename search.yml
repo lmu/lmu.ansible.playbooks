@@ -1,6 +1,6 @@
 ---
 
-- hosts: search-masters-production
+- hosts: solrs-production
   sudo: true
 
   vars:
@@ -9,5 +9,37 @@
       type: OpenJDK
       jdk: false
 
+
   roles:
-   - java
+#    - java
+#    - base-preseed
+#    - { role: maintenance,
+#        maintenance: {
+#          upgrade_type: "full",
+#          allow_reboot: false
+#        }
+#      }
+#    - supervisor
+    - { role: zc.buildout,
+        buildout: {
+          path: '/usr/local/',
+          directory: 'solr.buildout',
+          config: 'buildout.cfg',
+          requires_secrets: false,
+          secrets: '',
+          src: {
+            src: 'https://github.com/loechel/solr.buildout.git',
+            type: 'git',
+            rev: 'master'
+          }
+        }
+      }
+
+
+
+- hosts: solr-masters-production
+  sudo: true
+
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
