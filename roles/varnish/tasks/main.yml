@@ -9,7 +9,7 @@
 
 - name: "Ensure the directories (/etc/varnish/)is present"
   file: 
-    path=/etc/varnish/haproxy.conf.d
+    path=/etc/varnish/
     state=directory
     owner=root
     group=root

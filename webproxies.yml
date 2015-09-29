@@ -32,8 +32,8 @@
         owner=root
         group=root
       with_items:
+        - 09-haproxy-fiona-webproxy.cfg
         - 10-haproxy-plone-webproxy.cfg
-        - 20-haproxy-fiona-webproxy.cfg
       notify:
         - "Assemble HAProxy Config"
 
