@@ -20,6 +20,7 @@
   handlers:
     - include: roles/apache_httpd/handlers/main.yml
     - include: roles/haproxy/handlers/main.yml
+    - include: roles/varnish/handlers/main.yml
 
   tasks:
     # HAProxy
@@ -37,8 +38,15 @@
         - "Assemble HAProxy Config"
 
     # Varnish
-
-
+    - name: "Copy Varnish configs"
+      copy:
+        src="files/varnish-webproxy.vcl"
+        dest="/etc/varnish/default.vcl"
+        mode="u=rw,g=r,o=r"
+        owner=root
+        group=root
+      notify:
+        - Restart Varnish
 
     # Apache
     - name: "Ensure Apache2 default Enabled VHost is absent"

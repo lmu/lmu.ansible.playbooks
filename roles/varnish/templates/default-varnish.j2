@@ -26,7 +26,7 @@ MEMLOCK=82000
 
 ## Alternative 1, Minimal configuration, no VCL
 #
-# Listen on port {{ varnish.default_settings.frontend_port }}, administration on {{ varnish.default_settings.admin_if }}:{{ varnish.default_settings.admin_port }}, and forward to
+# Listen on port {{ varnish.default_settings.frontend_port }}, administration on {{ varnish.default_settings.admin_ip }}:{{ varnish.default_settings.admin_port }}, and forward to
 # content server on {{ varnish.default_settings.backend_ip }}:{{ varnish.default_settings.backend_port }}.  Use a fixed-size cache file.
 #
 # DAEMON_OPTS="-a {{ varnish.default_settings.frontend_ip }}:{{ varnish.default_settings.frontend_port }} \
@@ -47,7 +47,7 @@ DAEMON_OPTS="-a {{ varnish.default_settings.frontend_ip }}:{{ varnish.default_se
              -T {{ varnish.default_settings.admin_ip }}:{{ varnish.default_settings.admin_port }} \
              -f /etc/varnish/default.vcl \
              -S /etc/varnish/secret \
-             -p http_req_hdr_len={{ varnish.default_settings.http_req_hdr_len \
+             -p http_req_hdr_len={{ varnish.default_settings.http_req_hdr_len }} \
              -p http_resp_hdr_len={{ varnish.default_settings.http_resp_hdr_len }} \
              -p http_max_hdr={{ varnish.default_settings.http_max_hdr }} \
              -s {{ varnish.default_settings.storage }}"

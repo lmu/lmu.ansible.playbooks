@@ -7,21 +7,21 @@
   when: ansible_os_family == "Debian"
 
 
-#- name: "Ensure the directories (/etc/varnish/haproxy.cfg.d)is present"
-#  file: 
-#    path=/etc/haproxy/haproxy.conf.d
-#    state=directory
-#    owner=root
-#    group=root
-#    mode="u=rwx,g=rx,o=rx"
+- name: "Ensure the directories (/etc/varnish/)is present"
+  file: 
+    path=/etc/varnish/haproxy.conf.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
 
-#- name: "Copy the base config for HAProxy"
-#  template:
-#    dest="/etc/haproxy/haproxy.conf.d/00-base.cfg"
-#    src="00-base.cfg.j2"
-#    owner=root
-#    group=root
-#    mode="u=rw,g=r,o=r"
+- name: "Copy the base default config for Varnish"
+  template:
+    dest="/etc/default/varnish"
+    src="default-varnish.j2"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
 
 - name: "Ensure the Varnish-Cache service is started and enable on boot"
   service:

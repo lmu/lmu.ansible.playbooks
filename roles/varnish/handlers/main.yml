@@ -1,19 +1,11 @@
 ---
 
-- name: "Assemble HAProxy Config"
-  assemble:
-    dest=/etc/haproxy/haproxy.cfg
-    src=/etc/haproxy/haproxy.conf.d/
-    mode="u=rw,g=r,o=r"
-    owner=root
-    group=root
-
-- name: "Restart HAProxy"
+- name: "Restart Varnish"
   service:
-    name=haproxy
+    name=varnish
     state=restarted
 
-- name: "Reload HAProxy"
+- name: "Reload Varnish"
   service:
-    name=haproxy
+    name=varnish
     state=reloaded
