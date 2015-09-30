@@ -11,29 +11,15 @@
 
 
   roles:
-#    - java
-#    - base-preseed
-#    - { role: maintenance,
-#        maintenance: {
-#          upgrade_type: "full",
-#          allow_reboot: false
-#        }
-#      }
-#    - supervisor
-    - { role: zc.buildout,
-        buildout: {
-          path: '/usr/local/',
-          directory: 'solr.buildout',
-          config: 'buildout.cfg',
-          requires_secrets: false,
-          secrets: '',
-          src: {
-            src: 'https://github.com/loechel/solr.buildout.git',
-            type: 'git',
-            rev: 'master'
-          }
+    - java
+    - base-preseed
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
         }
       }
+    - supervisor
 
 
 
@@ -43,3 +29,57 @@
 
   handlers:
     - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+          path: '/usr/local/',
+          directory: 'solr.buildout',
+          config: 'master.cfg',
+          requires_secrets: true,
+          secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          src: {
+            src: 'https://github.com/loechel/solr.buildout.git',
+            type: 'git',
+            rev: 'master'
+          }
+        }
+      }
+  tasks:
+
+    - name: "Restart Supervisor"
+      service:
+        name=supervisor
+        state=restarted
+
+- hosts: solr-slaves-production
+  sudo: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+          path: '/usr/local/',
+          directory: 'solr.buildout',
+          config: 'slave.cfg',
+          requires_secrets: true,
+          secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          src: {
+            src: 'https://github.com/loechel/solr.buildout.git',
+            type: 'git',
+            rev: 'master'
+          }
+        }
+      }
+  tasks:
+
+    - name: "Restart Supervisor"
+      service:
+        name=supervisor
+        state=restarted

@@ -22,6 +22,9 @@
     force=yes
   when: buildout.src.type|lower == "git" and buildout.src.src
   become_user: plone_buildout
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: Checkout buildout from subversion
   subversion:
@@ -29,13 +32,31 @@
     dest="{{ buildout.path }}{{ buildout.directory }}"
     revision={{ buildout.src.rev }}
   when: buildout.src.type|lower == "svn" and buildout.src.src
+  become_user: plone_buildout
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
+- name: Ensure buildout-directory is owned by user plone_buildout
+  file:
+    path="{{ buildout.path }}{{ buildout.directory }}"
+    mode="u=rwx,g=rx,o=rx"
+    owner=plone_buildout
+    group=plone_group
+    recurse=yes
+    state=directory
 
 - name: install zc.buildout
   pip: 
     name=zc.buildout
     state=present
     virtualenv="{{ buildout.path }}{{ buildout.directory }}"
+    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
     #virtualenv_python={{ buildout.python }}
+  #become_user: plone_buildout
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: Ensure buildout-directory is owned by user plone_buildout
   file:
@@ -49,7 +70,7 @@
 - name: Ensure a /data/{{buildout.directory}}/var directory owned by user plone_daemon exists
   file:
     path=/data/{{ buildout.directory }}/var
-    mode="u=rwx,g=rx,o=rx"
+    mode="u=rwx,g=rwx,o=rx"
     owner=plone_daemon
     group=plone_group
     recurse=yes
@@ -67,7 +88,7 @@
 - name: Ensure buildout-var-directory is owned by user plone_daemon
   file:
     path="{{ buildout.path }}{{ buildout.directory }}/var/."
-    mode="u=rwx,g=rx,o=rx"
+    mode="u=rwx,g=rwx,o=rx"
     owner=plone_daemon
     group=plone_group
     recurse=yes
@@ -79,16 +100,24 @@
     src="{{ buildout.path }}{{ buildout.directory }}/{{ buildout.config }}"
     state=link
     owner=plone_buildout
-    group_plone_group
+    group=plone_group
 
 - name: Copy secrets.cfg if provided
-  copy:
+  template:
     dest="{{ buildout.path }}{{ buildout.directory }}/secrets.cfg"
     src={{ buildout.secrets }}
-    owner=plone.buildout
+    owner=plone_buildout
     group=plone_group
-    mode="o=r,g=,u="
+    mode="u=r,g=,o="
   when: buildout.requires_secrets
+
+- name: ensure supervisor conf.d directory is writeable for plone_buildout
+  file:
+    path=/etc/supervisor/conf.d
+    state=directory
+    owner=plone_buildout
+    group=plone_group
+    mode="u=rwx,g=rx,o=rx"
 
 - name: Run buildout
   command: ./bin/buildout
@@ -96,4 +125,14 @@
   environment:
     VIRTUAL_ENV: "{{ buildout.directory }}"
     PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
+
+- name: set normal file rights for supervisor conf.d directory
+  file:
+    path=/etc/supervisor/conf.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"

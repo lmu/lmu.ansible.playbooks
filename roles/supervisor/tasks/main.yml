@@ -5,18 +5,21 @@
 
 - name: ensure supervisor conf.d directory exists
   file:
-    path: /etc/supervisor/conf.d
-    state: directory
+    path=/etc/supervisor/conf.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
 
 - name: ensure supervisor log directory exists
   file:
-    path: /var/log/supervisor
-    state: directory
+    path=/var/log/supervisor
+    state=directory
 
 - name: Copy supervisor global configuration
   template: 
     src=supervisord.conf.j2
-    dest=/etc/supervisord.conf
+    dest=/etc/supervisor/supervisord.conf
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
