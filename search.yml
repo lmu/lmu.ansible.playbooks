@@ -49,10 +49,16 @@
       }
   tasks:
 
+    - name: "check if 'solr-instance' is present"
+      supervisorctl:
+        name="solr-instance"
+        state=present
+
     - name: "Restart Supervisor"
       service:
         name=supervisor
         state=restarted
+        sleep=5
 
 - hosts: solr-slaves-production
   sudo: true
@@ -79,7 +85,13 @@
       }
   tasks:
 
+    - name: "check if 'solr-instance' is present"
+      supervisorctl:
+        name="solr-instance"
+        state=present
+
     - name: "Restart Supervisor"
       service:
         name=supervisor
         state=restarted
+        sleep=5

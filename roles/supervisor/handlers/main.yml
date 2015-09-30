@@ -4,8 +4,10 @@
   service:
     name=supervisor
     state=restarted
+    sleep=5
 
 - name: "Reload Supervisor"
   service:
     name=supervisor
     state=reloaded
+    sleep=5

@@ -26,7 +26,13 @@
             "cms-live-app3.verwaltung.uni-munechen.de",
             "cms-live-app4",
             "cms-live-app4.verwaltung.uni-munechen.de",
+            "search3",
+            "search3.verwaltung.uni-munechen.de",
+            "search4",
+            "search4.verwaltung.uni-munechen.de",
             "*.zuv.uni-munechen.de",
+            "10.110.0.0/24",
+            "10.153.0.0/24",
             "172.23.0.0/24"
           ]
         }
