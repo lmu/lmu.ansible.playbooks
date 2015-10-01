@@ -90,6 +90,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
     include /etc/apache2/includes/plone_blacklist_rewrite.include
     include /etc/apache2/includes/blacklist_proxy.include
 
+    RewriteRule ^/index.html - [L,NC]
     RewriteRule ^/$ https://www.intranet.verwaltung.uni-muenchen.de/index.html [R=302,L]
 
     <Location />
@@ -98,7 +99,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
     </Location>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude 
-    <LocationMatch "^/(index.html|(_assets|_sync|servlet|servlets|resources|footer|funktionen|system|aktuelles|leitbild|leitbild-startseite|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen|it-newsletter|smartphones)/(.*))">
+    <LocationMatch "^/(index.html|(_assets|_sync|servlet|servlets|resources|footer|funktionen|system|aktuelles|leitbild|leitbild-startseite|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen|it-newsletter|smartphones|test-mensa)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
 #        ProxyPass http://127.0.0.1:8001

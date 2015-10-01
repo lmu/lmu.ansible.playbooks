@@ -83,6 +83,7 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
     include /etc/apache2/includes/plone_blacklist_rewrite.include
     include /etc/apache2/includes/blacklist_proxy.include
 
+    RewriteRule ^/index.html - [L,NC]
     RewriteRule ^/$ https://www.serviceportal.verwaltung.uni-muenchen.de/index.html [R=302,L]
 
     <Location />
