@@ -83,6 +83,8 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
     include /etc/apache2/includes/plone_blacklist_rewrite.include
     include /etc/apache2/includes/blacklist_proxy.include
 
+    RewriteRule ^/$ https://www.serviceportal.verwaltung.uni-muenchen.de/index.html [R=302,L]
+
     <Location />
         Header set X-Backend-For Plone
         RequestHeader set X-Backend-For Plone
@@ -93,7 +95,7 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
     </LocationMatch>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude 
-    <LocationMatch "^/(index.html|(_assets|_sync|servlet|servlets|resources|footer|system|aktuelles|leitbild|leitbild-startseite|funktionen|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen)/(.*))">
+    <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
 #        ProxyPass http://127.0.0.1:8001

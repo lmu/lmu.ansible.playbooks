@@ -43,3 +43,4 @@
     name=apache2
     state=started
     enabled=yes
+  ignore_errors: True
