@@ -20,6 +20,12 @@ backend fiona {
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
 sub vcl_recv {
+    # Purging
+    if (req.request == "PURGE") {
+        return(lookup);
+    }
+
+    # Backend selection
     if (req.http.X-Backend-For == "Fiona") {
         set req.backend = fiona;
     } else if (req.http.X-Backend-For == "Plone") {
@@ -28,9 +34,6 @@ sub vcl_recv {
         error 500 "Unknown Backend";
     }
 
-    if (req.request == "PURGE") {
-        return(lookup);
-    }
 }
 
 sub vcl_hit {
