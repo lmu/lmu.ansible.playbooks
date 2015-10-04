@@ -11,8 +11,8 @@
 
 
   roles:
-    - java
     - base-preseed
+    - java
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",

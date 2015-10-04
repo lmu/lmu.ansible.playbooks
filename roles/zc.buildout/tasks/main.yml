@@ -51,7 +51,7 @@
     name=zc.buildout
     state=present
     virtualenv="{{ buildout.path }}{{ buildout.directory }}"
-    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
+    #extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
     #virtualenv_python={{ buildout.python }}
   #become_user: plone_buildout
   environment:
