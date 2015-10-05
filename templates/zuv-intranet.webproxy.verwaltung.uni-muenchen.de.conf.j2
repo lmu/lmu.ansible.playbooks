@@ -105,8 +105,8 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 #        ProxyPass http://127.0.0.1:8001
 #        ProxyPassReverse http://127.0.0.1:8001
 #        ProxyPass http://cms-live-pm1:80
-#        ProxyPassReverse http://cms-live-pm1:80
-#        RewriteRule ^/(.*)$ http://cms-live-pm1:8080$1 [P]
+#        ProxyPassReverse http://cms-live-pm1.verwaltung.uni-muenchen.de:80
+#        RewriteRule ^/(.*)$ http://cms-live-pm1.verwaltung.uni-muenchen.de:8080$1 [P]
         Header set X-Backend-For Fiona
         RequestHeader set X-Backend-For Fiona
     </LocationMatch>
@@ -117,8 +117,8 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 
     # Rewrite everything that is not Blacklisted in fiona_intranet_blcklist.include or plone_blacklist_rewrite.include to Plone
 
-        RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/intranet/VirtualHostRoot/$1 [P,L]  # Varnish
-#        RewriteRule ^/(.*)$ http://127.0.0.1:8000/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/intranet/VirtualHostRoot/$1 [P,L]  # HAProxy for Plone
-#        RewriteRule ^/(.*)$ http://cms-live-app3:8080/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/intranet/VirtualHostRoot/$1 [P,L]  # direct Plone debug-instance on cms-live-app3
+        RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-intranet/VirtualHostRoot/$1 [P,L]  # Varnish
+#        RewriteRule ^/(.*)$ http://127.0.0.1:8000/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-intranet/VirtualHostRoot/$1 [P,L]  # HAProxy for Plone
+#        RewriteRule ^/(.*)$ http://cms-live-app3:8080/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-intranet/VirtualHostRoot/$1 [P,L]  # direct Plone debug-instance on cms-live-app3
 
 </VirtualHost>
