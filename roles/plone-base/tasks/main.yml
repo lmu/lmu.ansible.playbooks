@@ -11,6 +11,7 @@
     - python-setuptools
     - python-pip
     - python-virtualenv
+    - python-tk
     # Dependencies for external Version Control Packages
     - git-core
     - subversion

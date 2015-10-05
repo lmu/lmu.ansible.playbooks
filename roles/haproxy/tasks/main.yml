@@ -42,3 +42,4 @@
     name=haproxy
     state=started
     enabled=yes
+  ignore_errors: True

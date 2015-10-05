@@ -34,6 +34,21 @@ sub vcl_recv {
         error 500 "Unknown Backend";
     }
 
+    if (req.url ~ "/umfragen/current_poll" ) {
+        return (pass);
+    }
+
+    if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
+        /* All assests from the theme should be cached anonymously, also from ++plone++static */
+        if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
+            return (pass);
+        } else {
+          unset req.http.Authorization;
+          unset req.http.Cookie;
+          return (lookup);
+        }
+    }
+
 }
 
 sub vcl_hit {
@@ -55,4 +70,28 @@ sub vcl_fetch {
        set beresp.do_esi = true; 
        set beresp.ttl = 5m;
     }
+
+    if (req.url ~ "/blog-mit/frontpage_view.include" ) {
+        set beresp.ttl = 5m;
+        set beresp.http.cache-control = "max-age=300;s-maxage=300";
+        set beresp.http.max-age = "300";
+        set beresp.http.s-maxage = "300";
+        return ( deliver );
+    }
+
+    if (req.url ~ "/..images/" ) {
+        set beresp.ttl = 5m;
+        set beresp.http.cache-control = "max-age=300;s-maxage=0";
+        set beresp.http.max-age = "300";
+        set beresp.http.s-maxage = "0";
+        return ( deliver );
+    }
+    if (req.url ~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)" ) {
+        set beresp.ttl = 1209600s;
+        set beresp.http.cache-control = "max-age=1209600;s-maxage=1209600";
+        set beresp.http.max-age = "1209600";
+        set beresp.http.s-maxage = "1209600";
+        return ( deliver );
+    }
+
 }

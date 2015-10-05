@@ -28,3 +28,4 @@
     name=varnish
     state=started
     enabled=yes
+  ignore_errors: True
