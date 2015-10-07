@@ -1,5 +1,6 @@
 RewriteRule ^/_assets - [L,NC]
 RewriteRule ^/_sync - [L,NC]
+RewriteRule ^/_include - [L,NC]
 RewriteRule ^/servlet - [L,NC]
 RewriteRule ^/servlets - [L,NC]
 RewriteRule ^/resources - [L,NC]

@@ -99,7 +99,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
     </Location>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude 
-    <LocationMatch "^/(index.html|(_assets|_sync|servlet|servlets|resources|footer|funktionen|system|aktuelles|leitbild|leitbild-startseite|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen|it-newsletter|smartphones|test-mensa)/(.*))">
+    <LocationMatch "^/(index.html|(_assets|_sync|_include|servlet|servlets|resources|footer|funktionen|system|aktuelles|leitbild|leitbild-startseite|besser-werden|einrichtungen|meine-angebote|personen|services|weiterbildung|wir-haben-verbessert|wissen|it-newsletter|smartphones|test-mensa)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
 #        ProxyPass http://127.0.0.1:8001
@@ -123,7 +123,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 
 </VirtualHost>
 
-<VirtualHost  *:443>
+<VirtualHost  *:88>
 
     ServerName www.intranet.verwaltung.uni-muenchen.de
     DocumentRoot /var/www/html
@@ -135,22 +135,22 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
     LimitRequestFieldSize 65536
     LimitRequestLine 65536
 
-    # Schaltet die SSL-Maschinerie an
-    SSLEngine on
-
-    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
-    SSLProtocol all -SSLv2 -SSLv3
-
-    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
-    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
-
-    # Datei mit dem Serverzertifikat
-    SSLCertificateFile /shared/pki/certs/www.intranet.verwaltung.uni-muenchen.de.pem
-    # Datei mit dem Key dazu
-    SSLCertificateKeyFile /shared/pki/keys/www.intranet.verwaltung.uni-muenchen.de_key.pem
-
-    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
-    SSLCertificateChainFile /shared/pki/certs/dfn-chain.crt
+#    # Schaltet die SSL-Maschinerie an
+#    SSLEngine on
+#
+#    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
+#    SSLProtocol all -SSLv2 -SSLv3
+#
+#    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
+#    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
+#
+#    # Datei mit dem Serverzertifikat
+#    SSLCertificateFile /shared/pki/certs/www.intranet.verwaltung.uni-muenchen.de.pem
+#    # Datei mit dem Key dazu
+#    SSLCertificateKeyFile /shared/pki/keys/www.intranet.verwaltung.uni-muenchen.de_key.pem
+#
+#    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
+#    SSLCertificateChainFile /shared/pki/certs/dfn-chain.crt
 
     # Das sind ein paar abgeschriebene Sachen, wird schon passen
     <Files ~ "\.(cgi|shtml|phtml|php3?)$">
@@ -162,6 +162,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
     
     Header set EDUPersonPrincipalName  
     Header set UID Gisela.Mustermann
+    Header unset Strict-Transport-Security
     
     # Proxy-Regeln für Backend
     ProxyVia On
