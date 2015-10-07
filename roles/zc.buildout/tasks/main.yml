@@ -48,15 +48,19 @@
 
 - name: install zc.buildout
   pip: 
-    name=zc.buildout
+    name={{ item }}
     state=present
     virtualenv="{{ buildout.path }}{{ buildout.directory }}"
-    #extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
+    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
     #virtualenv_python={{ buildout.python }}
-  #become_user: plone_buildout
+  become_user: plone_buildout
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  with_items:
+    - setuptools>=18.3.2
+    - pip
+    - zc.buildout>=2.4.4
 
 - name: Ensure buildout-directory is owned by user plone_buildout
   file:

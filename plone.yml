@@ -1,65 +1,101 @@
 ---
 
-- hosts: zope-dbs-production
+- hosts: plone
   sudo: true
 
   roles:
+    - base-preseed
     - plone-base
+    - supervisor
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
+      }
+
+- hosts: zope-dbs-production
+  sudo: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
     -  { role: zc.buildout,
          buildout: {
-            path: /usr/local/Plone/,
-            directory: production.buildout,
+            path: /usr/local/,
+            directory: buildout.zeoserver-production,
             src: {
                 type: git,
                 src: "https://github.com/loechel/lmu-iuk.buildout.git",
-                rev: HEAD,
+                rev: buildout-cleanup,
+            },
+            config: zeoserver-production.cfg,
+            python: python2.7,
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: 'templates/secrets.cfg.j2',
+            login: 'admin',
+            password: 'admin',
+         }}
+
+
+# - hosts: zope-dbs-failover-production
+#   sudo: true
+
+#   handlers:
+#     - include: roles/supervisor/handlers/main.yml
+
+#     -  { role: zc.buildout,
+#          buildout: {
+#             path: /usr/local/,
+#             directory: buildout.zeoserver-failover-production,
+#             src: {
+#                 type: git,
+#                 src: "https://github.com/loechel/lmu-iuk.buildout.git",
+#                 rev: buildout-cleanup,
+#             },
+#             config: zeoserver-failover-production.cfg,
+#             python: python2.7,
+#             buildout_user: plone_buildout,
+#             requires_secrets: true,
+#             secrets: 'templates/secrets.cfg.j2'          login: 'admin',
+#          }}
+
+
+- hosts: zope-clients-production
+  sudo: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    -  { role: zc.buildout,
+         buildout: {
+            path: /usr/local/,
+            directory: buildout.zope-clients-production,
+            src: {
+                type: git,
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                rev: buildout-cleanup,
             },
             config: zope-clients-production.cfg,
             python: python2.7,
             buildout_user: plone_buildout,
             requires_secrets: true,
-            secrets: files/secrets.cfg,
+            secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
          }}
 
 
-- hosts: zope-dbs-failover-production
+- hosts: plone
   sudo: true
 
-  roles:
-    - plone-base
-    -  { role: zc.buildout,
-         buildout: {
-            path: /usr/local/Plone/,
-            directory: production.buildout,
-            src: {
-                type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
-                rev: master
-            },
-            config: zeoserver-failover-production.cfg,
-            python: python2.7,
-            buildout_user: plone_buildout,
-            requires_secrets: false,
-            secrets: files/secrets.cfg,
-         }}
+  tasks:
 
-- hosts: zope-clients-production
-  sudo: true
-
-  roles:
-    - plone-base
-    -  { role: zc.buildout,
-         buildout: {
-            path: /usr/local/Plone/,
-            directory: production.buildout,
-            src: {
-                type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
-                rev: master
-            },
-            config: zeoserver-failover-production.cfg,
-            python: python2.7,
-            buildout_user: plone_buildout,
-            requires_secrets: false,
-            secrets: files/secrets.cfg,
-         }}
+    - name: "Restart Supervisor"
+      service:
+        name=supervisor
+        state=restarted
+        sleep=5

@@ -40,10 +40,19 @@
     path={{ item }}
     owner=plone_buildout
     group=plone_group
-    mode="u=rwx,g=rx,u=rx"
+    mode="u=rwx,g=rx,o=rx"
     state=directory
   with_items:
     - /usr/local/buildout-cache
     - /usr/local/buildout-cache/downloads
     - /usr/local/buildout-cache/eggs
     - /usr/local/buildout-cache/extends
+    - /home/plone_buildout/.buildout
+
+- name: Copy default.cfg if provided
+  copy:
+    dest="/home/plone_buildout/.buildout/default.cfg"
+    src=default.cfg
+    owner=plone_buildout
+    group=plone_group
+    mode="u=rwx,g=r,o="
