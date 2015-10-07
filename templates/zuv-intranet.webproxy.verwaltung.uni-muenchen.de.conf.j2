@@ -122,3 +122,63 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 #        RewriteRule ^/(.*)$ http://cms-live-app3:8080/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-intranet/VirtualHostRoot/$1 [P,L]  # direct Plone debug-instance on cms-live-app3
 
 </VirtualHost>
+
+<VirtualHost  *:443>
+
+    ServerName www.intranet.verwaltung.uni-muenchen.de
+    DocumentRoot /var/www/html
+
+    # Setzt / Verändert Core Parameter des apache, wieviele Request Header Informationen er zulässt.
+    LimitRequestBody 0
+    #Verfolgen ob der LimitRequestFields-Default-Wert von 100 ausreicht und bei Bedarf anpassen
+    #LimitRequestFields 250
+    LimitRequestFieldSize 65536
+    LimitRequestLine 65536
+
+    # Schaltet die SSL-Maschinerie an
+    SSLEngine on
+
+    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
+    SSLProtocol all -SSLv2 -SSLv3
+
+    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
+    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
+
+    # Datei mit dem Serverzertifikat
+    SSLCertificateFile /shared/pki/certs/www.intranet.verwaltung.uni-muenchen.de.pem
+    # Datei mit dem Key dazu
+    SSLCertificateKeyFile /shared/pki/keys/www.intranet.verwaltung.uni-muenchen.de_key.pem
+
+    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
+    SSLCertificateChainFile /shared/pki/certs/dfn-chain.crt
+
+    # Das sind ein paar abgeschriebene Sachen, wird schon passen
+    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+        SSLOptions +StdEnvVars
+    </Files>
+    <Directory "/var/www/cgi-bin">
+        SSLOptions +StdEnvVars
+    </Directory>
+    
+    Header set EDUPersonPrincipalName  
+    Header set UID Gisela.Mustermann
+    
+    # Proxy-Regeln für Backend
+    ProxyVia On
+    ProxyRequests Off
+    ProxyPreserveHost On
+
+    # prevent your web server from being used as global HTTP proxy
+    <LocationMatch "^[^/]">
+        Deny from all
+    </LocationMatch>
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    ProxyPass / http://127.0.0.1:80/
+    ProxyPassReverse / http://127.0.0.1:80/
+
+</VirtualHost>

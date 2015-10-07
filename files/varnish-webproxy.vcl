@@ -38,9 +38,9 @@ sub vcl_recv {
         return (pass);
     }
 
-    if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
+//    if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
         /* All assests from the theme should be cached anonymously, also from ++plone++static */
-        if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
+/*        if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
             return (pass);
         } else {
           unset req.http.Authorization;
@@ -48,7 +48,7 @@ sub vcl_recv {
           return (lookup);
         }
     }
-
+*/
 }
 
 sub vcl_hit {
