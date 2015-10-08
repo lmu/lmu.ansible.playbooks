@@ -123,7 +123,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
 
 </VirtualHost>
 
-<VirtualHost  *:88>
+<VirtualHost  *:8080>
 
     ServerName www.intranet.verwaltung.uni-muenchen.de
     DocumentRoot /var/www/html
@@ -160,7 +160,7 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
         SSLOptions +StdEnvVars
     </Directory>
     
-    Header set EDUPersonPrincipalName  
+    Header set EDUPersonPrincipalName 57F65C58C10308C8@lmu.de
     Header set UID Gisela.Mustermann
     Header unset Strict-Transport-Security
     
@@ -178,6 +178,9 @@ object-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenche
         Order deny,allow
         Allow from all
     </Proxy>
+
+    Header set X-Backend-For Fiona
+    RequestHeader set X-Backend-For Fiona
 
     ProxyPass / http://127.0.0.1:80/
     ProxyPassReverse / http://127.0.0.1:80/
