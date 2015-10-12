@@ -46,21 +46,13 @@
     recurse=yes
     state=directory
 
-- name: install zc.buildout
-  pip: 
-    name={{ item }}
-    state=present
-    virtualenv="{{ buildout.path }}{{ buildout.directory }}"
-    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
-    #virtualenv_python={{ buildout.python }}
-  become_user: plone_buildout
-  environment:
-    http_proxy: "{{ lookup('env', 'http_proxy') }}"
-    https_proxy: "{{ lookup('env', 'https_proxy') }}"
-  with_items:
-    - setuptools>=18.3.2
-    - pip
-    - zc.buildout>=2.4.4
+- name: Create virtualenv in buildout directory
+  command: virtualenv --no-pip --no-setuptools --no-wheel --no-site-packages {{ buildout.path }}{{ buildout.directory }}
+    chdir="{{ buildout.path }}"
+    creates="{{ buildout.path }}{{ buildout.directory }}/bin/activate"
+  #register: virtualenv_setup
+  #ignore_errors: yes
+  #failed_when: "'Permission denied' in virtualenv_setup.stderr"
 
 - name: Ensure buildout-directory is owned by user plone_buildout
   file:
@@ -123,14 +115,41 @@
     group=plone_group
     mode="u=rwx,g=rx,o=rx"
 
+- name: Bootstrap buildout
+  command: python bootstrap.py --version=2.4.4 --setuptools-version=18.4
+    chdir="{{ buildout.path }}{{ buildout.directory }}"
+    creates="{{ buildout.path }}{{ buildout.directory }}/bin/buildout"
+  environment:
+    VIRTUAL_ENV: "{{ buildout.path }}{{ buildout.directory }}"
+    PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  become_user: plone_buildout
+
 - name: Run buildout
   command: ./bin/buildout
     chdir="{{ buildout.path }}{{ buildout.directory }}"
   environment:
-    VIRTUAL_ENV: "{{ buildout.directory }}"
+    VIRTUAL_ENV: "{{ buildout.path }}{{ buildout.directory }}"
     PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  become_user: plone_buildout
+
+
+- name: delete existing mo files of src
+  command: find . -iname *.mo -delete
+    chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+  become_user: plone_buildout
+
+- name: Compile po to po.mo files of src
+  command: find . -iname *.po -exec msgfmt {} -o {}.mo \;
+    chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+  become_user: plone_buildout
+
+- name: rename po.mo to mo files of src
+  command: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
+    chdir="{{ buildout.path }}{{ buildout.directory }}/src"
   become_user: plone_buildout
 
 - name: set normal file rights for supervisor conf.d directory

@@ -16,6 +16,19 @@
     - build-essential
   when: ansible_os_family == "Debian"
 
+- name: install latest setuptools and pip 
+  pip: 
+    name={{ item }}
+    state=latest
+    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  with_items:
+    - setuptools
+    - pip
+    - virtualenv
+
 - name: Ensure Group plone_group exists
   group:
     name=plone_group
@@ -49,10 +62,29 @@
     - /usr/local/buildout-cache/extends
     - /home/plone_buildout/.buildout
 
-- name: Copy default.cfg if provided
+- name: Copy default.cfg for plone_buildout if provided
   copy:
     dest="/home/plone_buildout/.buildout/default.cfg"
     src=default.cfg
     owner=plone_buildout
     group=plone_group
-    mode="u=rwx,g=r,o="
+    mode="u=rwx,g=r,o=r"
+
+
+- name: Ensure .buildout of sudo user exists
+  file:
+    path={{ item }}
+    owner=ansible
+    group=ansible
+    mode="u=rwx,g=rx,o=rx"
+    state=directory
+  with_items:
+    - /home/ansible/.buildout
+
+- name: Copy default.cfg if provided
+  copy:
+    dest="/home/ansible/.buildout/default.cfg"
+    src=default.cfg
+    mode="u=rwx,g=r,o=r"
+    owner=ansible
+    group=ansible
