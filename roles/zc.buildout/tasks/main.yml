@@ -121,7 +121,7 @@
     creates="{{ buildout.path }}{{ buildout.directory }}/bin/buildout"
   environment:
     VIRTUAL_ENV: "{{ buildout.path }}{{ buildout.directory }}"
-    PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ buildout.path }}{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
@@ -131,7 +131,7 @@
     chdir="{{ buildout.path }}{{ buildout.directory }}"
   environment:
     VIRTUAL_ENV: "{{ buildout.path }}{{ buildout.directory }}"
-    PATH: "{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ buildout.path }}{{ buildout.directory }}/bin:{{ ansible_env.PATH }}"
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
