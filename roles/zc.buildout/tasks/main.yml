@@ -126,6 +126,10 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
 
+- name: delete dirty src folder
+  command: rm -rf */
+    chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+
 - name: Run buildout
   command: ./bin/buildout
     chdir="{{ buildout.path }}{{ buildout.directory }}"
@@ -135,7 +139,6 @@
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
-
 
 - name: delete existing mo files of src
   command: find . -iname *.mo -delete
