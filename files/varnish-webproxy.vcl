@@ -26,7 +26,11 @@ sub vcl_recv {
     }
 
     # Backend selection
-    if (req.http.X-Backend-For == "Fiona") {
+    if (req.url ~ "^/_include/") {
+        set req.backend = fiona;
+    } else if (req.url ~ "\.include") {
+        set req.backend = plone;
+    } else if (req.http.X-Backend-For == "Fiona") {
         set req.backend = fiona;
     } else if (req.http.X-Backend-For == "Plone") {
         set req.backend = plone;
