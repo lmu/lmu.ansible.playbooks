@@ -1,0 +1,208 @@
+---
+
+- hosts: zope-clients-martius4-production
+  sudo: true
+
+  tasks:
+    - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
+      haproxy:
+        state=disabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      with_items:
+        - clients
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Disable Server / Zope-Clients on Load Balancing WebProxy2
+      haproxy:
+        state=disabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      with_items:
+        - clients
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Stop Zope Clients via Supervisor
+      supervisorctl:
+        name={{ item }}
+        state=stopped
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+
+- hosts: zope-clients-martius4-production
+  sudo: true
+
+  roles:
+    -  { role: zc.buildout,
+         buildout: {
+            path: /usr/local/,
+            directory: buildout.zope-clients-production,
+            src: {
+                type: git,
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                rev: buildout-cleanup,
+            },
+            config: zope-clients-production.cfg,
+            python: python2.7,
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+         }}
+
+
+- hosts: zope-clients-martius4-production
+  sudo: true
+
+  tasks:
+    - name: Start Zope Clients via Supervisor
+      supervisorctl:
+        name={{ items }}
+        state=started
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
+      haproxy:
+        state=enabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - clients
+
+    - name: Enable Server / Zope-Clients on Load Balancing WebProxy2
+      haproxy:
+        state=enabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - clients
+
+- hosts: zope-clients-ludwig27-production
+  sudo: true
+
+  tasks:
+    - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
+      haproxy:
+        state=disabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      with_items:
+        - clients
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Disable Server / Zope-Clients on Load Balancing WebProxy2
+      haproxy:
+        state=disabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      with_items:
+        - clients
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Stop Zope Clients via Supervisor
+      supervisorctl:
+        name={{ item }}
+        state=stopped
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+
+- hosts: zope-clients-ludwig27-production
+  sudo: true
+
+  roles:
+    -  { role: zc.buildout,
+         buildout: {
+            path: /usr/local/,
+            directory: buildout.zope-clients-production,
+            src: {
+                type: git,
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                rev: buildout-cleanup,
+            },
+            config: zope-clients-production.cfg,
+            python: python2.7,
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+         }}
+
+
+- hosts: zope-clients-ludwig27-production
+  sudo: true
+
+  tasks:
+    - name: Start Zope Clients via Supervisor
+      supervisorctl:
+        name={{ items }}
+        state=started
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+
+    - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
+      haproxy:
+        state=enabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - clients
+
+    - name: Enable Server / Zope-Clients on Load Balancing WebProxy2
+      haproxy:
+        state=enabled
+        host={{ inventory_hostname }}-{{ item }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - clients
+

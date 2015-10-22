@@ -98,4 +98,4 @@
       service:
         name=supervisor
         state=restarted
-        sleep=10
+        sleep=20
