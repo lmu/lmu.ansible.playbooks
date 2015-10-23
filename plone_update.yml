@@ -46,6 +46,12 @@
   sudo: true
 
   roles:
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: false
+         }
+       }
     -  { role: zc.buildout,
          buildout: {
             path: /usr/local/,
@@ -63,12 +69,33 @@
           login: 'admin',
           password: 'admin',
          }}
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: true
+         }
+       }
 
 
 - hosts: zope-clients-martius4-production
   sudo: true
 
   tasks:
+
+    - name: Update Supervisorctl - Ensure Zope Clients are present
+      supervisorctl:
+        name={{ item }}
+        state=present
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - HttpOKClient1
+        - HttpOKClient2
+        - HttpOKClient3
+        - HttpOKClient4
+
     - name: Start Zope Clients via Supervisor
       supervisorctl:
         name={{ item }}
@@ -153,6 +180,12 @@
   sudo: true
 
   roles:
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: false
+         }
+       }
     -  { role: zc.buildout,
          buildout: {
             path: /usr/local/,
@@ -170,12 +203,33 @@
           login: 'admin',
           password: 'admin',
          }}
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: true
+         }
+       }
 
 
 - hosts: zope-clients-ludwig27-production
   sudo: true
 
   tasks:
+
+    - name: Update Supervisorctl - Ensure Zope Clients are present
+      supervisorctl:
+        name={{ item }}
+        state=present
+      with_items:
+        - client1
+        - client2
+        - client3
+        - client4
+        - HttpOKClient1
+        - HttpOKClient2
+        - HttpOKClient3
+        - HttpOKClient4
+
     - name: Start Zope Clients via Supervisor
       supervisorctl:
         name={{ item }}
