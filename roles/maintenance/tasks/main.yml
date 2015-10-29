@@ -5,7 +5,6 @@
   when: ansible_os_family == "Debian"
   notify: 
   - "Restart Server"
-  - "Inform that Server needs restart and is disallowed"
   - "Wait for Server to come back"
 
 - stat: path=/var/run/reboot-required
@@ -23,3 +22,9 @@
   command: apt-get autoremove -y
   when: "check_autoremove.rc == 0 and ' 0 zu entfernen' not in check_autoremove.stdout"
   register: autoremove
+
+- name: "Inform that Server needs restart and is disallowed"
+  debug: 
+    msg="Server {{ inventory_hostname }} needs restart, please perform / start this manually."
+  when: reboot_required.stat.exists and not maintenance.allow_reboot
+  changed_when: reboot_required.stat.exists and not maintenance.allow_reboot
