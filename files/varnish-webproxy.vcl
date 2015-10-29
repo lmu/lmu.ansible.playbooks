@@ -30,6 +30,8 @@ sub vcl_recv {
         set req.backend = fiona;
     } else if (req.url ~ "\.include") {
         set req.backend = plone;
+        # Never Cache Plone Backend .includes
+        return (pass);
     } else if (req.http.X-Backend-For == "Fiona") {
         set req.backend = fiona;
     } else if (req.http.X-Backend-For == "Plone") {
@@ -38,13 +40,10 @@ sub vcl_recv {
         error 500 "Unknown Backend";
     }
 
-    if (req.url ~ "/umfragen/current_poll" ) {
-        return (pass);
-    }
-
-//    if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
-        /* All assests from the theme should be cached anonymously, also from ++plone++static */
-/*        if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
+/*
+    # All assests from the theme should be cached anonymously, also from ++plone++static 
+    if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
+        if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
             return (pass);
         } else {
           unset req.http.Authorization;
