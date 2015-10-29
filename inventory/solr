@@ -4,16 +4,20 @@
 search3.verwaltung.uni-muenchen.de
 
 [solr-slaves-production]
-search4.verwaltung.uni-muenchen.de
 
 [solrs-production:children]
 solr-masters-production
 solr-slaves-production
 
 [solr-masters-staging]
+search4.verwaltung.uni-muenchen.de
 
 [solr-slaves-staging]
 
 [solrs-staging:children]
 solr-masters-staging
 solr-slaves-staging
+
+[solrs:children]
+solrs-production
+solrs-staging

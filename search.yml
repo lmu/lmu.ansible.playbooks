@@ -1,6 +1,6 @@
 ---
 
-- hosts: solrs-production
+- hosts: solrs
   sudo: true
 
   vars:
@@ -35,7 +35,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'master.cfg',
+          config: 'production-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -71,7 +71,80 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'slave.cfg',
+          config: 'production-slave.cfg',
+          requires_secrets: true,
+          secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          src: {
+            src: 'https://github.com/loechel/solr.buildout.git',
+            type: 'git',
+            rev: 'master'
+          }
+        }
+      }
+  tasks:
+
+    - name: "check if 'solr-instance' is present"
+      supervisorctl:
+        name="solr-instance"
+        state=present
+
+    - name: "Restart Supervisor"
+      service:
+        name=supervisor
+        state=restarted
+        sleep=5
+
+- hosts: solr-masters-staging
+  sudo: true
+
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+          path: '/usr/local/',
+          directory: 'solr.buildout',
+          config: 'staging-master.cfg',
+          requires_secrets: true,
+          secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          src: {
+            src: 'https://github.com/loechel/solr.buildout.git',
+            type: 'git',
+            rev: 'master'
+          }
+        }
+      }
+  tasks:
+
+    - name: "check if 'solr-instance' is present"
+      supervisorctl:
+        name="solr-instance"
+        state=present
+
+    - name: "Restart Supervisor"
+      service:
+        name=supervisor
+        state=restarted
+        sleep=5
+
+- hosts: solr-slaves-staging
+  sudo: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+          path: '/usr/local/',
+          directory: 'solr.buildout',
+          config: 'staging-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
