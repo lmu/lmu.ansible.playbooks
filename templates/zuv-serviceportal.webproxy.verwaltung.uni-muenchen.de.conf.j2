@@ -96,7 +96,7 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
     </LocationMatch>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude 
-    <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert)/(.*))">
+    <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|leitbild|leitbild-startseite|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
 #        ProxyPass http://127.0.0.1:8001
