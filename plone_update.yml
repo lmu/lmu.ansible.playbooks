@@ -33,14 +33,14 @@
         name={{ item }}
         state=stopped
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
 - hosts: zope-clients-martius4-production
   sudo: true
@@ -87,28 +87,28 @@
         name={{ item }}
         state=present
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
     - name: Start Zope Clients via Supervisor
       supervisorctl:
         name={{ item }}
         state=started
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
     - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
       haproxy:
@@ -167,14 +167,14 @@
         name={{ item }}
         state=stopped
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
 - hosts: zope-clients-ludwig27-production
   sudo: true
@@ -221,28 +221,28 @@
         name={{ item }}
         state=present
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
     - name: Start Zope Clients via Supervisor
       supervisorctl:
         name={{ item }}
         state=started
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - HttpOKClient1
-        - HttpOKClient2
-        - HttpOKClient3
-        - HttpOKClient4
+        - clients:client1
+        - clients:client2
+        - clients:client3
+        - clients:client4
+        - HttpOkClient1
+        - HttpOkClient2
+        - HttpOkClient3
+        - HttpOkClient4
 
     - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
       haproxy:

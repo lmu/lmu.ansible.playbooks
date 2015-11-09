@@ -48,6 +48,7 @@
     - aptitude
     - ssl-cert
     - update-notifier-common
+    - software-properties-common
     - facter
     - ohai
     - python

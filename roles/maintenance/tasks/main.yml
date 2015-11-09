@@ -28,3 +28,12 @@
     msg="Server {{ inventory_hostname }} needs restart, please perform / start this manually."
   when: reboot_required.stat.exists and not maintenance.allow_reboot
   changed_when: reboot_required.stat.exists and not maintenance.allow_reboot
+
+- name: "Restart Server if allowed"
+  command: shutdown -r now "Reboot triggered by Ansible after system updates"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: reboot_required.stat.exists and ansible_os_family == "Debian" and maintenance.allow_reboot 
+  notify: 
+  - "Wait for Server to come back"
