@@ -12,6 +12,7 @@
         proxy: {
           no_proxy: [
             "www.scm.verwaltung.uni-muenchen.de",
+            "pypi.verwaltung.uni-muenchen.de",
             "www.intranet.verwaltung.uni-muenchen.de",
             "www.serviceportal.verwaltung.uni-muenchen.de",
             "cms-live-pm1",
@@ -40,6 +41,6 @@
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",
-          allow_reboot: true
+          allow_reboot: false
         }
       }

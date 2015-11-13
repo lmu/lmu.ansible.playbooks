@@ -78,6 +78,8 @@
         - fiona_intranet_blacklist.include
         - fiona_serviceportal_blacklist.include
         - plone_blacklist_rewrite.include
+      notify:
+        - "Reload Apache httpd"
 
     - name: "Install vhost.confs for sites"
       template: 
@@ -91,7 +93,6 @@
         - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
         - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
       notify:
-        - "Restart Apache httpd"
         - "Reload Apache httpd"
 
     - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
@@ -106,5 +107,4 @@
         - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
         - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
       notify:
-        - "Restart Apache httpd"
         - "Reload Apache httpd"
