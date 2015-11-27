@@ -16,11 +16,26 @@
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",
-          allow_reboot: false
+          allow_reboot: true
         }
       }
     - supervisor
 
+  tasks:
+
+    - name: remove .installed.cfg
+      file:
+        path='/usr/local/solr.buildout/.installed.cfg'
+        state=absent
+
+
+    - name: remove part elems
+      file:
+        path={{ item }}
+        state=absent
+      with_items:
+        - '/usr/local/solr.buildout/parts/solr-download-stable'
+        - '/usr/local/solr.buildout/parts/solr-download-latest'
 
 
 - hosts: solr-masters-production
@@ -35,7 +50,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'production-master.cfg',
+          config: 'develop.cfg', #'production-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -71,7 +86,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'production-slave.cfg',
+          config: 'develop.cfg', #'production-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -108,7 +123,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'staging-master.cfg',
+          config: 'develop.cfg', #'staging-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -144,7 +159,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'staging-slave.cfg',
+          config: 'develop.cfg', #'staging-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
