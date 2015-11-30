@@ -1,7 +1,7 @@
 ---
 
 - name: "Restart Server"
-  command: shutdown -r now "Reboot triggered by Ansible after system updates"
+  command: shutdown -r +1 "Reboot triggered by Ansible after system updates"
   async: 0
   poll: 0
   ignore_errors: true
@@ -17,4 +17,5 @@
     delay=20
     timeout=300
   sudo: false
-  when: reboot_required.stat.exists
+  when: reboot_required.stat.exists and ansible_os_family == "Debian" and maintenance.allow_reboot
+

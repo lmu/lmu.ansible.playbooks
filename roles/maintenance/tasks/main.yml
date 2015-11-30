@@ -14,13 +14,16 @@
   shell: apt-get autoremove -y --dry-run
   sudo: True
   register: check_autoremove
-  changed_when: "' 0 zu entfernen' not in check_autoremove.stdout"
+  changed_when: "' 0 to remove' not in check_autoremove.stdout"
   failed_when: "check_autoremove.rc != 0"
   always_run: True
+  environment:
+    LC_ALL: C
+    LANG: en
 
 - name: "Autoremove unused Packages"
   command: apt-get autoremove -y
-  when: "check_autoremove.rc == 0 and ' 0 zu entfernen' not in check_autoremove.stdout"
+  when: "check_autoremove.rc == 0 and ' 0 to remove' not in check_autoremove.stdout"
   register: autoremove
 
 - name: "Inform that Server needs restart and is disallowed"
@@ -28,12 +31,3 @@
     msg="Server {{ inventory_hostname }} needs restart, please perform / start this manually."
   when: reboot_required.stat.exists and not maintenance.allow_reboot
   changed_when: reboot_required.stat.exists and not maintenance.allow_reboot
-
-- name: "Restart Server if allowed"
-  command: shutdown -r now "Reboot triggered by Ansible after system updates"
-  async: 0
-  poll: 0
-  ignore_errors: true
-  when: reboot_required.stat.exists and ansible_os_family == "Debian" and maintenance.allow_reboot 
-  notify: 
-  - "Wait for Server to come back"
