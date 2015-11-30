@@ -2,5 +2,4 @@
 CZC52447XZ.verwaltung.uni-muenchen.de ansible_ssh_host=172.23.15.37
 
 [local:vars]
-
 maintenance.allow_reboot=false

@@ -7,7 +7,6 @@
   roles:
     - { role: maintenance,
         maintenance: {
-          upgrade_type: "full",
-          allow_reboot: true
+          upgrade_type: "full"
         }
       }
