@@ -3,12 +3,13 @@
 - name: "Update all Packages (Mode: {{ maintenance.upgrade_type }})"
   apt: upgrade={{ maintenance.upgrade_type }} update_cache=yes
   when: ansible_os_family == "Debian"
-  notify: 
+  notify:
   - "Restart Server"
   - "Wait for Server to come back"
 
 - stat: path=/var/run/reboot-required
   register: reboot_required
+  always_run: True
 
 - name: "Check if anything needs autoremoving"
   shell: apt-get autoremove -y --dry-run
@@ -27,7 +28,16 @@
   register: autoremove
 
 - name: "Inform that Server needs restart and is disallowed"
-  debug: 
+  debug:
     msg="Server {{ inventory_hostname }} needs restart, please perform / start this manually."
   when: reboot_required.stat.exists and not maintenance.allow_reboot
   changed_when: reboot_required.stat.exists and not maintenance.allow_reboot
+
+- name: "Inform that Server needs restart and will be restarted"
+  debug:
+    msg="Server {{ inventory_hostname }} needs restart and will be restarted, now."
+  when: reboot_required.stat.exists and maintenance.allow_reboot
+  changed_when: reboot_required.stat.exists and maintenance.allow_reboot
+  notify:
+  - "Restart Server"
+  - "Wait for Server to come back"
