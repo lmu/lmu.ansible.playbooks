@@ -45,6 +45,6 @@ listen haproxy-master
 
         stats show-desc HAProxy on {{ ansible_fqdn }}
         stats show-legends
-        stats refresh 5s
+        stats refresh 60s
 
         stats admin if TRUE
