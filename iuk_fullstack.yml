@@ -1,18 +1,16 @@
 ---
 
 - include: base-preseed.yml
-- include: maintenance.yml
+- include: maintenance-full.yml
 
 
 
 
 
-- include: search.yml
-- include: webproxies.yml
+#- include: search.yml
+#- include: webproxies.yml
 
 # Infrastruktur
 
-- include: sentry.yml
-- include: monitor-master.yml
-
-
+#- include: sentry.yml
+#- include: monitor-masters.yml

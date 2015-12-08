@@ -61,13 +61,15 @@
     Header set X-XSS-Protection "1; mode=block"
     Header set X-Content-Type-Options "nosniff"
     # Header set Content-Security-Policy-Report-Only "default-src 'self'; img-src *; style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval'"
-    Header set Content-Security-Policy "default-src 'self' cms-static.uni-muenchen.de iukintest.verwaltung.uni-muenchen.de iuksptest.verwaltung.uni-muenchen.de; \
-script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de iukintest.verwaltung.uni-muenchen.de iuksptest.verwaltung.uni-muenchen.de; \
+    Header set Content-Security-Policy "\
+default-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de; \
+script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de; \
 style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 img-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 font-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
-object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de;"
-    RequestHeader set X-Forwarded-For "www.serviceportal.verwaltung.uni-muenchen.de:443"
+object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;"
+    # RequestHeader append X-Forwarded-For "www.serviceportal.verwaltung.uni-muenchen.de:443"
+    RequestHeader append X-Forwarded-For ", zuv-serviceportal.{{ ansible_fqdn | lower }}"
     RequestHeader set X-Backend-For Fiona
     RequestHeader set X-Use-ESI true
 
