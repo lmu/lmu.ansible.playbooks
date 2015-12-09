@@ -10,6 +10,7 @@ cms-live-app3.verwaltung.uni-muenchen.de
 #cms-live-app4.verwaltung.uni-muenchen.de
 
 [webproxies-production]
+#webproxy1.verwaltung.uni-muenchen.de
 webproxy2.verwaltung.uni-muenchen.de
 
 [webproxies:children]
