@@ -68,7 +68,6 @@ style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-mue
 img-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 font-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;"
-    # RequestHeader append X-Forwarded-For "www.serviceportal.verwaltung.uni-muenchen.de:443"
     RequestHeader append X-Forwarded-For "zuv-serviceportal.{{ ansible_fqdn | lower }}"
     RequestHeader set X-Backend-For Fiona
     RequestHeader set X-Use-ESI true
@@ -101,20 +100,11 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.in
     <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|leitbild|leitbild-startseite|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
-#        ProxyPass http://127.0.0.1:8001
-#        ProxyPassReverse http://127.0.0.1:8001
-#        ProxyPass http://cms-live-pm1.verwaltung.uni-muenchen.de:80
-#        ProxyPassReverse http://cms-live-pm1:80
-#        RewriteRule ^/(.*)$ http://cms-live-pm1.verwaltung.uni-muenchen.de:8080$1 [P]
         Header set X-Backend-For Fiona
         RequestHeader set X-Backend-For Fiona
     </LocationMatch>
 
-    # Rewrite everything that is not Blacklisted in fiona_intranet_blcklist.include or plone_blacklist_rewrite.include to Plone
-
-        RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-serviceportal/VirtualHostRoot/$1 [P,L]  # Varnish
-#        RewriteRule ^/(.*)$ http://127.0.0.1:8000/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-serviceportal/VirtualHostRoot/$1 [P,L]  # HAProxy for Plone
-#        RewriteRule ^/(.*)$ http://cms-live-app3:8080/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-serviceportal/VirtualHostRoot/$1 [P,L]  # direct Plone debug-instance on cms-live-app3
-
+    # Rewrite everything that is not Blacklisted in fiona_intranet_blcklist.include or plone_blacklist_rewrite.include to Plone via Varnish and HAProxy
+    RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.serviceportal.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-serviceportal/VirtualHostRoot/$1 [P,L]  # Varnish
 
 </VirtualHost>
