@@ -2,10 +2,12 @@
 
 
 [zope-clients-production]
-#cms-live-app3.verwaltung.uni-muenchen.de
-cms-live-app4.verwaltung.uni-muenchen.de
+cms-live-app3.verwaltung.uni-muenchen.de
+#cms-live-app4.verwaltung.uni-muenchen.de
 
-
+[zope-clients-ludwig27-production]
+cms-live-app3.verwaltung.uni-muenchen.de
+#cms-live-app4.verwaltung.uni-muenchen.de
 
 [webproxies-production]
 webproxy2.verwaltung.uni-muenchen.de

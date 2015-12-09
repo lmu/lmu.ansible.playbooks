@@ -69,7 +69,7 @@ img-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de www.web-analytics.uni-
 font-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;"
     # RequestHeader append X-Forwarded-For "www.serviceportal.verwaltung.uni-muenchen.de:443"
-    RequestHeader append X-Forwarded-For ", zuv-serviceportal.{{ ansible_fqdn | lower }}"
+    RequestHeader append X-Forwarded-For "zuv-serviceportal.{{ ansible_fqdn | lower }}"
     RequestHeader set X-Backend-For Fiona
     RequestHeader set X-Use-ESI true
 
