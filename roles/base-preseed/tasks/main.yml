@@ -13,7 +13,7 @@
     groups=sudo,
     system=yes
 
-- name: Ensure that admin can login via SSH Public Key
+- name: Ensure that admin can login via SSH Public Key (Transfere Public Key)
   authorized_key: 
     user=ansible
     key="{{ lookup('file', '~/.ssh/id_rsa.pub')}}"
