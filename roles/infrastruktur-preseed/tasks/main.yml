@@ -1,0 +1,83 @@
+---
+
+- name: Change Password for "fachadmin"
+  user:
+    name=fachadmin
+    password={{ fachadmin_password }}
+    update_password=always
+
+- name: Make Infrastruktur-Proxy Settings
+  template:
+    dest=/etc/profile.d/infrastruktur_proxy.sh
+    src=infrastruktur_proxy.sh.j2
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+
+- name: Make APT respect Infrastruktur-Proxy Settings
+  # Clerifiy if this is the best way.
+  copy:
+    dest=/etc/apt/apt.conf.d/infrastruktur_proxy.conf
+    src=infrastruktur_proxy_apt.conf
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+
+- name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
+  file:
+    name=/usr/local/share/ca-certificates/lmu/
+    state=directory
+    mode="u=rwx,g=rx,o=rx"
+    owner=root
+    group=root
+
+#- name: copy ZUV-Proxy-CA and Chain
+#  copy:
+#    dest=/usr/local/share/ca-certificates/lmu/{{ item }}
+#    src=certs/{{ item }}
+#    mode="o=rw,g=r,u=r"
+#    owner=root
+#    group=root
+#  with_items:
+#    - ZUV-CA.crt
+#    - LMU-CA.crt
+#    - lmu-proxy-CA.crt
+
+#- name: Install ZUV-Proxy-CA
+#  command: update-ca-certificates
+#  register: ca_update_result
+#  changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
+
+- name: Add alias for "pip" to always use Infrastruktur-Proxy-CA
+  copy:
+    dest=/etc/profile.d/infrastruktur_proxy_alias.sh
+    src=infrastruktur_proxy_alias.sh
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+
+- name: Update apt/sources.list
+  template:
+    dest=/etc/apt/sources.list
+    src=zuv_source.list.j2
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+
+- name: Update Apt-Keys
+  apt_key:
+    url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
+    state=present
+
+- name: Ensure Base-Packages (common) are installed
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+    - vim
+    - aptitude
+    - update-notifier-common
+    - bginfo-ubuntu
+    - certs-zuv-ubuntu
+  when: ansible_os_family == "Debian"
+  notify: 
+    - Restart xinetd

@@ -15,14 +15,26 @@
       superuser_email: Alexander.Loechel@lmu.de
 
   vars_files:
-    - secret.yml
+    - secrets.yml
 
   roles:
+    - base-preseed
+    - { role: infrastruktur-preseed,
+        proxy: {
+          no_proxy: [
+            "www.scm.verwaltung.uni-muenchen.de",
+            "pypi.verwaltung.uni-muenchen.de",
+          ]
+        }
+      }
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
+      }
     - supervisor
     - role: nginx
       nginx_sites: none
     - postgres
     - sentry
-  dependencies:
-    - { role: base-preseed }
-    - { role: maintenance }

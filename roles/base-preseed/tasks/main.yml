@@ -64,4 +64,7 @@
     - wget
     - bzip2
     - gzip
+    - hv-kvp-daemon-init
+#    - linux-tools
+#    - linux-cloud-tools
   when: ansible_os_family == "Debian"

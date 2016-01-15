@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+export http_proxy="http://webscan1.verwaltung.uni-muenchen.de:8080"
+export ftp_proxy="http://webscan1.verwaltung.uni-muenchen.de:8080"
+export https_proxy="https://webscan1.verwaltung.uni-muenchen.de:8443"
+export no_proxy="localhost, 127.0.0.1, yup.verwaltung.uni-muenchen.de, apt.verwaltung.uni-muenchen.de{% for fqdn in proxy.no_proxy %}, {{ fqdn }}{% endfor %}"
