@@ -13,7 +13,7 @@
 
 - name: "Check if anything needs autoremoving"
   shell: apt-get autoremove -y --dry-run
-  sudo: True
+  become: True
   register: check_autoremove
   changed_when: "' 0 to remove' not in check_autoremove.stdout"
   failed_when: "check_autoremove.rc != 0"

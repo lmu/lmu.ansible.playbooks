@@ -2,7 +2,7 @@
 # Repair setup of some Servers
 
 - hosts: all
-  sudo: true
+  become: true
   gather_facts: true
 
   tasks:

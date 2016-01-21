@@ -1,7 +1,7 @@
 ---
 
 - hosts: plone
-  sudo: true
+  become: true
 
   roles:
     - base-preseed
@@ -15,7 +15,7 @@
       }
 
 - hosts: zope-dbs-production
-  sudo: true
+  become: true
 
   handlers:
     - include: roles/supervisor/handlers/main.yml
@@ -41,7 +41,7 @@
 
 
 # - hosts: zope-dbs-failover-production
-#   sudo: true
+#   become: true
 
 #   handlers:
 #     - include: roles/supervisor/handlers/main.yml
@@ -64,7 +64,7 @@
 
 
 - hosts: zope-clients-production
-  sudo: true
+  become: true
 
   handlers:
     - include: roles/supervisor/handlers/main.yml
@@ -90,7 +90,7 @@
 
 
 - hosts: plone
-  sudo: true
+  become: true
 
   tasks:
 

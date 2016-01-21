@@ -1,7 +1,7 @@
 ---
 
 - hosts: solrs
-  sudo: true
+  become: true
 
   vars:
     java:
@@ -39,7 +39,7 @@
 
 
 - hosts: solr-masters-production
-  sudo: true
+  become: true
 
 
   handlers:
@@ -76,7 +76,7 @@
         sleep=5
 
 - hosts: solr-slaves-production
-  sudo: true
+  become: true
 
   handlers:
     - include: roles/supervisor/handlers/main.yml
@@ -112,7 +112,7 @@
         sleep=5
 
 - hosts: solr-masters-staging
-  sudo: true
+  become: true
 
 
   handlers:
@@ -149,7 +149,7 @@
         sleep=5
 
 - hosts: solr-slaves-staging
-  sudo: true
+  become: true
 
   handlers:
     - include: roles/supervisor/handlers/main.yml

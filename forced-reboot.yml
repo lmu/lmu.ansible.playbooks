@@ -1,7 +1,7 @@
 ---
 
 - hosts: all
-  sudo: true
+  become: true
   gather_facts: true
 
   tasks:
@@ -22,4 +22,4 @@
       state=started
       delay=20
       timeout=300
-    sudo: false
+    become: false

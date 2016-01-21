@@ -1,7 +1,7 @@
 ---
 
 - hosts: monitor-masters
-  sudo: true
+  become: true
 
   roles:
   #  - omd

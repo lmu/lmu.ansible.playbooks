@@ -2,7 +2,7 @@
 ---
 
 - hosts: sentry
-  sudo: true
+  become: true
 
   vars:
     supervisor:

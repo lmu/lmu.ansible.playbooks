@@ -1,7 +1,7 @@
 ---
 
 - hosts: zope-clients-martius4-production
-  sudo: true
+  become: true
 
   tasks:
     - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
@@ -43,7 +43,7 @@
         - HttpOkClient4
 
 - hosts: zope-clients-martius4-production
-  sudo: true
+  become: true
 
   roles:
     -  { role: maintenance,
@@ -78,7 +78,7 @@
 
 
 - hosts: zope-clients-martius4-production
-  sudo: true
+  become: true
 
   tasks:
 
@@ -135,7 +135,7 @@
         - clients
 
 - hosts: zope-clients-ludwig27-production
-  sudo: true
+  become: true
 
   tasks:
     - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
@@ -177,7 +177,7 @@
         - HttpOkClient4
 
 - hosts: zope-clients-ludwig27-production
-  sudo: true
+  become: true
 
   roles:
     -  { role: maintenance,
@@ -212,7 +212,7 @@
 
 
 - hosts: zope-clients-ludwig27-production
-  sudo: true
+  become: true
 
   tasks:
 
