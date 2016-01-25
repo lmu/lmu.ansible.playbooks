@@ -40,27 +40,30 @@
          }}
 
 
-# - hosts: zope-dbs-failover-production
-#   become: true
+- hosts: zope-dbs-failover-production
+  become: true
 
-#   handlers:
-#     - include: roles/supervisor/handlers/main.yml
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
 
-#     -  { role: zc.buildout,
-#          buildout: {
-#             path: /usr/local/,
-#             directory: buildout.zeoserver-failover-production,
-#             src: {
-#                 type: git,
-#                 src: "https://github.com/loechel/lmu-iuk.buildout.git",
-#                 rev: buildout-cleanup,
-#             },
-#             config: zeoserver-failover-production.cfg,
-#             python: python2.7,
-#             buildout_user: plone_buildout,
-#             requires_secrets: true,
-#             secrets: 'templates/secrets.cfg.j2'          login: 'admin',
-#          }}
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+           path: /usr/local/,
+           directory: buildout.zeoserver-failover-production,
+           src: {
+               type: git,
+               src: "https://github.com/loechel/lmu-iuk.buildout.git",
+               rev: buildout-cleanup,
+           },
+           config: zeoserver-failover-production.cfg,
+           python: python2.7,
+           buildout_user: plone_buildout,
+           requires_secrets: true,
+           secrets: 'templates/secrets.cfg.j2',
+           login: 'admin',
+           password: 'admin'
+        }}
 
 
 - hosts: zope-clients-production
@@ -84,8 +87,8 @@
             buildout_user: plone_buildout,
             requires_secrets: true,
             secrets: 'templates/secrets.cfg.j2',
-          login: 'admin',
-          password: 'admin',
+            login: 'admin',
+            password: 'admin',
          }}
 
 
