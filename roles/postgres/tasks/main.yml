@@ -5,6 +5,7 @@
     - postgresql-contrib
     - postgresql-client
     - libpq-dev
+    - pgtop
   when: ansible_os_family == "Debian"
 
 - name: install postgresql python bindings

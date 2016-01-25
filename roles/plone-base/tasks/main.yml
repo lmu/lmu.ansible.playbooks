@@ -44,7 +44,7 @@
     - wv
     - poppler-utils
   register: dependency
-  changed_when: "' 0 newly installed' not in dependency.stdout"
+  #changed_when: "' 0 newly installed' not in dependency.stdout"
   when: ansible_os_family == "Debian"
 
 - name: Ensure Group plone_group exists

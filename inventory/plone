@@ -6,6 +6,9 @@ cms-live-appdb1.verwaltung.uni-muenchen.de
 [zope-dbs-failover-production]
 cms-live-appdb2.verwaltung.uni-muenchen.de
 
+[zope-dbs-staging]
+cms-live-appdb2.verwaltung.uni-muenchen.de
+
 [zope-dbs:children]
 zope-dbs-production
 zope-dbs-failover-production
@@ -17,13 +20,9 @@ cms-live-app3.verwaltung.uni-muenchen.de
 [zope-clients-martius4-production]
 cms-live-app4.verwaltung.uni-muenchen.de
 
-
 [zope-clients-production:children]
 zope-clients-ludwig27-production
 zope-clients-martius4-production
-
-[zope-dbs-staging]
-cms-live-appdb2.verwaltung.uni-muenchen.de
 
 [zope-clients-staging]
 cms-live-app4.verwaltung.uni-muenchen.de

@@ -4,6 +4,7 @@
   apt: name={{ item }} state=present update_cache=no
   with_items:
     - haproxy
+    - hatop
   when: ansible_os_family == "Debian"
 
 - name: "Ensure the directories (/etc/haproxy/haproxy.cfg.d)is present"
