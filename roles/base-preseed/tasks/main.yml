@@ -14,7 +14,7 @@
     system=yes
 
 - name: Ensure that admin can login via SSH Public Key (Transfere Public Key)
-  authorized_key: 
+  authorized_key:
     user=ansible
     key="{{ lookup('file', '~/.ssh/id_rsa.pub')}}"
     state=present
@@ -39,7 +39,7 @@
     validate="visudo -cf %s"
 
 - name: Ensure Base-Packages (common) are installed
-  apt: 
+  apt:
     pkg={{ item }}
     state=present
     update_cache=yes
@@ -49,6 +49,7 @@
     - ssl-cert
     - update-notifier-common
     - software-properties-common
+    - apt-transport-https
     - facter
     - ohai
     - python
@@ -67,15 +68,11 @@
     # Tops for analysing
     - htop
     - atop
-    - iftop 
+    - iftop
     - itop
     - iotop
     - jnettop
     - dnstop
     - logtop
     - powertop
-    # Kernelmodules for hyper-v support
-    - hv-kvp-daemon-init
-#    - linux-tools
-#    - linux-cloud-tools
   when: ansible_os_family == "Debian"

@@ -78,6 +78,10 @@
     - update-notifier-common
     - bginfo-ubuntu
     - certs-zuv-ubuntu
+    # Kernelmodules for hyper-v support
+    - hv-kvp-daemon-init
+#    - linux-tools
+#    - linux-cloud-tools
   when: ansible_os_family == "Debian"
-  notify: 
+  notify:
     - Restart xinetd

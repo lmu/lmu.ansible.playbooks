@@ -1,6 +1,6 @@
 # backend definition.  Set this to point to your content
 # server.
-# 
+#
 backend default {
     .host = "127.0.0.1";
     .port = "8080";
@@ -15,7 +15,7 @@ backend fiona {
     .host = "127.0.0.1";
     .port = "8001";
 }
-# 
+#
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
@@ -30,6 +30,7 @@ sub vcl_recv {
         set req.backend = fiona;
     } else if (req.url ~ "\.include") {
         set req.backend = plone;
+        set req.http.X-Theme-Disabled = true;
         # Never Cache Plone Backend .includes
         return (pass);
     } else if (req.http.X-Backend-For == "Fiona") {
@@ -41,7 +42,7 @@ sub vcl_recv {
     }
 
 /*
-    # All assests from the theme should be cached anonymously, also from ++plone++static 
+    # All assests from the theme should be cached anonymously, also from ++plone++static
     if (req.http.Authorization || req.http.Cookie ~ "__ac" || req.http.Cookie ~ "__shibsession") {
         if (req.url !~ "(\+\+theme\+\+lmu|\+\+plone\+\+static|portal_css|portal_javascript|\+\+resource\+\+lmu)") {
             return (pass);
@@ -70,7 +71,7 @@ sub vcl_miss {
 
 sub vcl_fetch {
     if (req.http.X-Use-ESI) {
-       set beresp.do_esi = true; 
+       set beresp.do_esi = true;
        set beresp.ttl = 5m;
     }
 
