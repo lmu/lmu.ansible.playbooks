@@ -1,6 +1,6 @@
-# backend definition.  Set this to point to your content
-# server.
-#
+# backend definition.
+# Set this to point to your content server.
+
 backend default {
     .host = "127.0.0.1";
     .port = "8080";
@@ -15,7 +15,7 @@ backend fiona {
     .host = "127.0.0.1";
     .port = "8001";
 }
-#
+
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
@@ -75,8 +75,8 @@ sub vcl_fetch {
        set beresp.ttl = 5m;
     }
 
-    if (req.url ~ "/blog-mit/frontpage_view.include" ) {
-        set beresp.ttl = 5m;
+    if (req.url ~ "/frontpage_view.include" ) {
+        set beresp.ttl = 1m;
         set beresp.http.cache-control = "max-age=300;s-maxage=300";
         set beresp.http.max-age = "300";
         set beresp.http.s-maxage = "300";

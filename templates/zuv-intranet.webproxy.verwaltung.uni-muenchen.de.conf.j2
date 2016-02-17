@@ -69,8 +69,12 @@ img-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de www.web-analytics.uni-
 font-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;"
     RequestHeader append X-Forwarded-For "zuv-intranet.{{ ansible_fqdn | lower }}"
-
+    RequestHeader set X-Backend-For Fiona
     RequestHeader set X-Use-ESI true
+
+    RequestHeader setifempty GROUPMEMBERSHIP cn=ZUV-Intranet-Members,ou=Mitarbeiter,ou=LMU-Portal,ou=anwendungen,o=uni-muenchen,c=de;cn=ZUV-Serviceportal-Members,ou=Mitarbeiter,ou=LMU-Portal,ou=anwendungen,o=uni-muenchen,c=de;
+    RequestHeader setifempty EDUPERSONPRINCIPALNAME 1D737AF064694649@lmu.de
+    RequestHeader X-Remote-User iuk-test
 
     <LocationMatch "\.(ttf|otf|eot|woff|js|css|xml|json|include|jpeg|png|gif|jpg|svg)$">
         Header set Access-Control-Allow-Origin "*"
