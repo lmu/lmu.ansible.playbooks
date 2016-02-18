@@ -74,7 +74,8 @@ object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.in
 
     RequestHeader setifempty GROUPMEMBERSHIP cn=ZUV-Intranet-Members,ou=Mitarbeiter,ou=LMU-Portal,ou=anwendungen,o=uni-muenchen,c=de;cn=ZUV-Serviceportal-Members,ou=Mitarbeiter,ou=LMU-Portal,ou=anwendungen,o=uni-muenchen,c=de;
     RequestHeader setifempty EDUPERSONPRINCIPALNAME 1D737AF064694649@lmu.de
-    RequestHeader X-Remote-User iuk-test
+    RequestHeader setifempty REMOTE_USER iuk-test
+    RequestHeader setifempty cn iuk-test
 
     <LocationMatch "\.(ttf|otf|eot|woff|js|css|xml|json|include|jpeg|png|gif|jpg|svg)$">
         Header set Access-Control-Allow-Origin "*"

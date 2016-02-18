@@ -3,6 +3,11 @@
 - name: "Update all Packages (Mode: {{ maintenance.upgrade_type }})"
   apt: upgrade={{ maintenance.upgrade_type }} update_cache=yes
   when: ansible_os_family == "Debian"
+  register: check_install
+  changed_when: "'No packages will be installed, upgraded, or removed.' not in check_install.stdout"
+  environment:
+    LC_ALL: C
+    LANG: en
   notify:
   - "Restart Server"
   - "Wait for Server to come back"
