@@ -6,9 +6,10 @@
   postgresql_user: name="{{ database.db_user }}"
                    login_user=postgres
                    login_password=postgres
-                   login_host=127.0.0.1
+                   login_host=localhost
                    password="{{ database.db_passwd }}"
                    role_attr_flags=CREATEDB,NOSUPERUSER
+  become_user: postgres
 
 - name: "Create Database"
   postgresql_db: name="{{ database.db_name }}"

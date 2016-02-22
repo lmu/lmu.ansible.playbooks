@@ -6,9 +6,10 @@
     - postgresql
     - postgresql-contrib
     - postgresql-client
-#    - postgres-xc
+    - python-psycopg2
     - libpq-dev
     - pgtop
+#    - postgres-xc
   when: ansible_os_family == "Debian"
 
 - name: "Install PostgreSQL Python bindings"
@@ -48,7 +49,8 @@
   become: true
 
 - name: "initialize PostgreSQL"
-  command: pg_ctl -D {{ database.data_directory }} -o '-U postgres' initdb
+  command: initdb -D {{ database.data_directory }}
+  become_user: postgres
   when: "pg_data_dir.stat.path != '/var/lib/postgresql/9.3/main'"
 
 - name: "Ensure PostgreSQL is started on boot"

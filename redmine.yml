@@ -17,16 +17,16 @@
 #          allow_reboot: false
 #        }
 #      }
-#    - { role: postgres,
-#        database: {
-#          db_name: "ref_vi-5",
-#          db_user: "{{ redmine_db.user }}",
-#          db_passwd: "{{ redmine_db.passwd }}",
-#          #data_directory: "/data/postgresql",
-#          data_directory: "/var/lib/postgresql/9.3/main",
-#          start_mode: "auto"
-#        }
-#      }
+    - { role: postgres,
+        database: {
+          db_name: "ref_vi-5",
+          db_user: "{{ redmine_db.user }}",
+          db_passwd: "{{ redmine_db.passwd }}",
+#          data_directory: "/data/postgresql",
+          data_directory: "/var/lib/postgresql/9.3/main",
+          start_mode: "auto"
+        }
+      }
     - { role: redmine,
         redmine: {
           db_name: "ref_vi-5",

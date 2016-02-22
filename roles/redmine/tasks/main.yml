@@ -27,7 +27,7 @@
     copy=no
     owner=redmine
     group=redmine
-    mode="u=rwx,g=r,o=r"
+    mode="u=rwx,g=rx,o=rx"
 
 #- name: "Move Redmine Download to directory"
 #  copy:
@@ -40,6 +40,16 @@
 #    copy=no
 #    mode="u=rwx,g=r,o=r"
 
+
+- name: "Copy Dependency File"
+  copy:
+    src="Gemfile.local"
+    dest="/data/redmine/redmine-3.2.0/Gemfile.local"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o=r"
+
 - name: "Copy Config Files"
   template:
     src={{ item }}.j2
@@ -50,3 +60,31 @@
     mode="u=rw,g=r,o=r"
   with_items:
     - database.yml
+
+- name: "Ensure Redmine can write gems directory"
+  file:
+    path="/data/redmine/redmine-3.2.0/vendor/bundle"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+
+- name: "Install Redmine"
+  bundler:
+    state=present
+    chdir="/data/redmine/redmine-3.2.0/"
+    gemfile="/data/redmine/redmine-3.2.0/Gemfile"
+    gem_path="/data/redmine/redmine-3.2.0/vendor/bundle"
+    exclude_groups="test development "
+  become: yes
+  become_user: "redmine"
+
+- name: "Ensure Redmine Instance directory has correct user and file modes"
+  file:
+    path="/data/redmine/{{ redmine.dest }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
