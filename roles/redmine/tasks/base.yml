@@ -1,0 +1,34 @@
+---
+
+- name: "Ensure Ruby is installed"
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+    - ruby2.0
+    - ruby2.0-dev
+    - build-essential
+    #- bundler
+  when: ansible_os_family == "Debian"
+
+- name: "Ensure Group redmine exists"
+  group:
+    name="redmine"
+    state=present
+
+- name: "Ensure User redmine exists"
+  user:
+    name="redmine"
+    group="redmine"
+    force=true
+    uid=980
+    state=present
+
+- name: "Ensure Base directory exists"
+  file:
+    path=/data/redmine
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+
+- name: "Install bundler for Ruby 2.0"
+  command: gem2.0 install bundler

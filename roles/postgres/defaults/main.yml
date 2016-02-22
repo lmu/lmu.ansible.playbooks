@@ -1,0 +1,7 @@
+---
+
+vars:
+  database: {
+    start_mode: "auto",
+    data_directory: "/var/lib/postgresql/9.3/main"
+  }

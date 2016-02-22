@@ -1,8 +1,52 @@
 ---
 
-- name: "Ensure Ruby is installed"
-  apt: pkg={{ item }} state=present update_cache=yes
+- include: base.yml
+
+- name: "Ensure Redmine Instance directory exists"
+  file:
+    path="/data/redmine/{{ redmine.dest }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o="
+
+- name: "Download Redmine to master"
+  get_url:
+    url: "{{ redmine.src_url}}/{{ redmine.src_file }}"
+    dest: "./downloads/"
+    mode: "u=rwx,g=rwx,o=rx"
+    checksum: "md5:{{ redmine.checksum }}"
+  delegate_to: 127.0.0.1
+  become: false
+
+
+- name: "Download Redmine"
+  unarchive:
+    src="{{ redmine.src_url}}/{{ redmine.src_file }}"
+    dest="/data/redmine/"
+    copy=no
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o=r"
+
+#- name: "Move Redmine Download to directory"
+#  copy:
+#    src="/data/redmine/redmine-3.2.0"
+#    dest="/data/redmine/{{ redmine.dest }}"
+#    owner=redmine
+#    group=redmine
+#    force=yes
+#    directory_mode=yes
+#    copy=no
+#    mode="u=rwx,g=r,o=r"
+
+- name: "Copy Config Files"
+  template:
+    src={{ item }}.j2
+    dest="/data/redmine/redmine-3.2.0/config/{{ item }}"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rw,g=r,o=r"
   with_items:
-    - ruby2.0
-    - ruby2.0-dev
-  when: ansible_os_family == "Debian"
+    - database.yml

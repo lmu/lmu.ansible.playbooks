@@ -1,0 +1,46 @@
+---
+
+- hosts: redmine
+  become: true
+
+
+  vars:
+
+  vars_files:
+    - secrets.yml
+
+  roles:
+#    - base-preseed
+#    - { role: maintenance,
+#        maintenance: {
+#          upgrade_type: "full",
+#          allow_reboot: false
+#        }
+#      }
+#    - { role: postgres,
+#        database: {
+#          db_name: "ref_vi-5",
+#          db_user: "{{ redmine_db.user }}",
+#          db_passwd: "{{ redmine_db.passwd }}",
+#          #data_directory: "/data/postgresql",
+#          data_directory: "/var/lib/postgresql/9.3/main",
+#          start_mode: "auto"
+#        }
+#      }
+    - { role: redmine,
+        redmine: {
+          db_name: "ref_vi-5",
+          db_dev_name: "ref_vi-5-dev",
+          db_test_name: "ref_vi-5-test",
+          db_user: "{{ redmine_db.user }}",
+          db_passwd: "{{ redmine_db.passwd }}",
+          db_host: "127.0.0.1",
+          src_url: "http://www.redmine.org/releases/",
+          src_file: "redmine-3.2.0.tar.gz",
+          checksum: "b1050c3a0e6effd5a704ef5003d9df06",
+          dest: "ref_vi-5"
+        }
+      }
+#    - { role: nginx,
+#        nginx_sites: none
+#      }

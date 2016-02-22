@@ -76,3 +76,12 @@
     - logtop
     - powertop
   when: ansible_os_family == "Debian"
+
+
+- name: "Ensure Data Directory exists"
+  file:
+    path="/data"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"

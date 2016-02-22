@@ -1,0 +1,55 @@
+---
+
+- name: "Install PostgreSQL Packages"
+  apt: pkg={{ item }} state=latest install_recommends=yes
+  with_items:
+    - postgresql
+    - postgresql-contrib
+    - postgresql-client
+#    - postgres-xc
+    - libpq-dev
+    - pgtop
+  when: ansible_os_family == "Debian"
+
+- name: "Install PostgreSQL Python bindings"
+  pip: name=psycopg2
+
+- name: "Copy the config files for PostgreSQL"
+  template:
+    src={{ item }}.j2
+    dest=/etc/postgresql/9.3/main/{{ item }}
+    force=yes
+    owner=postgres
+    group=postgres
+    mode="u=rw,g=r,o=r"
+  with_items:
+    - postgresql.conf
+    - pg_ident.conf
+    - pg_hba.conf
+    - start.conf
+  notify:
+    - "Restart PostgreSQL"
+
+- name: "Ensure PostgreSQL Data Directory exists"
+  file:
+    path="{{ database.data_directory }}"
+    state=directory
+    owner=postgres
+    group=postgres
+    mode="u=rwx,g=,o="
+
+- name: "Check Data Directory"
+  stat:
+    path="{{ database.data_directory }}"
+  register: pg_data_dir
+
+- name: "Generate Locale"
+  command: locale-gen 'de_DE.UTF-8'
+  become: true
+
+- name: "initialize PostgreSQL"
+  command: pg_ctl -D {{ database.data_directory }} -o '-U postgres' initdb
+  when: "pg_data_dir.stat.path != '/var/lib/postgresql/9.3/main'"
+
+- name: "Ensure PostgreSQL is started on boot"
+  service: name=postgresql state=restarted enabled=yes
