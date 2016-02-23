@@ -80,8 +80,15 @@
     - certs-zuv-ubuntu
     # Kernelmodules for hyper-v support
     - hv-kvp-daemon-init
-#    - linux-tools
-#    - linux-cloud-tools
+    #- linux-tools
+    #- linux-cloud-tools
+    - linux-tools-generic-lts-wily
+    - linux-cloud-tools-generic-lts-wily
+    - linux-signed-image-generic-lts-wily
+    - linux-signed-generic-lts-wily
+    - linux-image-generic-lts-wily
+    - linux-headers-generic-lts-wily
+    - linux-generic-lts-wily
   when: ansible_os_family == "Debian"
   notify:
     - Restart xinetd
