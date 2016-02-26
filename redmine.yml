@@ -53,3 +53,31 @@
           log_level: "debug"
         }
       }
+
+  tasks:
+
+        - name: "Install vhost.confs for sites"
+          template:
+            src=templates/nginx-redmine.conf.j2
+            dest=/etc/nginx/sites-available/{{ item }}
+            force=yes
+            mode="u=rw,g=r,o=r"
+            owner=root
+            group=root
+          with_items:
+            - ref_vi-5.conf
+          notify:
+            - "Reload NGINX"
+
+        - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
+          file:
+            src=/etc/nginx/sites-available/{{ item }}
+            path=/etc/nginx/sites-enabled/{{ item }}
+            force=yes
+            state=link
+            owner=root
+            group=root
+          with_items:
+            - ref_vi-5.conf
+          notify:
+            - "Reload NGINX"
