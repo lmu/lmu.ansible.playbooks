@@ -3,6 +3,10 @@
 - hosts: redmine
   become: true
 
+  handlers:
+
+    - include: roles/nginx/handlers/main.yml
+    - include: roles/supervisor/handlers/main.yml
 
   vars:
 
@@ -50,34 +54,58 @@
           app_base_path: "/opt/redmine",
           data_base_path: "/data/redmine",
           log_base_path: "/var/log/redmine",
+          run_base_path: "/var/run/redmine",
           log_level: "debug"
         }
       }
+    - { role: supervisor }
 
   tasks:
 
-        - name: "Install vhost.confs for sites"
-          template:
-            src=templates/nginx-redmine.conf.j2
-            dest=/etc/nginx/sites-available/{{ item }}
-            force=yes
-            mode="u=rw,g=r,o=r"
-            owner=root
-            group=root
-          with_items:
-            - ref_vi-5.conf
-          notify:
-            - "Reload NGINX"
+    - name: "Install vhost.confs for sites"
+      template:
+        src=templates/nginx-redmine.conf.j2
+        dest=/etc/nginx/sites-available/{{ item }}
+        force=yes
+        mode="u=rw,g=r,o=r"
+        owner=root
+        group=root
+      vars:
+        redmine:
+          name: "ref_vi-5"
+          app_base_path: "/opt/redmine"
+          run_base_path: "/var/run/redmine"
+          log_base_path: "/var/log/redmine"
+          domain: "redminetest.verwaltung.uni-muenchen.de"
+      with_items:
+        - ref_vi-5.conf
+      notify:
+        - "Reload NGINX"
 
-        - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
-          file:
-            src=/etc/nginx/sites-available/{{ item }}
-            path=/etc/nginx/sites-enabled/{{ item }}
-            force=yes
-            state=link
-            owner=root
-            group=root
-          with_items:
-            - ref_vi-5.conf
-          notify:
-            - "Reload NGINX"
+    - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
+      file:
+        src=/etc/nginx/sites-available/{{ item }}
+        path=/etc/nginx/sites-enabled/{{ item }}
+        force=yes
+        state=link
+        owner=root
+        group=root
+      with_items:
+        - ref_vi-5.conf
+      notify:
+        - "Reload NGINX"
+
+    - name: "Install Supervisor Conf for Puma/Redmine"
+      template:
+        src: redmine-puma-supervisor.conf.j2
+        dest: /etc/supervisor/conf.d/puma-redmine.conf
+        owner: root
+        group: root
+        mode: "u=rwx,g=rx,o=rx"
+      vars:
+        redmine:
+          name: "ref_vi-5"
+          app_base_path: "/opt/redmine"
+
+      notify:
+        - "Restart Supervisor"

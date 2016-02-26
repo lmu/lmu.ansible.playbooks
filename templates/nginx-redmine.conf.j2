@@ -1,24 +1,88 @@
 upstream redmine {
-  #server unix:/home/redmine/redmine/tmp/sockets/redmine.sock fail_timeout=0;
-  server 127.0.0.1:3000;
+  server unix://{{ redmine.run_base_path}}/{{ redmine.name }}/puma.sock fail_timeout=0;
+  #server 127.0.0.1:3000;
 }
 
 server {
-  server_name snacks.rudeotter.com;
   listen 80;
-  root /home/redmine/redmine/public;
+  listen 443;
+  server_name {{ redmine.domain }};
 
-  location / {
-    try_files $uri/index.html $uri.html $uri @ruby;
+  # ~2 seconds is often enough for most folks to parse HTML/CSS and
+  # retrieve needed images/icons/frames, connections are cheap in
+  # nginx so increasing this is generally safe...
+  keepalive_timeout 5;
+
+  # path for static files
+  root {{ redmine.app_base_path}}/{{ redmine.name }}/redmine-3.2.0/public;
+  access_log {{ redmine.log_base_path}}/{{ redmine.name }}/production.access.log;
+  error_log {{ redmine.log_base_path}}/{{ redmine.name }}/production.error.log info;
+
+  # this rewrites all the requests to the maintenance.html
+  # page if it exists in the doc root. This is for capistrano's
+  # disable web task
+  if (-f $document_root/maintenance.html) {
+    rewrite  ^(.*)$  /maintenance.html last;
+    break;
   }
 
-  location @ruby {
+  location / {
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP  $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+
     proxy_redirect off;
     proxy_read_timeout 300;
-    proxy_pass http://redmine;
+
+    # If the file exists as a static file serve it directly without
+    # running all the other rewite tests on it
+    if (-f $request_filename) {
+      break;
+    }
+
+    # check for index.html for directory index
+    # if its there on the filesystem then rewite
+    # the url to add /index.html to the end of it
+    # and then break to send it to the next config rules.
+    if (-f $request_filename/index.html) {
+      rewrite (.*) $1/index.html break;
+    }
+
+    # this is the meat of the rack page caching config
+    # it adds .html to the end of the url and then checks
+    # the filesystem for that file. If it exists, then we
+    # rewite the url to have explicit .html on the end
+    # and then send it on its way to the next config rule.
+    # if there is no file on the fs then it sets all the
+    # necessary headers and proxies to our upstream mongrels
+    if (-f $request_filename.html) {
+      rewrite (.*) $1.html break;
+    }
+
+    if (!-f $request_filename) {
+      proxy_pass http://redmine;
+      break;
+    }
+    # try_files $uri/index.html $uri.html $uri @ruby;
+  }
+
+  # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
+  # BUT there's a chance it could break the ajax calls.
+  location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
+     expires max;
+     break;
+  }
+
+  location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
+     expires max;
+     break;
+  }
+
+  # Error pages
+  # error_page 500 502 503 504 /500.html;
+  location = /500.html {
+    root /redmine/current/public;
   }
 }

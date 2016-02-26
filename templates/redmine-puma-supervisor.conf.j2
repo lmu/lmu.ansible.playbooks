@@ -1,0 +1,5 @@
+[program:puma-{{ redmine.name }}]
+command=bundle exec puma --config config/puma.rb
+numprocs=1
+directory={{ redmine.app_base_path}}/{{ redmine.name }}/redmine-3.2.0/
+environment=PATH={{ redmine.app_base_path}}/{{ redmine.name }}/redmine-3.2.0/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"

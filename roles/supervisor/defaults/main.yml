@@ -2,4 +2,4 @@
 supervisor: {
   username: "admin",
   password: "admin"
-}
+  }

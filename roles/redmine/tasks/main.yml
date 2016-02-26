@@ -67,6 +67,7 @@
     - additional_environment.rb
     - configuration.yml
     - settings.yml
+    - puma.rb
 
 - name: "Ensure Redmine can write gems directory"
   file:
@@ -134,6 +135,18 @@
     group=redmine
     mode="u=rx,g=rx,o=rx"
     recurse=yes
+
+- name: "Ensure Redmine Instance Runtime directory exists"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rx,g=rx,o=rx"
+    recurse=yes
+  with_items:
+    - "{{ redmine.run_base_path}}/{{ redmine.name }}"
+    - "{{ redmine.log_base_path}}/{{ redmine.name }}"
 
 - name: "Ensure Redmine Instance sub directories has correct user and file modes"
   file:
