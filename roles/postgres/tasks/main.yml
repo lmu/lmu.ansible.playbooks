@@ -3,22 +3,25 @@
 - include: base.yml
 
 - name: "Create User"
-  postgresql_user: name="{{ database.db_user }}"
-                   login_user=postgres
-                   login_password=postgres
-                   login_host=localhost
-                   password="{{ database.db_passwd }}"
-                   role_attr_flags=CREATEDB,NOSUPERUSER
+  postgresql_user:
+    name="{{ database.db_user }}"
+    password="{{ database.db_passwd }}"
+    role_attr_flags="CREATEDB,NOSUPERUSER"
+    #login_user=postgres
+    #login_password=postgres
+    #login_host=localhost
   become_user: postgres
+  become: yes
 
 - name: "Create Database"
-  postgresql_db: name="{{ database.db_name }}"
-                 login_user="{{database.db_user}}"
-                 login_password="{{ database.db_passwd }}"
-                 login_host=127.0.0.1
-                 encoding='UTF-8'
-                 template='template0'
-                 state=present
-                 owner="{{database.db_user}}"
-                 lc_ctype='de_DE.UTF-8'
-                 lc_collate='de_DE.UTF-8'
+  postgresql_db:
+    name="{{ database.db_name }}"
+    login_user="{{database.db_user}}"
+    login_password="{{ database.db_passwd }}"
+    login_host=127.0.0.1
+    encoding='UTF-8'
+    template='template0'
+    state=present
+    owner="{{database.db_user}}"
+    lc_ctype='de_DE.UTF-8'
+    lc_collate='de_DE.UTF-8'
