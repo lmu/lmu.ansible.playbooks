@@ -8,16 +8,19 @@ piwik-master2.verwaltung.uni-muenchen.de
 piwik-master2.verwaltung.uni-muenchen.de
 piwik-worker2.verwaltung.uni-muenchen.de
 
-[piwik-production-frontend]
+[piwik-production-frontends]
 piwik-frontend1.verwaltung.uni-muenchen.de
 
 [piwik-test-dbs]
 piwiktest2.verwaltung.uni-muenchen.de
 
-[piwik-test-master]
+[piwik-test-masters]
 piwiktest2.verwaltung.uni-muenchen.de
 
-[piwik-test-frontend]
+[piwik-test-workers]
+piwiktest2.verwaltung.uni-muenchen.de
+
+[piwik-test-frontends]
 piwiktest2.verwaltung.uni-muenchen.de
 
 [piwik-dbs:children]
