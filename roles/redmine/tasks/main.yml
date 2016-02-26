@@ -164,3 +164,7 @@
     - public/plugin_assets
   tags:
     - setup
+
+- include: nginx.yml
+
+- include: supervisor.yml

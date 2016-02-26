@@ -1,0 +1,9 @@
+---
+
+dependencies:
+
+  - { role: nginx,
+    }
+
+  - { role: supervisor,
+    }
