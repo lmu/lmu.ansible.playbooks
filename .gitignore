@@ -62,3 +62,5 @@ target/
 # Ansible specials
 secrets/
 secrets.yml
+graphs/
+*.retry
