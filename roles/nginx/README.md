@@ -65,7 +65,7 @@ sites configured.
       roles:
       - {role: nginx,
          nginx_http_params: { tcp_nodelay: "on",
-                              error_log: "/var/log/nginx/error.log"}, 
+                              error_log: "/var/log/nginx/error.log"},
                               nginx_sites: none }
 
 Note: Please make sure the HTTP directives passed are valid, as this role

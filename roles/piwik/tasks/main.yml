@@ -1,3 +1,23 @@
 ---
 
 - name: "Install Piwik"
+  debug:
+    msg="Install Piwik"
+
+- name: "Ensure Piwik Directory exists"
+  file:
+    name="{{ piwik.path }}"
+    state=directory
+    mode="u=rwx,g=rx,o=rx"
+    owner="www-data"
+    group="www-data"
+
+
+- name: "Download latest Piwik"
+  unarchive:
+    src="{{ piwik.src_url }}"
+    dest="{{ piwik.path }}"
+    mode="u=rwx,g=rx,o=rx"
+    owner="www-data"
+    group="www-data"
+    copy=no

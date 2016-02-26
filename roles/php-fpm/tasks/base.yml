@@ -1,0 +1,31 @@
+---
+
+- name: "Install PHP-FPM Module"
+  apt:
+    name="{{ item }}"
+    state=present
+    update_cache=yes
+  with_items:
+    - php5-fpm
+    - php5-curl
+    - php5-gd
+  tags:
+    - setup
+
+- name: "Install additional PHP Modules"
+  apt:
+    name="{{ php.modules }}"
+    state=present
+    update_cache=no
+  tags:
+    - setup
+  notify:
+    - "Restart PHP-FPM"
+
+- name: "Start PHP-FPM"
+  service:
+      name="php5-fpm"
+      state=started
+      enabled=yes
+  tags:
+    - setup

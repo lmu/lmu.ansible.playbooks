@@ -27,6 +27,15 @@
           start_mode: "auto"
         }
       }
+    - { role: nginx,
+        nginx: {
+            use_ppa: "yes",
+            ppa: "ppa:nginx/stable"
+          },
+        nginx_sites: {
+          test: "test"
+        }
+      }
     - { role: redmine,
         redmine: {
           db_name: "ref_vi-5",
@@ -41,6 +50,3 @@
           dest: "ref_vi-5"
         }
       }
-#    - { role: nginx,
-#        nginx_sites: none
-#      }

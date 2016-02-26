@@ -65,6 +65,7 @@
     - wget
     - bzip2
     - gzip
+    - unzip
     # Tops for analysing
     - htop
     - atop

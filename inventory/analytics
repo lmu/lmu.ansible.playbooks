@@ -1,12 +1,40 @@
-[piwik-dbs]
+[piwik-production-dbs]
 piwik-db2.verwaltung.uni-muenchen.de
 
-[piwik-masters]
+[piwik-production-masters]
 piwik-master2.verwaltung.uni-muenchen.de
 
-[piwik-workers]
+[piwik-production-workers]
 piwik-master2.verwaltung.uni-muenchen.de
 piwik-worker2.verwaltung.uni-muenchen.de
+
+[piwik-production-frontend]
+piwik-frontend1.verwaltung.uni-muenchen.de
+
+[piwik-test-dbs]
+piwiktest2.verwaltung.uni-muenchen.de
+
+[piwik-test-master]
+piwiktest2.verwaltung.uni-muenchen.de
+
+[piwik-test-frontend]
+piwiktest2.verwaltung.uni-muenchen.de
+
+[piwik-dbs:children]
+piwik-production-dbs
+piwik-test-dbs
+
+[piwik-masters:children]
+piwik-production-masters
+piwik-test-masters
+
+[piwik-workers:children]
+piwik-production-workers
+piwik-test-workers
+
+[piwik-frontends:children]
+piwik-production-frontends
+piwik-test-frontends
 
 [piwik:children]
 piwik-dbs
@@ -15,4 +43,3 @@ piwik-workers
 
 [analytics:children]
 piwik
-

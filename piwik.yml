@@ -1,7 +1,7 @@
 ---
 
 - hosts: piwik
-  sudo: true
+  become: true
 
   roles:
     - base-preseed
@@ -11,3 +11,52 @@
           allow_reboot: false
         }
       }
+
+- hosts: piwik-dbs
+  sudo: true
+
+  roles:
+    - { role: mysql,
+        mysql: {
+
+          }
+      }
+
+- hosts: piwik-masters
+  become: true
+
+  handlers:
+    - include: roles/nginx/handlers/main.yml
+    - include: roles/php-fpm/handlers/main.yml
+
+  roles:
+    - { role: nginx,
+        nginx: {
+            use_ppa: "yes",
+            ppa: "ppa:nginx/stable"
+          },
+        nginx_sites: {
+          test: "test"
+        }
+      }
+    - { role: php-fpm,
+        php: {
+          modules: ["php5-curl", "php5-gd", "php5-cli", "php5-geoip", "php-apc"]
+        }
+      }
+    - { role: piwik,
+        piwik: {
+          path: "/var/www/piwik-lmu/htdocs/",
+          src_url: "http://builds.piwik.org/piwik.zip"
+        }
+      }
+#    - { role: phpmyadmin,
+#        phpmyadmin: {
+#          test: "test"
+#        }
+#      }
+
+  tasks:
+
+    - name: "Copy NGINX Configuration for Piwik with PHP-FPM"
+      debug: msg="Test"
