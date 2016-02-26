@@ -29,11 +29,8 @@
       }
     - { role: nginx,
         nginx: {
-            use_ppa: "yes",
-            ppa: "ppa:nginx/stable"
-          },
-        nginx_sites: {
-          test: "test"
+          use_ppa: "yes",
+          ppa: "ppa:nginx/stable"
         }
       }
     - { role: redmine,
