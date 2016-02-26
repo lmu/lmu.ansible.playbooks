@@ -30,13 +30,17 @@
     uid=980
     state=present
 
-- name: "Ensure Base directory exists"
+- name: "Ensure Base directories exists"
   file:
-    path=/data/redmine
+    path="{{ item }}"
     state=directory
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "{{ redmine.app_base_path }}"
+    - "{{ redmine.data_base_path }}"
+    - "{{ redmine.log_base_path }}"
 
 - name: "Install bundler for Ruby 2.0"
   command: gem2.0 install bundler
