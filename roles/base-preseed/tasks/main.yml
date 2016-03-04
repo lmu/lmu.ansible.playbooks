@@ -66,6 +66,8 @@
     - bzip2
     - gzip
     - unzip
+    - libffi-dev
+    - libssl-dev
     # Tops for analysing
     - htop
     - atop

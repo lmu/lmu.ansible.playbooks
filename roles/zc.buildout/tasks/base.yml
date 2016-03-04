@@ -20,7 +20,7 @@
   pip: 
     name={{ item }}
     state=latest
-    extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem'
+    #extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem --index-url="http://pypi.python.org/simple/"'
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"

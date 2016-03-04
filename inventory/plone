@@ -15,6 +15,7 @@ zope-dbs-failover-production
 zope-dbs-staging
 
 [zope-clients-ludwig27-production]
+#cms-live-app2.verwaltung.uni-muenchen.de
 cms-live-app3.verwaltung.uni-muenchen.de
 
 [zope-clients-martius4-production]

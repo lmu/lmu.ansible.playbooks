@@ -32,22 +32,22 @@
     owner=root
     group=root
 
-#- name: copy ZUV-Proxy-CA and Chain
-#  copy:
-#    dest=/usr/local/share/ca-certificates/lmu/{{ item }}
-#    src=certs/{{ item }}
-#    mode="o=rw,g=r,u=r"
-#    owner=root
-#    group=root
-#  with_items:
-#    - ZUV-CA.crt
-#    - LMU-CA.crt
-#    - lmu-proxy-CA.crt
+- name: copy ZUV-Proxy-CA and Chain
+  copy:
+    dest=/usr/local/share/ca-certificates/lmu/{{ item }}
+    src=certs/{{ item }}
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
+  with_items:
+    - ZUV-CA.crt
+    - LMU-CA.crt
+    - lmu-proxy-CA.crt
 
-#- name: Install ZUV-Proxy-CA
-#  command: update-ca-certificates
-#  register: ca_update_result
-#  changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
+- name: Install ZUV-Proxy-CA
+  command: update-ca-certificates
+  register: ca_update_result
+  changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
 
 - name: Add alias for "pip" to always use ZUV-Proxy-CA
   copy:
