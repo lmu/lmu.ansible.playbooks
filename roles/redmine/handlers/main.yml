@@ -1,0 +1,4 @@
+---
+
+- include: roles/nginx/handlers/main.yml
+- include: roles/supervisor/handlers/main.yml
