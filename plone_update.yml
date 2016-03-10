@@ -13,7 +13,7 @@
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: 'plone-cluster-martius4', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -28,7 +28,7 @@
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: 'plone-cluster-martius4', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -125,7 +125,7 @@
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: 'plone-cluster-martius4', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -140,7 +140,7 @@
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: 'plone-cluster-martius4', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -159,7 +159,7 @@
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: 'plone-cluster-ludwig27', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -174,7 +174,7 @@
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: 'plone-cluster-ludwig27', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -271,7 +271,7 @@
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: 'plone-cluster-ludwig27', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
@@ -286,7 +286,7 @@
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
       ignore_errors: yes
       with_items:
-        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: 'plone-cluster-ludwig27', name: '{{ ansible_hostname }}-clients' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
