@@ -4,33 +4,37 @@
   become: true
 
   tasks:
-    - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
+    - name: "Disable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy1"
       haproxy:
         state=disabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
-      ignore_errors: True
+      ignore_errors: yes
       with_items:
-        - clients
-        - client1
-        - client2
-        - client3
-        - client4
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Disable Server / Zope-Clients on Load Balancing WebProxy2
+    - name: "Disable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy2"
       haproxy:
         state=disabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
-      ignore_errors: True
+      ignore_errors: yes
       with_items:
-        - clients
-        - client1
-        - client2
-        - client3
-        - client4
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Stop Zope Clients via Supervisor
+    - name: "Stop Zope Clients via Supervisor"
       supervisorctl:
         name={{ item }}
         state=stopped
@@ -84,7 +88,7 @@
 
   tasks:
 
-    - name: Update Supervisorctl - Ensure Zope Clients are present
+    - name: "Update Supervisorctl - Ensure Zope Clients are present"
       supervisorctl:
         name={{ item }}
         state=present
@@ -98,7 +102,7 @@
         - HttpOkClient3
         - HttpOkClient4
 
-    - name: Start Zope Clients via Supervisor
+    - name: "Start Zope Clients via Supervisor"
       supervisorctl:
         name={{ item }}
         state=started
@@ -112,61 +116,71 @@
         - HttpOkClient3
         - HttpOkClient4
 
-    - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
+    - name: "Enable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy1"
       haproxy:
         state=enabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - clients
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Enable Server / Zope-Clients on Load Balancing WebProxy2
+    - name: "Enable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy2"
       haproxy:
         state=enabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - clients
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
 - hosts: zope-clients-ludwig27-production
   become: true
 
   tasks:
-    - name: Disable Server / Zope-Clients on Load Balancing WebProxy1
+    - name: "Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy1"
       haproxy:
         state=disabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
-      ignore_errors: True
+      ignore_errors: yes
       with_items:
-        - clients
-        - client1
-        - client2
-        - client3
-        - client4
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Disable Server / Zope-Clients on Load Balancing WebProxy2
+    - name: "Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy2"
       haproxy:
         state=disabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
-      ignore_errors: True
+      ignore_errors: yes
       with_items:
-        - clients
-        - client1
-        - client2
-        - client3
-        - client4
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Stop Zope Clients via Supervisor
+    - name: "Stop Zope Clients via Supervisor"
       supervisorctl:
         name={{ item }}
         state=stopped
@@ -220,7 +234,7 @@
 
   tasks:
 
-    - name: Update Supervisorctl - Ensure Zope Clients are present
+    - name: "Update Supervisorctl - Ensure Zope Clients are present"
       supervisorctl:
         name={{ item }}
         state=present
@@ -234,7 +248,7 @@
         - HttpOkClient3
         - HttpOkClient4
 
-    - name: Start Zope Clients via Supervisor
+    - name: "Start Zope Clients via Supervisor"
       supervisorctl:
         name={{ item }}
         state=started
@@ -248,27 +262,33 @@
         - HttpOkClient3
         - HttpOkClient4
 
-    - name: Enable Server / Zope-Clients on Load Balancing WebProxy1
+    - name: "Enable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy1"
       haproxy:
         state=enabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - clients
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
-    - name: Enable Server / Zope-Clients on Load Balancing WebProxy2
+    - name: "Enable Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy2"
       haproxy:
         state=enabled
-        host={{ ansible_hostname }}-{{ item }}
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
       with_items:
-        - client1
-        - client2
-        - client3
-        - client4
-        - clients
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
 
