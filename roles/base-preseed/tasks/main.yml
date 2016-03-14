@@ -88,3 +88,12 @@
     owner=root
     group=root
     mode="u=rwx,g=rx,o=rx"
+
+- name: "Set Cron Tab for Auto Upgrade (safe)"
+  cron:
+    name="Hourly Safe Upgrades"
+    job="aptitude safe-upgrade -y"
+    user='root'
+    state=present
+    special_time=hourly
+  become: true

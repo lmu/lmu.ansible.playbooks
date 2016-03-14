@@ -3,7 +3,7 @@
 # * Monitor-Server (Nagios/Check-MK)
 
 [webfrontends]
-special.verwaltung.uni-muenchen.de
+#special.verwaltung.uni-muenchen.de
 
 [monitor-masters]
-special.verwaltung.uni-muenchen.de
+#special.verwaltung.uni-muenchen.de

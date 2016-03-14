@@ -148,6 +148,16 @@
         - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
         - { backend: 'plone-cluster-martius4', name: 'clients' }
 
+    - name: "Set Cron Tab for deleting expired Pinnwand Entries"
+      cron:
+        name="Delete old Pinnwand Entries"
+        job="curl http://www.intranet.verwaltung.uni-muenchen.de/30_zentralbereich/30zb_zuv-intranet/pinnwand/auto_delete_view >> ~/delete.log"
+        user='ansible'
+        state=present
+        special_time=daily
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      become: false
+
 - hosts: zope-clients-ludwig27-production
   become: true
   serial: 1
