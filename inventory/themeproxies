@@ -1,9 +1,9 @@
 [themeproxies-production]
-themeproxy2.verwaltung.uni-muenchen.de
-themeproxy3.verwaltung.uni-muenchen.de
+#themeproxy2.verwaltung.uni-muenchen.de
+#themeproxy3.verwaltung.uni-muenchen.de
 
 [themeproxies-staging]
-themeproxytest2.verwaltung.uni-muenchen.
+#themeproxytest2.verwaltung.uni-muenchen.
 
 [themeproxies:children]
 themeproxies-production
