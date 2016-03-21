@@ -11,14 +11,14 @@
 environment 'production'
 daemonize false
 
-pidfile '{{ redmine.run_base_path}}/{{ redmine.name }}-puma.pid'
-state_path '{{ redmine.run_base_path}}/{{ redmine.name }}-puma.state'
+pidfile '{{ redmine.run_base_path}}/{{ instance.name }}-puma.pid'
+state_path '{{ redmine.run_base_path}}/{{ instance.name }}-puma.state'
 
 # stdout_redirect 'log/puma.log', 'log/puma_err.log'
 
 # quiet
 threads 0, 16
-bind 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-puma.sock'
+bind 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock'
 bind 'tcp://0.0.0.0:3000'
 
 # ssl_bind '127.0.0.1', '9292', { key: path_to_key, cert: path_to_cert }
@@ -41,5 +41,5 @@ workers "{{ ansible_processor_cores }}"
 
 # === Puma control rack application ===
 
-activate_control_app 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-pumactl.sock', { no_token: true }
+activate_control_app 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-pumactl.sock', { no_token: true }
 #activate_control_app 'tcp://127.0.0.1:3001', { no_token: true }

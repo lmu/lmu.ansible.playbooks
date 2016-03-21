@@ -25,3 +25,4 @@
     owner="{{database.db_user}}"
     lc_ctype='de_DE.UTF-8'
     lc_collate='de_DE.UTF-8'
+  when: "{{ database.db_name }} is defined"

@@ -1,10 +1,25 @@
 ---
 
-- set_fact: outer_loop="{{ item }}"
+- set_fact: instance="{{ item.value }}"
+
+- debug: msg="outer item={{ instance }} "
+
+- name: "Create Redmine Database for {{ instance.name }}"
+  postgresql_db:
+    name="{{ instance.db_name }}"
+    login_user="{{ instance.db_user}}"
+    login_password="{{ instance.db_passwd }}"
+    login_host=127.0.0.1
+    encoding='UTF-8'
+    template='template0'
+    state=present
+    owner="{{ instance.db_user}}"
+    lc_ctype='de_DE.UTF-8'
+    lc_collate='de_DE.UTF-8'
 
 - name: "Ensure Redmine Instance directories exists"
   file:
-    path="{{ item }}/{{ redmine_instance.name }}"
+    path="{{ item }}/{{ instance.name }}"
     state=directory
     owner=redmine
     group=redmine
@@ -14,70 +29,26 @@
     - "{{ redmine.data_base_path }}"
     - "{{ redmine.log_base_path }}"
 
-#- name: "Download Redmine to master"
-#  get_url:
-#    url="{{ redmine.src_url}}/{{ redmine.src_file }}"
-#    dest="/tmp/"
-#    mode="u=rwx,g=rwx,o=rx"
-#    checksum="md5:{{ redmine.checksum }}"
-#  delegate_to: 127.0.0.1
-#  become: false
-#
-#- name: "Download Redmine"
-#  unarchive:
-#    src="{{ redmine.src_url}}/{{ redmine.src_file }}"
-#    dest="{{ redmine.app_base_path }}/{{ redmine_instance.name }}"
-#    copy=no
-#    owner=redmine
-#    group=redmine
-#    mode="u=rwx,g=rx,o=rx"
-
 - name: "Download Redmine"
   subversion:
     repo="https://svn.redmine.org/redmine/branches/{{ redmine.svn_version }}-stable"
-    dest="{{ redmine.app_base_path }}/{{ redmine_instance.name }}"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
-    #owner=redmine
-    #group=redmine
-    #mode="u=rwx,g=rx,o=rx"
-
-- name: "Download Redmine Plugins to master (necessary because of login for RedmineCRM and SSL check)"
-  get_url:
-    url="{{ item.url }}/{{ item.name }}-{{ item.version | regex_replace('\.', '_') }}.zip"
-    dest="/tmp/redmine-plugins/"
-    validate_certs=no
-    mode="u=rwx,g=rx,o=rx"
-    force=yes
-  with_items: {{ redmine_plugins }}
-  delegate_to: 127.0.0.1
-  become: false
 
 - name: "Copy Redmine Plugins"
   unarchive:
     src="/tmp/redmine-plugins/{{ item.name }}-{{ item.version | regex_replace('\.', '_') }}.zip"
-    dest="{{ redmine.app_base_path }}/{{ redmine_instance.name }}/plugins"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins"
     copy=yes
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
-  with_items: {{ redmine_plugins }}
-
-#- name: "Move Redmine Download to directory"
-#  copy:
-#    src="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-#    dest="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-#    owner=redmine
-#    group=redmine
-#    force=yes
-#    directory_mode=yes
-#    copy=no
-#    mode="u=rwx,g=r,o=r"
-
+  with_items: "{{ redmine_plugins }}"
 
 - name: "Copy Dependency File"
   copy:
     src="Gemfile.local"
-    dest="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/Gemfile.local"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile.local"
     force=yes
     owner=redmine
     group=redmine
@@ -86,7 +57,7 @@
 - name: "Copy Config Files"
   template:
     src={{ item }}.j2
-    dest="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/config/{{ item }}"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/config/{{ item }}"
     force=yes
     owner=redmine
     group=redmine
@@ -100,7 +71,7 @@
 
 - name: "Ensure Redmine can write gems directory"
   file:
-    path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle"
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
     state=directory
     owner=redmine
     group=redmine
@@ -109,138 +80,83 @@
 
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
-    path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
+    path="{{ redmine.app_base_path}}/{{ instance.name }}"
     state=directory
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
     recurse=yes
 
-- name: "Install Redmine"
-  bundler:
-    state=present
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/"
-    gemfile="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/Gemfile"
-    gem_path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle"
-    exclude_groups="test development "
+- block:
+
+    - name: "Install Redmine"
+      bundler:
+        state=present
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
+        gemfile="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile"
+        gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
+        exclude_groups="test development"
+
+    - name: "Generate Session Store Secret"
+      command: bundle exec rake generate_secret_token
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+
+    - name: "Create Database Schema Objects"
+      command: bundle exec rake db:migrate
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+      register: create_db
+
+    - name: "Load Database default data"
+      command: bundle exec rake redmine:load_default_data
+        creates="default_data.exists"
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+      register: default_data
+
+    - name: "Create db.exists file to prevent multiple Database creation"
+      file:
+        path="{{ redmine.app_base_path}}/{{ instance.name }}/db.creates"
+        state=touch
+        owner=redmine
+        group=redmine
+        mode="u=rx,g=rx,o=rx"
+      when: "default_data.rc == 0"
+
+    - name: "Create Database Schema Objects for Plugins"
+      command: bundle exec rake redmine:plugins
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+
+    - name: "Create Database Schema Objects for Plugins"
+      command: bundle exec rake redmine:plugins:migrate
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+
+    - name: "Create Database Schema Objects for Plugins explicite"
+      command: bundle exec rake redmine:plugins NAME={{ item.name }}
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+      with_items: "{{ redmine_plugins }}"
+
+    - name: "Cleanup"
+      command: bundle exec rake tmp:cache:clear tmp:sessions:clear
+        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+
   become: yes
   become_user: "redmine"
-
-- name: "Generate Session Store Secret"
-  command: bundle exec rake generate_secret_token
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
   environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-  become: yes
-  become_user: "redmine"
-  tags:
-    - setup
-
-- name: "Create Database Schema Objects"
-  command: bundle exec rake db:migrate
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
+    PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
     RAILS_ENV: production
-  become: yes
-  become_user: "redmine"
-  register: create_db
-  tags:
-    - setup
-
-#- name: "Create Database Schema Objects for Plugins"
-#  command: bundle exec rake db:migrate:plugins
-#    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-#  environment:
-#    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-#    RAILS_ENV: production
-#  become: yes
-#  become_user: "redmine"
-#  tags:
-#    - setup
-
-- name: "Load Database default data"
-  command: bundle exec rake redmine:load_default_data
-    creates="default_data.exists"
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-    RAILS_ENV: production
-    REDMINE_LANG: "{{ redmine.lang }}"
-  become: yes
-  become_user: "redmine"
-  register: default_data
-  tags:
-    - setup
-
-- name: "Create db.exists file to prevent multiple Database creation"
-  file:
-    path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/db.creates"
-    state=touch
-    owner=redmine
-    group=redmine
-    mode="u=rx,g=rx,o=rx"
-  when: "default_data.rc == 0"
-  tags:
-     - setup
-
-- name: "Create Database Schema Objects for Plugins"
-  command: bundle exec rake redmine:plugins
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-    RAILS_ENV: production
-  become: yes
-  become_user: "redmine"
-  tags:
-    - setup
-
-- name: "Create Database Schema Objects for Plugins"
-  command: bundle exec rake redmine:plugins:migrate
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-    RAILS_ENV: production
-  become: yes
-  become_user: "redmine"
-  tags:
-    - setup
-
-- name: "Create Database Schema Objects for Plugins explicite"
-  command: bundle exec rake redmine:plugins NAME={{ item }}
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-    RAILS_ENV: production
-  become: yes
-  become_user: "redmine"
-  with_items:
-    - "redmine_agile"
-    - "redmine_contacts"
-    - "redmine_contacts_helpdesk"
-    - "redmine_checklists"
-  tags:
-    - setup
-
-- name: "Cleanup"
-  command: bundle exec rake tmp:cache:clear tmp:sessions:clear
-    chdir="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
-  environment:
-    PATH: "{{ redmine.app_base_path}}/{{ redmine_instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ lookup('env', 'PATH') }}"
-    RAILS_ENV: production
-  become: yes
-  become_user: "redmine"
+    REDMINE_LANG: "{{ instance.lang }}"
   tags:
     - setup
 
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
-    path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}"
+    path="{{ redmine.app_base_path}}/{{ instance.name }}"
     state=directory
     owner=redmine
     group=redmine
     mode="u=rx,g=rx,o=rx"
     recurse=yes
+  tags:
+    - setup
 
 - name: "Ensure Redmine Instance Runtime directory exists"
   file:
@@ -252,11 +168,13 @@
     recurse=yes
   with_items:
     - "{{ redmine.run_base_path}}"
-    - "{{ redmine.log_base_path}}/{{ redmine_instance.name }}"
+    - "{{ redmine.log_base_path}}/{{ instance.name }}"
+  tags:
+    - setup
 
 - name: "Ensure Redmine Instance sub directories has correct user and file modes"
   file:
-    path="{{ redmine.app_base_path}}/{{ redmine_instance.name }}/{{ item }}"
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
     state=directory
     owner=redmine
     group=redmine

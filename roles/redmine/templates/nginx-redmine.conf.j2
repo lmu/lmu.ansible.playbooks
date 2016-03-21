@@ -1,5 +1,5 @@
 upstream redmine {
-  server unix://{{ redmine.run_base_path}}/{{ redmine.name }}-puma.sock fail_timeout=0;
+  server unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock fail_timeout=0;
   #server 127.0.0.1:3000;
 }
 
@@ -14,9 +14,9 @@ server {
   keepalive_timeout 5;
 
   # path for static files
-  root {{ redmine.app_base_path}}/{{ redmine.name }}/public;
-  access_log {{ redmine.log_base_path}}/{{ redmine.name }}/production.access.log;
-  error_log {{ redmine.log_base_path}}/{{ redmine.name }}/production.error.log info;
+  root {{ redmine.app_base_path}}/{{ instance.name }}/public;
+  access_log {{ redmine.log_base_path}}/{{ instance.name }}/production.access.log;
+  error_log {{ redmine.log_base_path}}/{{ instance.name }}/production.error.log info;
 
   # this rewrites all the requests to the maintenance.html
   # page if it exists in the doc root. This is for capistrano's

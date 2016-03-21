@@ -1,9 +1,11 @@
 ---
 
+- set_fact: instance="{{ item.value }}"
+
 - name: "Install Supervisor Conf for Puma/Redmine"
   template:
     src: redmine-puma-supervisor.conf.j2
-    dest: "/etc/supervisor/conf.d/puma-{{ redmine.name }}.conf"
+    dest: "/etc/supervisor/conf.d/puma-{{ instance.name }}.conf"
     owner: root
     group: root
     mode: "u=rwx,g=rx,o=rx"

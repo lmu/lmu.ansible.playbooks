@@ -2,6 +2,17 @@
 
 dependencies:
 
+  - { role: postgres,
+      database: {
+        db_user: "{{ redmine_db.user }}",
+        db_passwd: "{{ redmine_db.passwd }}",
+        #data_directory: "/data/postgresql",
+        data_directory: "/var/lib/postgresql/9.3/main",
+        start_mode: "auto",
+        port: "5432"
+      }
+    }
+
   - { role: nginx,
     }
 

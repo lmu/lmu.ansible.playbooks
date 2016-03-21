@@ -2,9 +2,22 @@
 
 - include: base.yml
 
+- name: "Download Redmine Plugins to master (necessary because of login for RedmineCRM and SSL check)"
+  get_url:
+    url="{{ item.url }}/{{ item.name }}-{{ item.version | regex_replace('\.', '_') }}.zip"
+    dest="/tmp/redmine-plugins/"
+    validate_certs=no
+    mode="u=rwx,g=rx,o=rx"
+    force=yes
+  with_items: "{{ redmine_plugins }}"
+  delegate_to: 127.0.0.1
+  become: false
+
 - include: instance.yml
   with_dict: "{{ redmine_instance }}"
 
 - include: nginx.yml
+  with_dict: "{{ redmine_instance }}"
 
 - include: supervisor.yml
+  with_dict: "{{ redmine_instance }}"

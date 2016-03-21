@@ -73,7 +73,7 @@ default:
   # Examples:
   # attachments_storage_path: /var/redmine/files
   # attachments_storage_path: D:/redmine/files
-  attachments_storage_path: "{{ redmine.data_base_path }}/{{ redmine.name }}"
+  attachments_storage_path: "{{ redmine.data_base_path }}/{{ instance.name }}"
 
   # Configuration of the autologin cookie.
   # autologin_cookie_name: the name of the cookie (default: autologin)
