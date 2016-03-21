@@ -1,20 +1,30 @@
 ---
 
 - name: "Ensure Ruby is installed"
-  apt: pkg={{ item }} state=present update_cache=yes install_recommends=yes
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
   with_items:
     - ruby2.0
     - ruby2.0-dev
     - ruby-dev
     - build-essential
-    - ruby-rmagick
-    - libmagick-dev
-    - imagemagick
-    - libmagickwand-dev
-    - libmagickcore-dev
     - git
     - subversion
-    #- bundler
+  when: ansible_os_family == "Debian"
+
+
+- name: "Ensure Ruby dependencies are installed"
+  apt:
+    pkg={{ item }}
+    state=build-dep
+    update_cache=no
+    install_recommends=yes
+  with_items:
+    - ruby-rmagick
+    - ruby-bundler
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Group redmine exists"
@@ -36,11 +46,28 @@
     state=directory
     owner=redmine
     group=redmine
-    mode="u=rwx,g=rx,o=rx"
+    mode="u=rwx,g=rwx,o=rx"
   with_items:
     - "{{ redmine.app_base_path }}"
     - "{{ redmine.data_base_path }}"
     - "{{ redmine.log_base_path }}"
+    - "{{ redmine.run_base_path }}"
+
+- name: "Ensure local download directories exists"
+  file:
+    path="/tmp/redmine-plugins"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rwx"
+
+- name: "Ensure local download directories exists"
+  file:
+    path="/tmp/redmine-plugins"
+    state=directory
+    mode="u=rwx,g=rwx,o=rwx"
+  delegate_to: localhost
+  become: false
 
 - name: "Install bundler for Ruby 2.0"
   command: gem2.0 install bundler

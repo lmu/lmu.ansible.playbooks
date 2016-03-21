@@ -19,6 +19,7 @@ state_path '{{ redmine.run_base_path}}/{{ redmine.name }}-puma.state'
 # quiet
 threads 0, 16
 bind 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-puma.sock'
+bind 'tcp://0.0.0.0:3000'
 
 # ssl_bind '127.0.0.1', '9292', { key: path_to_key, cert: path_to_cert }
 
@@ -32,6 +33,7 @@ bind 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-puma.sock'
 # === Cluster mode ===
 
 # workers 2
+workers "{{ ansible_processor_cores }}"
 
 # on_worker_boot do
 #   puts 'On worker boot...'
@@ -39,4 +41,5 @@ bind 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-puma.sock'
 
 # === Puma control rack application ===
 
-activate_control_app 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-pumactl.sock'
+activate_control_app 'unix://{{ redmine.run_base_path}}/{{ redmine.name }}-pumactl.sock', { no_token: true }
+#activate_control_app 'tcp://127.0.0.1:3001', { no_token: true }

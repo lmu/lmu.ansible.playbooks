@@ -3,14 +3,9 @@
 - name: "Install Supervisor Conf for Puma/Redmine"
   template:
     src: redmine-puma-supervisor.conf.j2
-    dest: /etc/supervisor/conf.d/puma-redmine.conf
+    dest: "/etc/supervisor/conf.d/puma-{{ redmine.name }}.conf"
     owner: root
     group: root
     mode: "u=rwx,g=rx,o=rx"
-  vars:
-    redmine:
-      name: "ref_vi-5"
-      app_base_path: "/opt/redmine"
-
   notify:
     - "Restart Supervisor"

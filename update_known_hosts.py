@@ -10,6 +10,10 @@ import StringIO
 if __name__ == '__main__':
     hosts = subprocess.check_output(['ansible', 'all', '--list-hosts'])
 
+    hosts = hosts.splitlines()
+    if hosts[0].strip().startswith('hosts'):
+        hosts = hosts[1:]
+
     for host in hosts.split():
         try:
             subprocess.check_call(['ssh-keyscan', '-H', host],
