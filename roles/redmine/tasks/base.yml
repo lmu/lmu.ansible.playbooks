@@ -55,19 +55,27 @@
 
 - name: "Ensure local download directories exists"
   file:
-    path="/tmp/redmine-plugins"
+    path="{{ item }}"
     state=directory
     owner=redmine
     group=redmine
     mode="u=rwx,g=rwx,o=rwx"
+  with_items:
+    - "/tmp/redmine-plugins"
+    - "/tmp/redmine-themes"
 
 - name: "Ensure local download directories exists"
   file:
-    path="/tmp/redmine-plugins"
+    path="{{ item }}"
     state=directory
     mode="u=rwx,g=rwx,o=rwx"
   delegate_to: localhost
   become: false
+  with_items:
+    - "/tmp/redmine-plugins-download"
+    - "/tmp/redmine-plugins"
+    - "/tmp/redmine-themes-download"
+    - "/tmp/redmine-themes"
 
 - name: "Install bundler for Ruby 2.0"
   command: gem2.0 install bundler

@@ -27,7 +27,7 @@
           app_base_path: "/opt/redmine",
           data_base_path: "/data/redmine",
           log_base_path: "/var/log/redmine",
-          run_base_path: "/var/run/redmine",
+          run_base_path: "/var/run",
           svn_version: "3.1",
           src_url: "http://www.redmine.org/releases/",
           src_file: "redmine-3.2.0.tar.gz",
@@ -84,10 +84,28 @@
             plugins: [
               "redmine_agile",
               "redmine_checklists",
-              "redmine_contacts"
+              "redmine_contacts",
+              "redmine_contacts_helpdesk",
+              "redmine_didyoumean",
+              "redmine_spent_time",
+              "redmine-plugin-recurring-tasks",
+              "redmine_favorite_projects",
+              "redmine_spent_time_column",
+              "redmine_issue_templates",
+              "redmine_tweaks",
+              "redmine_autowatch",
+              "redmine_knowledgebase",
+              "redmine_wiki_extensions",
+              "redmine_lmu_modifications",
+              "redmine_wiki_lists",
+              "redmine_local_avatars",
+              "sidebar_hide",
             ],
             themes: [
-              "redmine-theme-lmu"
+              "redmine-theme-lmu",
+              "redmine-theme-gitmike",
+              "a1_theme",
+              "circle_theme"
             ],
             puma_port: "3000",
             nginx_port: "80",
@@ -133,99 +151,88 @@
         ],
         redmine_plugins_git: [
           {
-            name: "",
+            name: "redmine_autowatch",
             oname: "Redmine Auto Watch plugin",
-            type: "git",
-            url: "",
-            version: ""
+            url: "https://github.com/ZIMK/Redmine-AutoWatch.git",
+            version: "master"
           },
           {
             name: "redmine_didyoumean",
             oname: "Did You Mean?",
-            type: "git",
             url: "https://github.com/abahgat/redmine_didyoumean.git",
             version: "master"
           },
           {
             name: "redmine_favorite_projects",
             oname: "Redmine Favorite Projects plugin",
-            type: "git",
             url: "https://github.com/alexandermeindl/redmine_favorite_projects.git",
             version: "1.0.5"
           },
           {
             name: "redmine_knowledgebase",
             oname: "Knowledgebase",
-            type: "git",
             url: "https://github.com/alexbevi/redmine_knowledgebase.git",
             version: "v3.1.0"
           },
           {
             name: "redmine_lmu_modifications",
             oname: "Redmine LMU modifications plugin",
-            type: "git",
             url: "https://github.com/loechel/redmine_lmu_modifications.git",
             version: "master"
           },
           {
             name: "redmine_spent_time",
             oname: "Redmine Spent Time Column",
-            type: "git",
             url: "https://github.com/eyp/redmine_spent_time.git",
             version: "3.1.2"
           },
           {
             name: "redmine_spent_time_column",
             oname: "Redmine Spent Time Column",
-            type: "git",
             url: "https://github.com/alexandermeindl/redmine_spent_time_column.git",
             version: "master"
           },
           {
             name: "redmine_tweaks",
             oname: "Redmine Tweaks",
-            type: "git",
             url: "https://github.com/alexandermeindl/redmine_tweaks.git",
             version: "0.5.6"
           },
           {
             name: "redmine_wiki_lists",
             oname: "Redmine Wiki Lists plugin",
-            type: "git",
             url: "https://github.com/tkusukawa/redmine_wiki_lists.git",
             version: "0.0.6"
           },
           {
             name: "redmine-plugin-recurring-tasks",
             oname: "Redmine Wiki Lists plugin",
-            type: "git",
             url: "https://github.com/nutso/redmine-plugin-recurring-tasks.git",
             version: "v1.6.0"
           },
           {
             name: "sidebar_hide",
             oname: "Sidebare Hide plugin",
-            type: "git",
             url: "https://github.com/bdemirkir/sidebar_hide.git",
             version: "master"
           },
         ],
-        redmine_theme_download: [
+        redmine_themes_download: [
           {
             name: "a1_theme",
-            url: "http://www.redminecrm.com/license_manager/14517/a1_theme-1_1_3.zip",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip",
             version: "master"
           },
           {
             name: "circle_theme",
-            url: "http://www.redminecrm.com/license_manager/23529/circle_theme-2_0_2.zip",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip",
             version: "master"
           }
         ],
-        redmine_theme_git: [
+        redmine_themes_git: [
           {
             name: "redmine-theme-lmu",
-            url: "",
+            url: "https://github.com/loechel/redmine-theme-lmu.git",
             version: "master"
           },
           {

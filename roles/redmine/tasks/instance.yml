@@ -35,15 +35,27 @@
     dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
 
-- name: "Copy Redmine Plugins (download)"
-  unarchive:
+- name: "Copy Redmine Plugins"
+  copy:
     src="/tmp/redmine-plugins/{{ item }}"
-    dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins"
-    copy=yes
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins/{{ item }}"
+    force=yes
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
-  with_items: "{{ instance.plugins }}"
+  with_items:
+    - "{{ instance.plugins }}"
+
+- name: "Copy Redmine Themes"
+  copy:
+    src="/tmp/redmine-themes/{{ item }}"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}/public/themes/{{ item }}"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "{{ instance.plugins }}"
 
 - name: "Copy Dependency File"
   copy:
@@ -104,7 +116,6 @@
     - name: "Create Database Schema Objects"
       command: bundle exec rake db:migrate
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
-      register: create_db
 
     - name: "Load Database default data"
       command: bundle exec rake redmine:load_default_data
