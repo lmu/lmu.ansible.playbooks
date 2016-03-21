@@ -4,8 +4,8 @@ upstream redmine {
 }
 
 server {
-  listen 80;
-  listen 443;
+  listen {{ instance.nginx_port }};
+  listen {{ instance.nginx_ssl_port }};
   server_name {{ redmine.domain }};
 
   # ~2 seconds is often enough for most folks to parse HTML/CSS and

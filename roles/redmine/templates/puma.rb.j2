@@ -19,7 +19,7 @@ state_path '{{ redmine.run_base_path}}/{{ instance.name }}-puma.state'
 # quiet
 threads 0, 16
 bind 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock'
-bind 'tcp://0.0.0.0:3000'
+bind 'tcp://0.0.0.0:{{ instance.puma_port}}'
 
 # ssl_bind '127.0.0.1', '9292', { key: path_to_key, cert: path_to_cert }
 

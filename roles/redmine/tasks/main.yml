@@ -2,14 +2,59 @@
 
 - include: base.yml
 
-- name: "Download Redmine Plugins to master (necessary because of login for RedmineCRM and SSL check)"
+- name: "Download Redmine Plugins (wget) to master"
   get_url:
-    url="{{ item.url }}/{{ item.name }}-{{ item.version | regex_replace('\.', '_') }}.zip"
-    dest="/tmp/redmine-plugins/"
+    url="{{ item.url }}"
+    dest="/tmp/redmine-plugins-download/"
     validate_certs=no
     mode="u=rwx,g=rx,o=rx"
     force=yes
-  with_items: "{{ redmine_plugins }}"
+  with_items: "{{ redmine_plugins_download }}"
+  delegate_to: 127.0.0.1
+  become: false
+
+- name: "List Downloaded Redmine Plugins"
+  find:
+    paths="/tmp/redmine-plugins-download/"
+    patterns="*.zip,*.tar.gz,*tgz"
+  register: archives
+
+- name: "Unpack Dowloaded Redmine Plugins (download)"
+  unarchive:
+    src="/tmp/redmine-plugins-download/{{ item }}"
+    dest="/tmp/redmine-plugins/"
+    copy=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+  with_items: "{{ archives }}"
+
+- name: "Download Redmine Plugins (git) to master"
+  git:
+    repo="{{ item.url }}"
+    dest="/tmp/redmine-plugins/{{ item.name }}"
+    version="{{ item.version }}"
+  with_items: "{{ redmine_plugins_git }}"
+  delegate_to: 127.0.0.1
+  become: false
+
+- name: "Download Redmine Themes (wget) to master"
+  get_url:
+    url="{{ item.url }}"
+    dest="/tmp/redmine-themes/"
+    validate_certs=no
+    mode="u=rwx,g=rx,o=rx"
+    force=yes
+  with_items: "{{ redmine_themes_download }}"
+  delegate_to: 127.0.0.1
+  become: false
+
+- name: "Download Redmine Themes (git) to master"
+  git:
+    repo="{{ item.url }}"
+    dest="/tmp/redmine-themes"
+    version="{{ item.version }}"
+  with_items: "{{ redmine_themes_git }}"
   delegate_to: 127.0.0.1
   become: false
 

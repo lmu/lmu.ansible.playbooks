@@ -35,15 +35,15 @@
     dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
 
-- name: "Copy Redmine Plugins"
+- name: "Copy Redmine Plugins (download)"
   unarchive:
-    src="/tmp/redmine-plugins/{{ item.name }}-{{ item.version | regex_replace('\.', '_') }}.zip"
+    src="/tmp/redmine-plugins/{{ item }}"
     dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins"
     copy=yes
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
-  with_items: "{{ redmine_plugins }}"
+  with_items: "{{ instance.plugins }}"
 
 - name: "Copy Dependency File"
   copy:
@@ -112,9 +112,9 @@
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
       register: default_data
 
-    - name: "Create db.exists file to prevent multiple Database creation"
+    - name: "Create default_data.exists file to prevent multiple Database creation"
       file:
-        path="{{ redmine.app_base_path}}/{{ instance.name }}/db.creates"
+        path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
         state=touch
         owner=redmine
         group=redmine
