@@ -4,6 +4,12 @@
 
 - debug: msg="outer item={{ instance }} "
 
+- name: "Shutdown Puma via Supervisor for {{ instance.name }}"
+  supervisorctl:
+      name="puma-{{ instance.name }}"
+      state=stopped
+  ignore_errors: true
+
 - name: "Create Redmine Database for {{ instance.name }}"
   postgresql_db:
     name="{{ instance.db_name }}"
@@ -35,7 +41,7 @@
     dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
 
-- name: "Copy Redmine Plugins"
+- name: "Copy Redmine Plugins ({{ instance.name }})"
   copy:
     src="/tmp/redmine-plugins/{{ item }}"
     dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins/{{ item }}"
@@ -46,7 +52,7 @@
   with_items:
     - "{{ instance.plugins }}"
 
-- name: "Copy Redmine Themes"
+- name: "Copy Redmine Themes ({{ instance.name }})"
   copy:
     src="/tmp/redmine-themes/{{ item }}"
     dest="{{ redmine.app_base_path }}/{{ instance.name }}/public/themes/{{ item }}"
@@ -55,9 +61,9 @@
     group=redmine
     mode="u=rwx,g=rx,o=rx"
   with_items:
-    - "{{ instance.plugins }}"
+    - "{{ instance.themes }}"
 
-- name: "Copy Dependency File"
+- name: "Copy Dependency File ({{ instance.name }})"
   copy:
     src="Gemfile.local"
     dest="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile.local"
@@ -66,7 +72,7 @@
     group=redmine
     mode="u=rwx,g=r,o=r"
 
-- name: "Copy Config Files"
+- name: "Copy Config Files ({{ instance.name }})"
   template:
     src={{ item }}.j2
     dest="{{ redmine.app_base_path}}/{{ instance.name }}/config/{{ item }}"
@@ -101,7 +107,7 @@
 
 - block:
 
-    - name: "Install Redmine"
+    - name: "Install Redmine ({{ instance.name }})"
       bundler:
         state=present
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
@@ -109,21 +115,21 @@
         gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
         exclude_groups="test development"
 
-    - name: "Generate Session Store Secret"
+    - name: "Generate Session Store Secret ({{ instance.name }})"
       command: bundle exec rake generate_secret_token
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects"
+    - name: "Create Database Schema Objects ({{ instance.name }})"
       command: bundle exec rake db:migrate
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Load Database default data"
+    - name: "Load Database default data ({{ instance.name }})"
       command: bundle exec rake redmine:load_default_data
         creates="default_data.exists"
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
       register: default_data
 
-    - name: "Create default_data.exists file to prevent multiple Database creation"
+    - name: "Create default_data.exists file to prevent multiple Database creation ({{ instance.name }})"
       file:
         path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
         state=touch
@@ -132,20 +138,20 @@
         mode="u=rx,g=rx,o=rx"
       when: "default_data.rc == 0"
 
-    - name: "Create Database Schema Objects for Plugins"
+    - name: "Create Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
       command: bundle exec rake redmine:plugins
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects for Plugins"
+    - name: "Create Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
       command: bundle exec rake redmine:plugins:migrate
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects for Plugins explicite"
+    - name: "Create Database Schema Objects for Plugins explicite ({{ instance.name }})"
       command: bundle exec rake redmine:plugins NAME={{ item.name }}
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
-      with_items: "{{ redmine_plugins }}"
+      with_items: "{{ instance.plugins }}"
 
-    - name: "Cleanup"
+    - name: "Cleanup ({{ instance.name }})"
       command: bundle exec rake tmp:cache:clear tmp:sessions:clear
         chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
@@ -178,7 +184,7 @@
     mode="u=rwx,g=rwx,o=rx"
     recurse=yes
   with_items:
-    - "{{ redmine.run_base_path}}"
+    #- "{{ redmine.run_base_path}}"
     - "{{ redmine.log_base_path}}/{{ instance.name }}"
   tags:
     - setup
@@ -199,3 +205,10 @@
     - public/plugin_assets
   tags:
     - setup
+
+
+- name: "Shutdown Puma via Supervisor for {{ instance.name }}"
+  supervisorctl:
+      name="puma-{{ instance.name }}"
+      state=restarted
+  ignore_errors: true
