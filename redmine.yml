@@ -86,7 +86,7 @@
               "redmine_checklists",
               "redmine_contacts",
               "redmine_contacts_helpdesk",
-              "redmine_didyoumean",
+              #"redmine_didyoumean",
               "redmine_spent_time",
               "redmine-plugin-recurring-tasks",
               "redmine_favorite_projects",
