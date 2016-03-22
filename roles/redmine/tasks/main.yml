@@ -56,6 +56,11 @@
   delegate_to: 127.0.0.1
   become: false
 
+- name: "Start Setup Instance"
+  debug:
+    msg="Start setup of instance {{ item }}"
+  with_dict: "{{ redmine_instance }}"
+
 - include: instance.yml
   with_dict: "{{ redmine_instance }}"
 
