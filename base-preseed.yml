@@ -7,9 +7,15 @@
   roles:
     - base-preseed
     - { role: maintenance,
-       maintenance: {
-         upgrade_type: "full",
-         allow_reboot: false
-       }
-     }
-    - psdash
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
+      }
+    - { role: psdash,
+        psdash: {
+          path: "/usr/local/venv-psdash",
+          version: '0.6.2',
+          mode: "agent"
+        }
+      }

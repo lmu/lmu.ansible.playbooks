@@ -9,6 +9,7 @@
   with_items:
     - python-dev
     - build-essential
+    - libzmq-dev
   when: ansible_os_family == "Debian"
 
 - name: "Ensure psdash path: '{{ psdash.path }}' exists"
@@ -27,6 +28,9 @@
     virtualenv="{{ psdash.path }}"
     chdir="{{ psdash.path }}"
     #virtualenv_python=""
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: "Ensure psdash path: '{{ psdash.path }}' has right user settings and permissions"
   file:
@@ -44,9 +48,9 @@
     group: root
     mode: "u=rwx,g=rx,o=rx"
   when: psdash.mode == "agent"
-  notify:
-    - "Reload Supervisor"
-    - "Restart Supervisor"
+  #notify:
+  #  - "Reload Supervisor"
+  #  - "Restart Supervisor"
 
 - name: "Install psdash-master.conf"
   template:
@@ -65,6 +69,39 @@
     group: root
     mode: "u=rwx,g=rx,o=rx"
   when: psdash.mode == "master"
+  #notify:
+  #  - "Reload Supervisor"
+  #  - "Restart Supervisor"
+
+- name: "Remove psdash"
+  file:
+    path="{{ psdash.path }}"
+    state=absent
+    owner=root
+    group=root
+    mode="u=rwx,g=rwx,o=rx"
+  with_items:
+    - "/etc/supervisor/conf.d/psdash.conf"
+    - "/etc/psdash.py"
+    - "{{ psdash.path }}"
+  when: psdash.mode == "absent"
   notify:
     - "Reload Supervisor"
     - "Restart Supervisor"
+
+
+- name: "Update Supervisorctl - Ensure psdash-agent are present"
+  supervisorctl:
+    name={{ item }}
+    state=present
+  with_items:
+    - "psdash-agent"
+  when: psdash.mode == "agent"
+
+- name: "Start psdash-agent via Supervisor"
+  supervisorctl:
+    name={{ item }}
+    state=started
+  with_items:
+    - "psdash-agent"
+  when: psdash.mode == "agent"
