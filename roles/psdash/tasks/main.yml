@@ -1,0 +1,70 @@
+---
+
+- name: "Ensure base dependencies for psdash are installed"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - python-dev
+    - build-essential
+  when: ansible_os_family == "Debian"
+
+- name: "Ensure psdash path: '{{ psdash.path }}' exists"
+  file:
+    path="{{ psdash.path }}"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rwx,o=rx"
+
+- name: "Install psdash"
+  pip:
+    name="psdash"
+    state="present"
+    version="{{ psdash.version }}"
+    virtualenv="{{ psdash.path }}"
+    chdir="{{ psdash.path }}"
+    #virtualenv_python=""
+
+- name: "Ensure psdash path: '{{ psdash.path }}' has right user settings and permissions"
+  file:
+    path="{{ psdash.path }}"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rwx,o=rx"
+
+- name: "Install Supervisor Conf for psdash-agent"
+  template:
+    src: psdash-agent-supervisor.conf.j2
+    dest: "/etc/supervisor/conf.d/psdash.conf"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  when: psdash.mode == "agent"
+  notify:
+    - "Reload Supervisor"
+    - "Restart Supervisor"
+
+- name: "Install psdash-master.conf"
+  template:
+    src: psdash-master.py.j2
+    dest: "/etc/psdash.py"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  when: psdash.mode == "master"
+
+- name: "Install Supervisor Conf for psdash-master"
+  template:
+    src: psdash-master-supervisor.conf.j2
+    dest: "/etc/supervisor/conf.d/psdash.conf"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  when: psdash.mode == "master"
+  notify:
+    - "Reload Supervisor"
+    - "Restart Supervisor"

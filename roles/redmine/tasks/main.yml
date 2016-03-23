@@ -1,4 +1,7 @@
 ---
+- name: "Setup Redmine Multi-Instance"
+  debug:
+    msg="Start Setup of Redmine Multi-Instance"
 
 - include: base.yml
 

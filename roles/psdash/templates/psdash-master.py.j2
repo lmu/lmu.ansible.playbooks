@@ -1,0 +1,29 @@
+# PSDASH Config Dict in Flask Style
+
+#SERVERNAME = "psdash Master (on {{ ansible_hostname }})"
+
+PSDASH_NODES = [
+{% for node in {{ groups['all'] }} %}
+    { 'name': '{{ node }}', 'host': '{{ node }}', 'port': 5000  }
+{% endfor %}
+
+    # IuK ZEO-Server
+    { 'name': 'cms-live-appdb1', 'host': 'cms-live-appdb1.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'cms-live-appdb2', 'host': 'cms-live-appdb2.verwaltung.uni-muenchen.de', 'port': 5000  },
+    # IuK ZEO-Clients
+    { 'name': 'cms-live-app2', 'host': 'cms-live-app2.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'cms-live-app3', 'host': 'cms-live-app3.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'cms-live-app4', 'host': 'cms-live-app4.verwaltung.uni-muenchen.de', 'port': 5000  },
+    # IuK-Solr Server
+    { 'name': 'search3', 'host': 'search3.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'search4', 'host': 'search4.verwaltung.uni-muenchen.de', 'port': 5000  },
+    # WebProxies
+    { 'name': 'webproxy1', 'host': 'webproxy1.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'webproxy2', 'host': 'webproxy2.verwaltung.uni-muenchen.de', 'port': 5000  },
+    # Infrastructure Server
+    { 'name': 'special', 'host': 'special.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'sentry1', 'host': 'sentry1.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'redmine2', 'host': 'redmine2.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'redminetest2', 'host': 'redminetest2.verwaltung.uni-muenchen.de', 'port': 5000  },
+    { 'name': 'piwik1', 'host': 'piwik1.verwaltung.uni-muenchen.de', 'port': 5000  },
+]

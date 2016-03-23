@@ -1,0 +1,4 @@
+[program:psdash-agent]
+command={{ psdash.path }}/bin/psdash -l /var/log/**/*.log -a
+directory="{{ psdash.path }}"
+environment=PATH="{{ psdash.path }}/bin:{{ lookup('env', 'PATH') }}"

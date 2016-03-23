@@ -21,13 +21,14 @@
           allow_reboot: false
         }
       }
+    - psdash
 
     - { role: redmine,
         redmine: {
           app_base_path: "/opt/redmine",
           data_base_path: "/data/redmine",
           log_base_path: "/var/log/redmine",
-          run_base_path: "/var/run",
+          run_base_path: "/var/run/redmine",
           svn_version: "3.1",
           src_url: "http://www.redmine.org/releases/",
           src_file: "redmine-3.2.0.tar.gz",
@@ -87,22 +88,22 @@
               "redmine_contacts",
               "redmine_contacts_helpdesk",
               #"redmine_didyoumean",
-              "redmine_spent_time",
-              "redmine-plugin-recurring-tasks",
-              "redmine_favorite_projects",
-              "redmine_spent_time_column",
-              "redmine_issue_templates",
+              #"redmine_spent_time",
+              #"redmine-plugin-recurring-tasks",
+              #"redmine_favorite_projects",
+              #"redmine_spent_time_column",
+              #"redmine_issue_templates",
               "redmine_tweaks",
-              "redmine_autowatch",
-              "redmine_knowledgebase",
-              "redmine_wiki_extensions",
-              "redmine_lmu_modifications",
-              "redmine_wiki_lists",
-              "redmine_local_avatars",
+              #"redmine_autowatch",
+              #"redmine_knowledgebase",
+              #"redmine_wiki_extensions",
+              #"redmine_lmu_modifications",
+              #"redmine_wiki_lists",
+              #"redmine_local_avatars",
               "sidebar_hide",
             ],
             themes: [
-              "redmine-theme-lmu",
+              #"redmine-theme-lmu",
               "redmine-theme-gitmike",
               "a1",
               "circle"
@@ -220,13 +221,11 @@
         redmine_themes_download: [
           {
             name: "a1_theme",
-            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip",
-            version: "master"
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
           },
           {
             name: "circle_theme",
-            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip",
-            version: "master"
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
           }
         ],
         redmine_themes_git: [
