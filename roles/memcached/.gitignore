@@ -1,0 +1,8 @@
+# .gitignore File
+# list all file patterns to remove
+# you could use:
+# *.tmp --> ignore all *.tmp files
+* !*.tmpl --> do not ignore *.tmpl files
+
+# Mac OS specifics:
+.DS_Store

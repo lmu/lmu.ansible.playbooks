@@ -1,7 +1,10 @@
 ---
 
 - name: "Install PostgreSQL Packages"
-  apt: pkg={{ item }} state=latest install_recommends=yes
+  apt:
+    pkg={{ item }}
+    state=present
+    install_recommends=yes
   with_items:
     - postgresql
     - postgresql-contrib
@@ -13,9 +16,10 @@
   when: ansible_os_family == "Debian"
 
 - name: "Install PostgreSQL Python bindings"
-  pip: name=psycopg2
+  pip:
+    name=psycopg2
 
-- name: "Copy the config files for PostgreSQL"
+- name: "Copy the configuration files for PostgreSQL"
   template:
     src={{ item }}.j2
     dest=/etc/postgresql/9.3/main/{{ item }}
@@ -48,10 +52,13 @@
   command: locale-gen 'de_DE.UTF-8'
   become: true
 
-- name: "initialize PostgreSQL"
+- name: "Initialize PostgreSQL"
   command: initdb -D {{ database.data_directory }}
   become_user: postgres
   when: "pg_data_dir.stat.path != '/var/lib/postgresql/9.3/main'"
 
-- name: "Ensure PostgreSQL is started on boot"
-  service: name=postgresql state=restarted enabled=yes
+- name: "Ensure PostgreSQL is started and enabled on boot."
+  service:
+    name=postgresql
+    state=restarted
+    enabled=yes

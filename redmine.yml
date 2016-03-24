@@ -9,6 +9,7 @@
     - include: roles/supervisor/handlers/main.yml
 
   vars:
+    memcached_memory_limit: "512"
 
   vars_files:
     - secrets.yml
@@ -21,7 +22,6 @@
           allow_reboot: false
         }
       }
-    - psdash
 
     - { role: redmine,
         redmine: {
