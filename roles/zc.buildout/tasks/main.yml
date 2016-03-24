@@ -140,6 +140,21 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
 
+- name: delete existing mo files of buildout-cache
+  command: find . -iname *.mo -delete
+    chdir="/usr/local/buildout-cache"
+  become_user: plone_buildout
+
+- name: Compile po to po.mo files of buildout-cache
+  command: find . -iname *.po -exec msgfmt {} -o {}.mo \;
+    chdir="/usr/local/buildout-cache"
+  become_user: plone_buildout
+
+- name: rename po.mo to mo files of buildout-cache
+  command: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
+    chdir="/usr/local/buildout-cache"
+  become_user: plone_buildout
+
 - name: delete existing mo files of src
   command: find . -iname *.mo -delete
     chdir="{{ buildout.path }}{{ buildout.directory }}/src"
