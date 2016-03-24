@@ -10,6 +10,8 @@ Defaults        env_reset
 Defaults        mail_badpass
 Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Defaults        env_keep += "ftp_proxy http_proxy https_proxy no_proxy"
+Defaults:ansible  !requiretty
+Defaults:vagrant  !requiretty
 
 # Host alias specification
 
