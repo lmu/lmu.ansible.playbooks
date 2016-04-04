@@ -131,7 +131,7 @@
     chdir="{{ buildout.path }}{{ buildout.directory }}/src"
 
 - name: Run buildout
-  command: ./bin/buildout
+  command: ./bin/buildout {{ buildout.mode }}
     chdir="{{ buildout.path }}{{ buildout.directory }}"
   environment:
     VIRTUAL_ENV: "{{ buildout.path }}{{ buildout.directory }}"
