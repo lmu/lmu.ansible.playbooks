@@ -64,3 +64,6 @@ secrets/
 secrets.yml
 graphs/
 *.retry
+
+# Mac specifics
+.DS_Store

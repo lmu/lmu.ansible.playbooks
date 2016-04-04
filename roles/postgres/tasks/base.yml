@@ -19,10 +19,21 @@
   pip:
     name=psycopg2
 
+- name: "gather postgres version"
+  find:
+    paths="/etc/postgresql/"
+    recurse=no
+    file_type=directory
+  register: postgres_version
+
+#- name: debug
+#  debug:
+#    msg="{{ postgres_version }}"
+
 - name: "Copy the configuration files for PostgreSQL"
   template:
     src={{ item }}.j2
-    dest=/etc/postgresql/9.3/main/{{ item }}
+    dest="/etc/postgresql/{{ postgres_version.files[0].path | basename }}/main/{{ item }}"
     force=yes
     owner=postgres
     group=postgres
@@ -55,10 +66,12 @@
 - name: "Initialize PostgreSQL"
   command: initdb -D {{ database.data_directory }}
   become_user: postgres
-  when: "pg_data_dir.stat.path != '/var/lib/postgresql/9.3/main'"
+  when: "pg_data_dir.stat.path != '/var/lib/postgresql/{{ postgres_version.files[0].path | basename }}/main'"
 
 - name: "Ensure PostgreSQL is started and enabled on boot."
   service:
     name=postgresql
     state=restarted
     enabled=yes
+
+...

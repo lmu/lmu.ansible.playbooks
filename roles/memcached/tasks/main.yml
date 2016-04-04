@@ -24,3 +24,5 @@
     name=memcached
     state=started
     enabled=yes
+
+...
