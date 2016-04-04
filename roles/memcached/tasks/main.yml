@@ -1,0 +1,28 @@
+---
+
+- name: "Install memcached."
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - memcached
+  when: ansible_os_family == "Debian"
+
+- name: "Copy configuration files for memcached."
+  template:
+    src: memcached.conf.j2
+    dest: "/etc/memcached.conf"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  notify: "Restart memcached"
+
+- name: "Ensure memcached is started and enabled on boot."
+  service:
+    name=memcached
+    state=started
+    enabled=yes
+
+...

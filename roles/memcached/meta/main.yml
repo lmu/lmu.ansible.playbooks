@@ -1,0 +1,22 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: Alexander Loechel
+  description: Memcached for Linux (Debian, Ubuntu)
+  company: "Ludwig-Maximilians-Universität München"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.0.0
+  platforms:
+    - name: Ubuntu
+      versions:
+      - precise
+      - trusty
+    - name: Debian
+      versions:
+      - all
+  galaxy_tags:
+    - web
+    - database
+    - cache

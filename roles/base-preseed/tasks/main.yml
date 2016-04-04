@@ -1,10 +1,10 @@
 ---
 
-- name: Rename hostname to intended hostname
+- name: "Rename hostname to intended hostname"
   hostname:
     name={{ inventory_hostname }}
 
-- name: Ensure User "ansible" exists
+- name: "Ensure User 'ansible' exists"
   user:
     name=ansible
     comment="Ansible User for Provisioning with Ansible"
@@ -13,13 +13,13 @@
     groups=sudo,
     system=yes
 
-- name: Ensure that admin can login via SSH Public Key (Transfere Public Key)
+- name: "Ensure that admin can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
     user=ansible
     key="{{ lookup('file', '~/.ssh/id_rsa.pub')}}"
     state=present
 
-- name: Update sshd_config
+- name: "Update sshd_config"
   template:
     dest="/etc/ssh/sshd_config"
     src="sshd_config.j2"
@@ -27,9 +27,9 @@
     group=root
     mode="u=rw,g=r,o=r"
   notify:
-    - Reload sshd
+    - "Reload sshd"
 
-- name: Ensure that User "ansible" can sudo with public key
+- name: "Ensure that User 'ansible' can sudo with public key"
   template:
     dest="/etc/sudoers"
     src="sudoers.j2"
@@ -38,13 +38,12 @@
     mode="u=r,g=r,o="
     validate="visudo -cf %s"
 
-- name: Ensure Base-Packages (common) are installed
+- name: "Ensure Base-Packages (common) are installed"
   apt:
     pkg={{ item }}
     state=present
     update_cache=yes
   with_items:
-    - vim
     - aptitude
     - ssl-cert
     - update-notifier-common
@@ -61,6 +60,8 @@
     - python3-dev
     - python3-setuptools
     - python3-pip
+    # - python3-virtualenv
+    - vim
     - curl
     - wget
     - bzip2
@@ -68,7 +69,13 @@
     - unzip
     - libffi-dev
     - libssl-dev
-    # Tops for analysing
+
+- name: "Ensure Base-Packages (Analysis Tools / top's) are installed"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
     - htop
     - atop
     - iftop
@@ -79,7 +86,6 @@
     - logtop
     - powertop
   when: ansible_os_family == "Debian"
-
 
 - name: "Ensure Data Directory exists"
   file:
@@ -97,3 +103,5 @@
     state=present
     special_time=hourly
   become: true
+
+...

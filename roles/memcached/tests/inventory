@@ -1,0 +1,4 @@
+# Test inventory
+
+[memcached-servers]
+localhost
