@@ -107,53 +107,54 @@
 
 - block:
 
-    - name: "Install Redmine ({{ instance.name }})"
-      bundler:
-        state=present
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
-        gemfile="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile"
-        gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
-        exclude_groups="test development"
+  - name: "Install Redmine ({{ instance.name }})"
+    bundler:
+      state=present
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
+      gem_path="vendor/bundle"
+      exclude_groups="test development"
+      #gemfile="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile"
+      #gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
 
-    - name: "Generate Session Store Secret ({{ instance.name }})"
-      command: bundle exec rake generate_secret_token
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+  - name: "Generate Session Store Secret ({{ instance.name }})"
+    command: bundle exec rake generate_secret_token
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects ({{ instance.name }})"
-      command: bundle exec rake db:migrate
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+  - name: "Create Database Schema Objects ({{ instance.name }})"
+    command: bundle exec rake db:migrate
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Load Database default data ({{ instance.name }})"
-      command: bundle exec rake redmine:load_default_data
-        creates="default_data.exists"
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
-      register: default_data
+  - name: "Load Database default data ({{ instance.name }})"
+    command: bundle exec rake redmine:load_default_data
+      creates="default_data.exists"
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    register: default_data
 
-    - name: "Create default_data.exists file to prevent multiple Database creation ({{ instance.name }})"
-      file:
-        path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
-        state=touch
-        owner=redmine
-        group=redmine
-        mode="u=rx,g=rx,o=rx"
-      when: "default_data.rc == 0"
+  - name: "Create default_data.exists file to prevent multiple Database creation ({{ instance.name }})"
+    file:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
+      state=touch
+      owner=redmine
+      group=redmine
+      mode="u=rx,g=rx,o=rx"
+    when: "default_data.rc == 0"
 
-    - name: "Create Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
-      command: bundle exec rake redmine:plugins
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+  - name: "Create Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
-      command: bundle exec rake redmine:plugins:migrate
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+  - name: "Create Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins:migrate
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
-    - name: "Create Database Schema Objects for Plugins explicite ({{ instance.name }})"
-      command: bundle exec rake redmine:plugins NAME={{ item }}
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
-      with_items: "{{ instance.plugins }}"
+  - name: "Create Database Schema Objects for Plugins explicite ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins NAME={{ item }}
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    with_items: "{{ instance.plugins }}"
 
-    - name: "Cleanup ({{ instance.name }})"
-      command: bundle exec rake tmp:cache:clear tmp:sessions:clear
-        chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+  - name: "Cleanup ({{ instance.name }})"
+    command: bundle exec rake tmp:cache:clear tmp:sessions:clear
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
 
   become: yes
   become_user: "redmine"

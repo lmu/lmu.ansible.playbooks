@@ -12,8 +12,8 @@ config.log_level = :"{{ instance.log_level }}"
 config.cache_store = :mem_cache_store
 
 config.cache_store = :dalli_store, 'localhost', {
-  :namespace => redmine-"{{ instance.name }}",
+  :namespace => 'redmine-{{ instance.name }}',
   :expires_in => 1.hour,
   :compress => true,
-  :pool_size => "{{ ansible_processor_cores }}"
+  :pool_size => {{ ansible_processor_cores }}
 }

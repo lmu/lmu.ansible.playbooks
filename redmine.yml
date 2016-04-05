@@ -111,9 +111,9 @@
             ],
             themes: [
               #"redmine-theme-lmu",
-              "redmine-theme-gitmike",
-              "a1",
-              "circle"
+              #"redmine-theme-gitmike",
+              #"a1",
+              #"circle"
             ],
             puma_port: "3000",
             nginx_port: "80",

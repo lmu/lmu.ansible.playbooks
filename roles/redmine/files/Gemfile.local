@@ -1,3 +1,4 @@
 # Gemfile.local
 gem 'puma'
 gem 'dalli'
+gem 'connection_pool'
