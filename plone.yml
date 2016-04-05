@@ -37,6 +37,7 @@
             secrets: 'templates/secrets.cfg.j2',
             login: 'admin',
             password: 'admin',
+            mode: '',
          }}
 
 
@@ -62,7 +63,8 @@
            requires_secrets: true,
            secrets: 'templates/secrets.cfg.j2',
            login: 'admin',
-           password: 'admin'
+           password: 'admin',
+           mode: '',
         }}
 
 
@@ -89,6 +91,7 @@
             secrets: 'templates/secrets.cfg.j2',
             login: 'admin',
             password: 'admin',
+            mode: '',
          }}
 
 

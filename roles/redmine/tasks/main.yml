@@ -72,3 +72,5 @@
 
 - include: supervisor.yml
   with_dict: "{{ redmine_instance }}"
+
+...

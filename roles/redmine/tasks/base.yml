@@ -15,7 +15,6 @@
     - subversion
   when: ansible_os_family == "Debian"
 
-
 - name: "Ensure Ruby dependencies are installed"
   apt:
     pkg={{ item }}
@@ -98,3 +97,5 @@
 
 - name: "Install bundler for Ruby 2.0"
   command: gem2.0 install bundler
+
+...

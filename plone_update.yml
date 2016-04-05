@@ -75,6 +75,7 @@
             secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
+          mode: '',
          }}
     -  { role: maintenance,
          maintenance: {
@@ -233,6 +234,7 @@
             secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
+          mode: '',
          }}
     -  { role: maintenance,
          maintenance: {
@@ -305,4 +307,3 @@
         - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
         - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
         - { backend: 'plone-cluster-ludwig27', name: 'clients' }
-
