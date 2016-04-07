@@ -99,4 +99,12 @@
 #- name: "Install bundler for Ruby 2.0"
 #  command: gem2.0 install bundler
 
+- name: "Update bundler for Ruby"
+  gem: 
+    name=bundler
+    state=latest
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
 ...

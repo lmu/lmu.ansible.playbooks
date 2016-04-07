@@ -24,6 +24,14 @@
     owner=root
     group=root
 
+- name: "Make SVN respect ZUV-Proxy Settings"
+  copy:
+    dest=/home/ansible/.subversion/servers
+    src=subversion-server-settings.conf
+    mode="u=rw,g=r,o=r"
+    owner=ansible
+    group=ansible
+
 - name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
   file:
     name=/usr/local/share/ca-certificates/lmu/
@@ -70,7 +78,7 @@
     url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
     state=present
 
-- name: Ensure Base-Packages (common) are installed
+- name: Ensure Base-Packages (ZUV-common) are installed
   apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     - vim
@@ -78,17 +86,25 @@
     - update-notifier-common
     - bginfo-ubuntu
     - certs-zuv-ubuntu
+  when: ansible_os_family == "Debian"
+  notify:
+    - Restart xinetd
+
+
+- name: Ensure current Kernel-Packages (Hyper-V Support) are installed
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
     # Kernelmodules for hyper-v support
     - hv-kvp-daemon-init
     #- linux-tools
     #- linux-cloud-tools
-    - linux-tools-generic-lts-wily
-    - linux-cloud-tools-generic-lts-wily
-    - linux-signed-image-generic-lts-wily
-    - linux-signed-generic-lts-wily
-    - linux-image-generic-lts-wily
-    - linux-headers-generic-lts-wily
-    - linux-generic-lts-wily
+    - linux-tools-generic-lts-xenial
+    - linux-cloud-tools-generic-lts-xenial
+    - linux-signed-image-generic-lts-xenial
+    - linux-signed-generic-lts-xenial
+    - linux-image-generic-lts-xenial
+    - linux-headers-generic-lts-xenial
+    - linux-generic-lts-xenial
   when: ansible_os_family == "Debian"
   notify:
     - Restart xinetd

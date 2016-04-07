@@ -120,7 +120,7 @@
             nginx_ssl_port: "443",
           },
         },
-        # redmine_plugins_download: [
+        redmine_plugins_download: [
         #   {
         #     name: "redmine_agile",
         #     oname: "Redmine Agile plugin (Pro version)",
@@ -156,8 +156,8 @@
         #     oname: "Redmine Local Avatars plugin",
         #     url: "https://launchpad.net/redminelocalavatars/trunk/0.1.1/+download/redmine_local_avatars-0.1.1.tar.gz",
         #   },
-        # ],
-        # redmine_plugins_git: [
+        ],
+        redmine_plugins_git: [
         #   {
         #     name: "redmine_autowatch",
         #     oname: "Redmine Auto Watch plugin",
@@ -224,8 +224,8 @@
         #     url: "https://github.com/bdemirkir/sidebar_hide.git",
         #     version: "master"
         #   },
-        # ],
-        # redmine_themes_download: [
+        ],
+        redmine_themes_download: [
         #   {
         #     name: "a1_theme",
         #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
@@ -234,8 +234,8 @@
         #     name: "circle_theme",
         #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
         #   }
-        # ],
-        # redmine_themes_git: [
+        ],
+        redmine_themes_git: [
         #   {
         #     name: "redmine-theme-lmu",
         #     url: "https://github.com/loechel/redmine-theme-lmu.git",
@@ -246,7 +246,7 @@
         #     url: "https://github.com/makotokw/redmine-theme-gitmike.git",
         #     version: "v1.0.7"
         #   }
-        # ],
+        ],
         nginx: {
           use_ppa: "yes",
           ppa: "ppa:nginx/stable"
