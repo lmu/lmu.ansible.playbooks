@@ -8,6 +8,7 @@
 #   ...
 #
 config.log_level = :"{{ instance.log_level }}"
+config.paths.log = "{{ redmine.log_base_path }}/{{ instance.name }}/production.log"
 
 config.cache_store = :mem_cache_store
 

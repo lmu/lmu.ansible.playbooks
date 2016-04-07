@@ -30,10 +30,31 @@
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
+    recurse=yes
   with_items:
-    #- "{{ redmine.app_base_path }}"
+    - "{{ redmine.app_base_path }}"
     - "{{ redmine.data_base_path }}"
     - "{{ redmine.log_base_path }}"
+  tags:
+    - setup
+    - update
+
+- name: "Check if redmine instance directory exists as subversion directory"
+  stat:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}/.svn"
+  register: svn_path
+
+- name: "Ensure Redmine Instance only exists as subversion directory"
+  file:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}"
+    state=absent
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+  when: svn_path.stat.isdir is not defined
+  tags:
+    - setup
+    - update
 
 - name: "Download Redmine"
   subversion:
