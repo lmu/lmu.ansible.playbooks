@@ -10,6 +10,7 @@
     - ruby2.0
     - ruby2.0-dev
     - ruby-dev
+    - bundler
     - build-essential
     - git
     - subversion
@@ -95,7 +96,7 @@
     - "/tmp/redmine-themes-download"
     - "/tmp/redmine-themes"
 
-- name: "Install bundler for Ruby 2.0"
-  command: gem2.0 install bundler
+#- name: "Install bundler for Ruby 2.0"
+#  command: gem2.0 install bundler
 
 ...

@@ -107,6 +107,33 @@
 
 - block:
 
+  - name: "Ensure central bundler Cache directory exists"
+    file:
+      path="/home/redmine/.gem-cache"
+      state=directory
+      owner=redmine
+      group=redmine
+      mode="u=rwx,g=rx,o=rx"
+      recurse=yes
+
+  - name: "Make Bundler Cache directory parents exists"
+    file:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/2.0.0/"
+      state=directory
+      owner=redmine
+      group=redmine
+      mode="u=rwx,g=rx,o=rx"
+      recurse=yes
+
+  - name: "Make Bundler Cache directory linked"
+    file:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/2.0.0/cache"
+      src="/home/redmine/.gem-cache"
+      state=link
+      owner=redmine
+      group=redmine
+      mode="u=rwx,g=rx,o=rx"
+
   - name: "Install Redmine ({{ instance.name }})"
     bundler:
       state=present
