@@ -24,13 +24,21 @@
     owner=root
     group=root
 
+- name: "Ensure the SVN master Conf directory exists"
+  file:
+    name=/etc/subversion/
+    state=directory
+    mode="u=rwx,g=rx,o=rx"
+    owner=root
+    group=root
+
 - name: "Make SVN respect ZUV-Proxy Settings"
   copy:
-    dest=/home/ansible/.subversion/servers
+    dest=/etc/subversion/servers
     src=subversion-server-settings.conf
     mode="u=rw,g=r,o=r"
-    owner=ansible
-    group=ansible
+    owner=root
+    group=root
 
 - name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
   file:

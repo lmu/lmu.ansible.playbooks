@@ -148,6 +148,7 @@
       gem_path="vendor/bundle"
       exclude_groups="test development"
       executable=bundler
+      extra_args="--shebang=ruby2.0"
       #gemfile="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile"
       #gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
 
@@ -197,7 +198,7 @@
     PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/2.0.0/bin:{{ ansible_env.PATH }}"
     RAILS_ENV: production
     REDMINE_LANG: "{{ instance.lang }}"
-    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   tags:
     - setup
