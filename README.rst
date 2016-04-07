@@ -12,7 +12,10 @@ Services
 * Sentry
 * Open Monitoring Distribution (OMD)
 
-** Nagios
-** Check_mk
+  * Nagios
+  * NagViz
+  * Check_mk
 
 * Piwik
+* Solr
+* Dashing
