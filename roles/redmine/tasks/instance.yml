@@ -207,9 +207,10 @@
   tags:
     - setup
 
-
-- name: "Shutdown Puma via Supervisor for {{ instance.name }}"
+- name: "Start/Restart Puma via Supervisor for {{ instance.name }}"
   supervisorctl:
       name="puma-{{ instance.name }}"
       state=restarted
   ignore_errors: true
+
+...
