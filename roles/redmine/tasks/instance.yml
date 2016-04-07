@@ -40,6 +40,13 @@
     repo="https://svn.redmine.org/redmine/branches/{{ redmine.svn_version }}-stable"
     dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
+  become: yes
+  become_user: "redmine"
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    LC_ALL: C
+    LANG: en
 
 - name: "Copy Redmine Plugins ({{ instance.name }})"
   copy:
@@ -140,6 +147,7 @@
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
       gem_path="vendor/bundle"
       exclude_groups="test development"
+      executable=bundler
       #gemfile="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile"
       #gem_path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
 

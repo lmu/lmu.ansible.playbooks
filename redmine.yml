@@ -90,10 +90,10 @@
             lang: "de",
             log_level: "debug",
             plugins: [
-              "redmine_agile",
-              "redmine_checklists",
-              "redmine_contacts",
-              "redmine_contacts_helpdesk",
+              #"redmine_agile",
+              #"redmine_checklists",
+              #"redmine_contacts",
+              #"redmine_contacts_helpdesk",
               #"redmine_didyoumean",
               #"redmine_spent_time",
               #"redmine-plugin-recurring-tasks",
@@ -121,131 +121,131 @@
           },
         },
         redmine_plugins_download: [
-        #   {
-        #     name: "redmine_agile",
-        #     oname: "Redmine Agile plugin (Pro version)",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_agile-1_4_0-pro.zip",
-        #   },
-        #   {
-        #     name: "redmine_checklists",
-        #     oname: "Redmine Checklist plugin (Pro version)",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_checklists-3_1_3-pro.zip",
-        #   },
-        #   {
-        #     name: "redmine_contacts",
-        #     oname: "Redmine CRM plugin (Pro version)",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts-4_0_4-pro.zip",
-        #   },
-        #   {
-        #     name: "redmine_contacts_helpdesk",
-        #     oname: "Redmine Helpdesk plugin (Pro version)",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts_helpdesk-3_0_1.zip",
-        #   },
-        #   {
-        #     name: "redmine_issue_templates",
-        #     oname: "Redmine Issue Templates",
-        #     url: "https://bitbucket.org/akiko_pusu/redmine_issue_templates/downloads/redmine_issue_templates-0.1.1.zip",
-        #   },
-        #   {
-        #     name: "redmine_wiki_extensions",
-        #     oname: "Redmine Wiki Extensions plugin",
-        #     url: "https://bitbucket.org/haru_iida/redmine_wiki_extensions/downloads/redmine_wiki_extensions-0.7.0.zip",
-        #   },
-        #   {
-        #     name: "redmine_local_avatars",
-        #     oname: "Redmine Local Avatars plugin",
-        #     url: "https://launchpad.net/redminelocalavatars/trunk/0.1.1/+download/redmine_local_avatars-0.1.1.tar.gz",
-        #   },
+          # {
+          #   name: "redmine_agile",
+          #   oname: "Redmine Agile plugin (Pro version)",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_agile-1_4_0-pro.zip",
+          # },
+          # {
+          #   name: "redmine_checklists",
+          #   oname: "Redmine Checklist plugin (Pro version)",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_checklists-3_1_3-pro.zip",
+          # },
+          # {
+          #   name: "redmine_contacts",
+          #   oname: "Redmine CRM plugin (Pro version)",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts-4_0_4-pro.zip",
+          # },
+          # {
+          #   name: "redmine_contacts_helpdesk",
+          #   oname: "Redmine Helpdesk plugin (Pro version)",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts_helpdesk-3_0_1.zip",
+          # },
+          {
+            name: "redmine_issue_templates",
+            oname: "Redmine Issue Templates",
+            url: "https://bitbucket.org/akiko_pusu/redmine_issue_templates/downloads/redmine_issue_templates-0.1.1.zip",
+          },
+          {
+            name: "redmine_wiki_extensions",
+            oname: "Redmine Wiki Extensions plugin",
+            url: "https://bitbucket.org/haru_iida/redmine_wiki_extensions/downloads/redmine_wiki_extensions-0.7.0.zip",
+          },
+          {
+            name: "redmine_local_avatars",
+            oname: "Redmine Local Avatars plugin",
+            url: "https://launchpad.net/redminelocalavatars/trunk/0.1.1/+download/redmine_local_avatars-0.1.1.tar.gz",
+          },
         ],
         redmine_plugins_git: [
-        #   {
-        #     name: "redmine_autowatch",
-        #     oname: "Redmine Auto Watch plugin",
-        #     url: "https://github.com/ZIMK/Redmine-AutoWatch.git",
-        #     version: "master"
-        #   },
-        #   {
-        #     name: "redmine_didyoumean",
-        #     oname: "Did You Mean?",
-        #     url: "https://github.com/abahgat/redmine_didyoumean.git",
-        #     version: "master"
-        #   },
-        #   {
-        #     name: "redmine_favorite_projects",
-        #     oname: "Redmine Favorite Projects plugin",
-        #     url: "https://github.com/alexandermeindl/redmine_favorite_projects.git",
-        #     version: "1.0.5"
-        #   },
-        #   {
-        #     name: "redmine_knowledgebase",
-        #     oname: "Knowledgebase",
-        #     url: "https://github.com/alexbevi/redmine_knowledgebase.git",
-        #     version: "v3.1.0"
-        #   },
-        #   {
-        #     name: "redmine_lmu_modifications",
-        #     oname: "Redmine LMU modifications plugin",
-        #     url: "https://github.com/loechel/redmine_lmu_modifications.git",
-        #     version: "master"
-        #   },
-        #   {
-        #     name: "redmine_spent_time",
-        #     oname: "Redmine Spent Time Column",
-        #     url: "https://github.com/eyp/redmine_spent_time.git",
-        #     version: "3.1.2"
-        #   },
-        #   {
-        #     name: "redmine_spent_time_column",
-        #     oname: "Redmine Spent Time Column",
-        #     url: "https://github.com/alexandermeindl/redmine_spent_time_column.git",
-        #     version: "master"
-        #   },
-        #   {
-        #     name: "redmine_tweaks",
-        #     oname: "Redmine Tweaks",
-        #     url: "https://github.com/alexandermeindl/redmine_tweaks.git",
-        #     version: "0.5.6"
-        #   },
-        #   {
-        #     name: "redmine_wiki_lists",
-        #     oname: "Redmine Wiki Lists plugin",
-        #     url: "https://github.com/tkusukawa/redmine_wiki_lists.git",
-        #     version: "0.0.6"
-        #   },
-        #   {
-        #     name: "redmine-plugin-recurring-tasks",
-        #     oname: "Redmine Wiki Lists plugin",
-        #     url: "https://github.com/nutso/redmine-plugin-recurring-tasks.git",
-        #     version: "v1.6.0"
-        #   },
-        #   {
-        #     name: "sidebar_hide",
-        #     oname: "Sidebare Hide plugin",
-        #     url: "https://github.com/bdemirkir/sidebar_hide.git",
-        #     version: "master"
-        #   },
+          {
+            name: "redmine_autowatch",
+            oname: "Redmine Auto Watch plugin",
+            url: "https://github.com/ZIMK/Redmine-AutoWatch.git",
+            version: "master"
+          },
+          {
+            name: "redmine_didyoumean",
+            oname: "Did You Mean?",
+            url: "https://github.com/abahgat/redmine_didyoumean.git",
+            version: "master"
+          },
+          {
+            name: "redmine_favorite_projects",
+            oname: "Redmine Favorite Projects plugin",
+            url: "https://github.com/alexandermeindl/redmine_favorite_projects.git",
+            version: "1.0.5"
+          },
+          {
+            name: "redmine_knowledgebase",
+            oname: "Knowledgebase",
+            url: "https://github.com/alexbevi/redmine_knowledgebase.git",
+            version: "v3.1.0"
+          },
+          {
+            name: "redmine_lmu_modifications",
+            oname: "Redmine LMU modifications plugin",
+            url: "https://github.com/loechel/redmine_lmu_modifications.git",
+            version: "master"
+          },
+          {
+            name: "redmine_spent_time",
+            oname: "Redmine Spent Time Column",
+            url: "https://github.com/eyp/redmine_spent_time.git",
+            version: "3.1.2"
+          },
+          {
+            name: "redmine_spent_time_column",
+            oname: "Redmine Spent Time Column",
+            url: "https://github.com/alexandermeindl/redmine_spent_time_column.git",
+            version: "master"
+          },
+          {
+            name: "redmine_tweaks",
+            oname: "Redmine Tweaks",
+            url: "https://github.com/alexandermeindl/redmine_tweaks.git",
+            version: "0.5.6"
+          },
+          {
+            name: "redmine_wiki_lists",
+            oname: "Redmine Wiki Lists plugin",
+            url: "https://github.com/tkusukawa/redmine_wiki_lists.git",
+            version: "0.0.6"
+          },
+          {
+            name: "redmine-plugin-recurring-tasks",
+            oname: "Redmine Wiki Lists plugin",
+            url: "https://github.com/nutso/redmine-plugin-recurring-tasks.git",
+            version: "v1.6.0"
+          },
+          {
+            name: "sidebar_hide",
+            oname: "Sidebare Hide plugin",
+            url: "https://github.com/bdemirkir/sidebar_hide.git",
+            version: "master"
+          },
         ],
         redmine_themes_download: [
-        #   {
-        #     name: "a1_theme",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
-        #   },
-        #   {
-        #     name: "circle_theme",
-        #     url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
-        #   }
+          # {
+          #   name: "a1_theme",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
+          # },
+          # {
+          #   name: "circle_theme",
+          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
+          # }
         ],
         redmine_themes_git: [
-        #   {
-        #     name: "redmine-theme-lmu",
-        #     url: "https://github.com/loechel/redmine-theme-lmu.git",
-        #     version: "master"
-        #   },
-        #   {
-        #     name: "redmine-theme-gitmike",
-        #     url: "https://github.com/makotokw/redmine-theme-gitmike.git",
-        #     version: "v1.0.7"
-        #   }
+          {
+            name: "redmine-theme-lmu",
+            url: "https://github.com/loechel/redmine-theme-lmu.git",
+            version: "master"
+          },
+          {
+            name: "redmine-theme-gitmike",
+            url: "https://github.com/makotokw/redmine-theme-gitmike.git",
+            version: "v1.0.7"
+          }
         ],
         nginx: {
           use_ppa: "yes",
