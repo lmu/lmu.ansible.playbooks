@@ -102,7 +102,7 @@
               #"redmine_issue_templates",
               "redmine_tweaks",
               #"redmine_autowatch",
-              #"redmine_knowledgebase",
+              "redmine_knowledgebase",
               #"redmine_wiki_extensions",
               #"redmine_lmu_modifications",
               #"redmine_wiki_lists",
