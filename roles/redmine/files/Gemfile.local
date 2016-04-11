@@ -1,4 +1,7 @@
 # Gemfile.local
+gem 'syslog-logger'
+
 gem 'puma'
+
 gem 'dalli'
 gem 'connection_pool'

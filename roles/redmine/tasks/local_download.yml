@@ -1,0 +1,57 @@
+---
+  
+- block:
+  - name: "Download Redmine Plugins (wget) to master"
+    get_url:
+      url="{{ item.url }}"
+      dest="/tmp/redmine-plugins-download/"
+      validate_certs=no
+      mode="u=rwx,g=rx,o=rx"
+      force=yes
+    with_items: "{{ redmine_plugins_download }}"
+
+  - name: "Unpack Downloaded Redmine Plugins (download)"
+    unarchive:
+      src="{{ item }}"
+      dest="/tmp/redmine-plugins/"
+      copy=yes
+      mode="u=rwx,g=rx,o=rx"
+    with_fileglob:
+      - "/tmp/redmine-plugins-download/*"
+
+  - name: "Download Redmine Plugins (git) to master"
+    git:
+      repo="{{ item.url }}"
+      dest="/tmp/redmine-plugins/{{ item.name }}"
+      version="{{ item.version }}"
+    with_items: "{{ redmine_plugins_git }}"
+
+  - name: "Download Redmine Themes (wget) to master"
+    get_url:
+      url="{{ item.url }}"
+      dest="/tmp/redmine-themes-download/"
+      validate_certs=no
+      mode="u=rwx,g=rx,o=rx"
+      force=yes
+    with_items: "{{ redmine_themes_download }}"
+
+  - name: "Unpack Downloaded Redmine Themes (download)"
+    unarchive:
+      src="{{ item }}"
+      dest="/tmp/redmine-themes/"
+      copy=yes
+      mode="u=rwx,g=rx,o=rx"
+    with_fileglob:
+      - "/tmp/redmine-themes-download/*"
+
+  - name: "Download Redmine Themes (git) to master"
+    git:
+      repo="{{ item.url }}"
+      dest="/tmp/redmine-themes/{{ item.name }}"
+      version="{{ item.version }}"
+    with_items: "{{ redmine_themes_git }}"
+
+  delegate_to: 127.0.0.1
+  become: false
+
+...
