@@ -1,5 +1,29 @@
 ---
-  
+
+- name: "Ensure download directories exists"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rwx"
+  with_items:
+    - "/tmp/redmine-plugins"
+    - "/tmp/redmine-themes"
+
+- name: "Ensure local download directories exists"
+  file:
+    path="{{ item }}"
+    state=directory
+    mode="u=rwx,g=rwx,o=rwx"
+  delegate_to: localhost
+  become: false
+  with_items:
+    - "/tmp/redmine-plugins-download"
+    - "/tmp/redmine-plugins"
+    - "/tmp/redmine-themes-download"
+    - "/tmp/redmine-themes"
+
 - block:
   - name: "Download Redmine Plugins (wget) to master"
     get_url:

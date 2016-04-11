@@ -8,29 +8,6 @@
   tags:
     - setup
 
-- name: "Ensure Ruby (PPA) is installed"
-  apt:
-    pkg={{ item }}
-    state=present
-    update_cache=yes
-    install_recommends=yes
-  with_items:
-    - ruby2.2
-    - ruby2.2-dev
-    - ruby-dev
-    #- bundler
-    - build-essential
-    - git
-    - subversion
-    - gawk
-    - libffi-dev
-    - libgdbm-dev
-    - libncurses5-dev
-    - libreadline6-dev
-    - libssl-dev
-    - libyaml-dev
-  when: 'ansible_os_family == "Debian" and redmine.use_ppa == "yes"'
-
 - name: "Ensure Ruby is installed"
   apt:
     pkg={{ item }}
@@ -38,8 +15,8 @@
     update_cache=yes
     install_recommends=yes
   with_items:
-    - ruby2.0
-    - ruby2.0-dev
+    - "{{ redmine.ruby_version }}"
+    - "{{ redmine.ruby_version }}-dev"
     - ruby-dev
     #- bundler
     - build-essential
@@ -52,7 +29,7 @@
     - libreadline6-dev
     - libssl-dev
     - libyaml-dev
-  when: 'ansible_os_family == "Debian" and redmine.use_ppa == "no"'
+  when: 'ansible_os_family == "Debian"'
 
 - name: "Ensure Ruby dependencies are installed"
   apt:
@@ -102,45 +79,12 @@
     special_time=reboot
     job="mkdir -p /var/run/redmine; chown -R redmine:redmine /var/run/redmine; chmod -R u=rwx,g=rwx,o=rx /var/run/redmine"
 
-# - name: "Ensure Run Directory (tmpfs) exists and is mounted"
-#   mount:
-#     state=mounted
-#     name="{{ redmine.run_base_path }}"
-#     src="none"
-#     fstype="tmpfs"
-#     fstab="/etc/mtab"
-#     opts="rw,noexec,nosuid,size=10%,mode=0755"
-#     #opts="rw,noatime,noexec,nosuid,mode=0777,uid=980,giu=980"
-
-- name: "Ensure local download directories exists"
-  file:
-    path="{{ item }}"
-    state=directory
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=rwx,o=rwx"
-  with_items:
-    - "/tmp/redmine-plugins"
-    - "/tmp/redmine-themes"
-
-- name: "Ensure local download directories exists"
-  file:
-    path="{{ item }}"
-    state=directory
-    mode="u=rwx,g=rwx,o=rwx"
-  delegate_to: localhost
-  become: false
-  with_items:
-    - "/tmp/redmine-plugins-download"
-    - "/tmp/redmine-plugins"
-    - "/tmp/redmine-themes-download"
-    - "/tmp/redmine-themes"
-
 - name: "Update bundler for Ruby"
   gem:
     name=bundler
     state=latest
-    executable=gem2.2
+    executable="{{ redmine.rubygem_version }}"
+    user_install=no
   become: true
   become_user: root
   environment:
