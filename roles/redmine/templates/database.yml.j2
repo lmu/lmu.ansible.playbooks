@@ -10,6 +10,7 @@ production:
   password: {{ instance.db_passwd }}
   encoding: "UTF-8"
 
+{% if instance.db_dev_name | default(false) %}
 development:
   adapter: postgresql
   database: {{ instance.db_dev_name}}
@@ -17,7 +18,9 @@ development:
   username: {{ instance.db_user }}
   password: {{ instance.db_passwd }}
   encoding: "UTF-8"
+{% endif %}
 
+{% if instance.db_test_name | default(false) %}
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
@@ -28,3 +31,4 @@ test:
   username: {{ instance.db_user }}
   password: {{ instance.db_passwd }}
   encoding: "UTF-8"
+{% endif %}

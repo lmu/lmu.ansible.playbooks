@@ -36,7 +36,7 @@
           data_base_path: "/data/redmine",
           log_base_path: "/var/log/redmine",
           run_base_path: "/var/run/redmine",
-          svn_version: "3.1",
+          svn_version: "3.2",
           src_url: "http://www.redmine.org/releases/",
           src_file: "redmine-3.2.0.tar.gz",
           checksum: "b1050c3a0e6effd5a704ef5003d9df06",
@@ -82,8 +82,8 @@
             name: "ref_vi-5",
             alias: ["internetdienste", "fiona"],
             db_name: "ref_vi-5",
-            db_dev_name: "ref_vi-5-dev",
-            db_test_name: "ref_vi-5-test",
+            #db_dev_name: "ref_vi-5-dev",
+            #db_test_name: "ref_vi-5-test",
             db_user: "{{ redmine_db.user }}",
             db_passwd: "{{ redmine_db.passwd }}",
             db_host: "127.0.0.1",
@@ -97,16 +97,16 @@
               #"redmine_didyoumean",
               #"redmine_spent_time",
               #"redmine-plugin-recurring-tasks",
-              #"redmine_favorite_projects",
+              "redmine_favorite_projects",
               #"redmine_spent_time_column",
               #"redmine_issue_templates",
               "redmine_tweaks",
-              #"redmine_autowatch",
-              "redmine_knowledgebase",
+              "redmine_autowatch",
+              #"redmine_knowledgebase",
               #"redmine_wiki_extensions",
               #"redmine_lmu_modifications",
-              #"redmine_wiki_lists",
-              #"redmine_local_avatars",
+              "redmine_wiki_lists",
+              "redmine_local_avatars",
               "sidebar_hide",
             ],
             themes: [
@@ -121,26 +121,26 @@
           },
         },
         redmine_plugins_download: [
-          # {
-          #   name: "redmine_agile",
-          #   oname: "Redmine Agile plugin (Pro version)",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_agile-1_4_0-pro.zip",
-          # },
-          # {
-          #   name: "redmine_checklists",
-          #   oname: "Redmine Checklist plugin (Pro version)",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_checklists-3_1_3-pro.zip",
-          # },
-          # {
-          #   name: "redmine_contacts",
-          #   oname: "Redmine CRM plugin (Pro version)",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts-4_0_4-pro.zip",
-          # },
-          # {
-          #   name: "redmine_contacts_helpdesk",
-          #   oname: "Redmine Helpdesk plugin (Pro version)",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts_helpdesk-3_0_1.zip",
-          # },
+          {
+            name: "redmine_agile",
+            oname: "Redmine Agile plugin (Pro version)",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_agile-1_4_0-pro.zip",
+          },
+          {
+            name: "redmine_checklists",
+            oname: "Redmine Checklist plugin (Pro version)",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_checklists-3_1_3-pro.zip",
+          },
+          {
+            name: "redmine_contacts",
+            oname: "Redmine CRM plugin (Pro version)",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts-4_0_4-pro.zip",
+          },
+          {
+            name: "redmine_contacts_helpdesk",
+            oname: "Redmine Helpdesk plugin (Pro version)",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins/redmine_contacts_helpdesk-3_0_1.zip",
+          },
           {
             name: "redmine_issue_templates",
             oname: "Redmine Issue Templates",
@@ -226,14 +226,14 @@
           },
         ],
         redmine_themes_download: [
-          # {
-          #   name: "a1_theme",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
-          # },
-          # {
-          #   name: "circle_theme",
-          #   url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
-          # }
+          {
+            name: "a1_theme",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/a1_theme-1_1_3.zip"
+          },
+          {
+            name: "circle_theme",
+            url: "https://mneme.informatik.unibw-muenchen.de/redmine-themes/circle_theme-1_0_2.zip"
+          }
         ],
         redmine_themes_git: [
           {
