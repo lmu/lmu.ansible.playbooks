@@ -16,7 +16,6 @@
   with_dict: "{{ redmine_instance }}"
 
 - include: nginx.yml
-  with_dict: "{{ redmine_instance }}"
 
 - include: supervisor.yml
   with_dict: "{{ redmine_instance }}"

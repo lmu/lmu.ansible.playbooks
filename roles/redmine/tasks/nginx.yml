@@ -1,25 +1,53 @@
 ---
 
-- set_fact: instance="{{ item.value }}"
+- name: "Copy SSL Key components"
+  copy:
+    src="server-ssl/key/{{ redmine.domain }}_key.pem"
+    dest="/etc/ssl/private/{{ redmine.domain }}_key.pem"
+    force=yes
+    owner=root
+    group=root
+    mode="u=r,g=,o="
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Construct SSL-Certificate"
+  assemble:
+    src="files/server-ssl/crt/{{ redmine.domain}}.d/"
+    dest="/etc/ssl/certs/{{ redmine.domain }}_chained_crt.pem"
+    remote_src=False
+    mode="u=r,g=,o="
+    owner=root
+    group=root
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Install vhost.confs for sites"
   template:
     src=templates/nginx-redmine.conf.j2
-    dest=/etc/nginx/sites-available/{{ instance.name }}.conf
+    dest=/etc/nginx/sites-available/redmine-multiinstance.conf
     force=yes
     mode="u=rw,g=r,o=r"
     owner=root
     group=root
   notify:
     - "Reload NGINX"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
   file:
-    src=/etc/nginx/sites-available/{{ instance.name }}.conf
-    path=/etc/nginx/sites-enabled/{{ instance.name }}.conf
+    src=/etc/nginx/sites-available/redmine-multiinstance.conf
+    path=/etc/nginx/sites-enabled/redmine-multiinstance.conf
     force=yes
     state=link
     owner=root
     group=root
   notify:
     - "Reload NGINX"
+  tags:
+    - redmine_setup
+    - redmine_upgrade

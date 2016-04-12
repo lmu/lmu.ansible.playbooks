@@ -2,28 +2,38 @@
 
 - name: "Set Fact: Instance"
   set_fact: instance="{{ item.value }}"
+  tags:
+    - always
 
 - name: "Debug Message for {{ instance.name }} Parameters"
   debug: msg="outer item={{ instance }} "
+  tags:
+    - always
 
 - name: "Shutdown Puma via Supervisor for {{ instance.name }}"
   supervisorctl:
       name="puma-{{ instance.name }}"
       state=stopped
   ignore_errors: true
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
-- name: "Create Redmine Database for {{ instance.name }}"
+- name: "Ensure Redmine Database for {{ instance.name }} is present"
   postgresql_db:
-    name="{{ instance.db_name }}"
+    name="redmine-{{ instance.db_name }}"
     login_user="{{ instance.db_user}}"
     login_password="{{ instance.db_passwd }}"
-    login_host=127.0.0.1
+    login_host="127.0.0.1"
+    login_unix_socket="{{ instance.db_socket }}"
     encoding='UTF-8'
     template='template0'
     state=present
     owner="{{ instance.db_user}}"
     lc_ctype='de_DE.UTF-8'
     lc_collate='de_DE.UTF-8'
+  tags:
+    - redmine_setup
 
 - name: "Ensure Redmine Instance directories exists"
   file:
@@ -38,8 +48,8 @@
     - "{{ redmine.data_base_path }}"
     - "{{ redmine.log_base_path }}"
   tags:
-    - setup
-    - update
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Check if redmine instance directory exists as git directory"
   stat:
@@ -55,8 +65,8 @@
     mode="u=rwx,g=rx,o=rx"
   when: git_path.stat.isdir is not defined
   tags:
-    - setup
-    - update
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Download Redmine"
   git:
@@ -65,6 +75,9 @@
     dest="{{ redmine.app_base_path }}/{{ instance.name }}"
     force=yes
     update=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Get Redmine Plugins ({{ instance.name }})"
   git:
@@ -75,6 +88,9 @@
     update=yes
   with_dict: "{{ instance.plugins }}"
   when: '"{{ item.value.url }}" != ""'
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Get Redmine Themes ({{ instance.name }})"
   git:
@@ -84,6 +100,9 @@
     force=yes
     update=yes
   with_dict: "{{ instance.themes }}"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Copy Dependency File ({{ instance.name }})"
   copy:
@@ -93,6 +112,9 @@
     owner=redmine
     group=redmine
     mode="u=rwx,g=r,o=r"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Copy Config Files ({{ instance.name }})"
   template:
@@ -107,15 +129,9 @@
     - additional_environment.rb
     - configuration.yml
     - puma.rb
-
-- name: "Ensure Redmine can write gems directory"
-  file:
-    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
-    state=directory
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=rx,o=rx"
-    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
@@ -125,6 +141,21 @@
     group=redmine
     mode="u=rwx,g=rx,o=rx"
     recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine can write gems directory"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - block:
 
@@ -136,20 +167,31 @@
       exclude_groups="test development"
       executable=bundler
       extra_args="--shebang={{ redmine.ruby_version }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Generate Session Store Secret ({{ instance.name }})"
     command: bundle exec rake generate_secret_token
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Create Database Schema Objects ({{ instance.name }})"
     command: bundle exec rake db:migrate
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Load Database default data ({{ instance.name }})"
     command: bundle exec rake redmine:load_default_data
       creates="default_data.exists"
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     register: default_data
+    tags:
+      - redmine_setup
 
   - name: "Create default_data.exists file to prevent multiple Database creation ({{ instance.name }})"
     file:
@@ -159,28 +201,45 @@
       group=redmine
       mode="u=rx,g=rx,o=rx"
     when: "default_data.rc == 0"
+    tags:
+      - redmine_setup
 
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) explicite ({{ instance.name }})"
     command: bundle exec rake redmine:plugins NAME={{ item }}
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     with_items: "{{ instance.plugins }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
     command: bundle exec rake redmine:plugins
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
     command: bundle exec rake redmine:plugins:migrate
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Cleanup ({{ instance.name }})"
     command: bundle exec rake tmp:cache:clear tmp:sessions:clear
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   - name: "Rebuild Postgres Search Index ({{ instance.name }})"
     command: bundle exec rake redmine_postgresql_search:rebuild_index
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     when: '"redmine_postgresql_search" in "{{ instance.plugins }}"'
+    tags:
+      - redmine_setup
+      - redmine_upgrade
 
   become: yes
   become_user: "redmine"
@@ -193,8 +252,6 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
     LC_ALL: C
     LANG: en
-  tags:
-    - setup
 
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
@@ -205,7 +262,8 @@
     mode="u=rx,g=rx,o=rx"
     recurse=yes
   tags:
-    - setup
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Ensure Redmine Instance Runtime directory exists"
   file:
@@ -219,7 +277,8 @@
     - "{{ redmine.run_base_path}}"
     - "{{ redmine.log_base_path}}/{{ instance.name }}"
   tags:
-    - setup
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Ensure Redmine Instance sub directories has correct user and file modes"
   file:
@@ -236,12 +295,16 @@
     - tmp/pdf
     - public/plugin_assets
   tags:
-    - setup
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Start/Restart Puma via Supervisor for {{ instance.name }}"
   supervisorctl:
       name="puma-{{ instance.name }}"
       state=restarted
+  tags:
+    - redmine_setup
+    - redmine_upgrade
   ignore_errors: true
 
 ...

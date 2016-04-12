@@ -32,6 +32,8 @@
           src_file: "redmine-3.2.0.tar.gz",
           checksum: "b1050c3a0e6effd5a704ef5003d9df06",
           domain: "redminetest.verwaltung.uni-muenchen.de",
+          nginx_port: "80",
+          nginx_ssl_port: "443",
           use_ppa: "yes",
           ruby_ppa: "ppa:brightbox/ruby-ng",
           ruby_version: "ruby2.2",
@@ -39,8 +41,8 @@
           ruby_semversion: "2.2"
         },
         redmine_instance: {
-          # ref_vi-3: {
-          #   name: "ref_vi-3",
+          # ref_vi.3: {
+          #   name: "ref_vi.3",
           #   alias: ["sos", "anwendungsbetreuung"],
           #   db_name: "ref_vi-3",
           #   db_dev_name: "ref_vi-3-dev",
@@ -56,8 +58,8 @@
           #   nginx_port: "8003",
           #   nginx_ssl_port: "8443",
           # },
-          # ref_vi-4: {
-          #   name: "ref_vi-4",
+          # ref_vi.4: {
+          #   name: "ref_vi.4",
           #   alias: ["it-sicherheit", "verz"],
           #   db_name: "ref_vi-4",
           #   db_dev_name: "ref_vi-4-dev",
@@ -111,8 +113,6 @@
               "redmine-theme-gitmike": { url: "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.7" }
             },
             puma_port: "3000",
-            nginx_port: "80",
-            nginx_ssl_port: "443",
           },
 
         },
