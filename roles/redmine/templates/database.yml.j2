@@ -4,19 +4,26 @@
 
 production:
   adapter: postgresql
-  database: {{ instance.db_name}}
-  host: {{ instance.db_host }}
-  username: {{ instance.db_user }}
-  password: {{ instance.db_passwd }}
+  database: "redmine-{{ instance.db_name}}"
+{% if instance.db_socket is defined %}
+  socket: "{{ instance.db_socket }}"
+{% elif instance.db_host is defined and instance.db_port is defined %}
+  host: "{{ instance.db_host }}"
+  port: "{{ instance.db_port }}"
+{% else %}
+  host: "localhost"
+{% endif %}
+  username: "{{ instance.db_user }}"
+  password: "{{ instance.db_passwd }}"
   encoding: "UTF-8"
 
 {% if instance.db_dev_name | default(false) %}
 development:
   adapter: postgresql
-  database: {{ instance.db_dev_name}}
-  host: {{ instance.db_host }}
-  username: {{ instance.db_user }}
-  password: {{ instance.db_passwd }}
+  database: "{{ instance.db_dev_name}}"
+  host: "{{ instance.db_host }}"
+  username: "{{ instance.db_user }}"
+  password: "{{ instance.db_passwd }}"
   encoding: "UTF-8"
 {% endif %}
 
@@ -26,9 +33,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   adapter: postgresql
-  database: {{ instance.db_test_name}}
-  host: {{ instance.db_host }}
-  username: {{ instance.db_user }}
-  password: {{ instance.db_passwd }}
+  database: "{{ instance.db_test_name}}"
+  host: "{{ instance.db_host }}"
+  username: "{{ instance.db_user }}"
+  password: "{{ instance.db_passwd }}"
   encoding: "UTF-8"
 {% endif %}

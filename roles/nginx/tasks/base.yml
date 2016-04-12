@@ -1,15 +1,14 @@
 ---
 
-- name: "Install NGINX PPA"
+- name: "Ensure NGINX PPA is avaliable"
   apt_repository:
     repo="{{ nginx.ppa }}"
     state=present
-    #filename="nginx"
   when: 'ansible_distribution == "Ubuntu" and nginx.use_ppa == "yes"'
   tags:
     - setup
 
-- name: "Install the NGINX packages"
+- name: "Install NGINX packages"
   apt:
     name={{ item }}
     state=present
@@ -17,12 +16,11 @@
   with_items:
     - nginx
     - python-selinux
-  #environment: env
   when: ansible_os_family == "Debian"
   tags:
     - setup
 
-- name: "Ensure the directories for site specific configurations are present"
+- name: "Ensure directories for site specific configurations are present"
   file:
     path=/etc/nginx/{{ item }}
     state=directory
@@ -35,7 +33,7 @@
   tags:
     - setup
 
-- name: "Copy the NGINX configuration file"
+- name: "Copy NGINX configuration file"
   template:
     src=nginx.conf.j2
     dest=/etc/nginx/nginx.conf
@@ -45,7 +43,7 @@
   notify:
    - "Restart NGINX"
 
-- name: "Copy the NGINX default configuration file"
+- name: "Copy NGINX default configuration file"
   template:
     src=default.conf.j2
     dest=/etc/nginx/conf.d/default.conf
@@ -53,7 +51,7 @@
     - setup
     - configuration
 
-- name: "Copy the NGINX default site configuration file"
+- name: "Copy NGINX default site configuration file"
   template:
     src=default.j2
     dest=/etc/nginx/sites-available/default
@@ -61,7 +59,7 @@
     - setup
     - configuration
 
-- name: "Start the NGINX Service"
+- name: "Start NGINX Service"
   service:
     name=nginx
     state=started

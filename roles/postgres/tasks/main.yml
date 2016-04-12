@@ -6,12 +6,10 @@
   postgresql_user:
     name="{{ database.db_user }}"
     password="{{ database.db_passwd }}"
-    role_attr_flags="CREATEDB,NOSUPERUSER"
-    #login_user=postgres
-    #login_password=postgres
-    #login_host=localhost
+    role_attr_flags="NOSUPERUSER,CREATEDB"
   become_user: postgres
   become: yes
+  when: "{{ database.db_user }} is defined and {{ database.db_passwd }} is defined"
 
 - name: "Create Database"
   postgresql_db:
@@ -25,4 +23,4 @@
     owner="{{database.db_user}}"
     lc_ctype='de_DE.UTF-8'
     lc_collate='de_DE.UTF-8'
-  when: "{{ database.db_name }} is defined"
+  when: "{{ database.db_name }} is defined and {{ database.db_user }} is defined and {{ database.db_passwd }} is defined"

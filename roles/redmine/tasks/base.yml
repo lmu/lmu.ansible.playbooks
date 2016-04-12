@@ -2,7 +2,7 @@
 
 - name: "Ensure Ruby PPA is avaliable"
   apt_repository:
-    repo="ppa:brightbox/ruby-ng"
+    repo="{{ redmine.ruby_ppa }}"
     state=present
   when: 'ansible_distribution == "Ubuntu" and redmine.use_ppa == "yes"'
   tags:
@@ -29,6 +29,8 @@
     - libreadline6-dev
     - libssl-dev
     - libyaml-dev
+    - libxml2-dev
+    - libxslt1-dev
   when: 'ansible_os_family == "Debian"'
 
 - name: "Ensure Ruby dependencies are installed"
@@ -40,8 +42,9 @@
   with_items:
     - imagemagick
     - libmagick++-dev
+    - libmagickcore-dev
+    - libmagickwand-dev
     - ruby-rmagick
-    - ruby-bundler
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Group redmine exists"
@@ -90,5 +93,14 @@
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
+- name: "Create DB User"
+  postgresql_user:
+    name="{{ redmine_db.user }}"
+    password="{{ redmine_db.passwd }}"
+    role_attr_flags="SUPERUSER"
+    #role_attr_flags="NOSUPERUSER,CREATEDB,CREATEROLE,CREATEUSER"
+  become_user: postgres
+  become: yes
 
 ...
