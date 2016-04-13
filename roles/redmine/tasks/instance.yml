@@ -21,7 +21,7 @@
 
 - name: "Ensure Redmine Database for {{ instance.name }} is present"
   postgresql_db:
-    name="'redmine-{{ instance.db_name }}'"
+    name='"redmine-{{ instance.db_name }}"'
     login_user="{{ instance.db_user}}"
     login_password="{{ instance.db_passwd }}"
     login_host="127.0.0.1"
