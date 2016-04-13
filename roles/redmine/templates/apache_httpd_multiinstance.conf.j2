@@ -1,0 +1,107 @@
+#{{ ansible_managed }}
+# Please do not modify this file manually, it will be overwriten by next provision.
+
+<VirtualHost  *:80 >
+
+    # Kontaktadresse des für den Server zuständigen:
+    ServerAdmin it.internet@verwaltung.uni-muenchen.de
+
+    # Wenn es statische Inhalte gibt,
+    # Hier das Verzeichnis angeben wo dieses liegt,
+    # wenn es keine gibt: default: /var/www/html
+    DocumentRoot /var/www/html
+
+    # Vollständiger ServerName (FQDN)
+    ServerName {{ redmine.domain }}
+    # Sonsitige Namen des Server, mehrere können konfiguriert werden:
+    # ServerAlias
+
+    # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
+    ErrorLog "{{ redmine.log_base_path }}/{{ redmine.domain }}_error.log"
+
+    # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
+    CustomLog {{ redmine.log_base_path }}/{{ redmine.domain }}_access_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
+
+    # Optional: Pflicht-Redirect auf die SSL-Variante des vhosts
+    Redirect / https://{{ redmine.domain }}/
+
+</VirtualHost>
+
+
+<VirtualHost  *:443 >
+
+    # Kontaktadresse des für den Server zuständigen:
+    ServerAdmin it.internet@verwaltung.uni-muenchen.de
+    ServerName {{ redmine.domain }}
+
+    #
+    UseCanonicalName on
+
+    # Wenn es statische Inhalte gibt,
+    # Hier das Verzeichnis angeben wo dieses liegt,
+    # wenn es keine gibt: default: /var/www/html
+    DocumentRoot /var/www/html
+
+    ErrorLog {{ redmine.log_base_path }}/{{ redmine.domain }}_ssl_error_log
+    # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
+    CustomLog {{ redmine.log_base_path }}/{{ redmine.domain }}_ssl_access_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
+    TransferLog {{ redmine.log_base_path }}/{{ redmine.domain }}_ssl_transfer.log
+
+    # Welches Log-Detaillevel wollen wir
+    LogLevel info
+
+    # Komprimiere die Daten beim Senden
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png)$" no-gzip
+    Header append Vary User-Agent
+
+    # Schaltet die SSL-Maschinerie an
+    SSLEngine on
+    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
+    SSLProtocol all -SSLv2 -SSLv3
+    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
+    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
+
+    # Datei mit dem Serverzertifikat
+    SSLCertificateFile /etc/ssl/private/{{ redmine.domain }}_crt.pem
+    # Datei mit dem Key dazu
+    SSLCertificateKeyFile /etc/ssl/private/{{ redmine.domain }}_crt.pem
+    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
+    SSLCertificateChainFile /etc/ssl/private/lmu-chain.pem
+
+    # Das sind ein paar abgeschriebene Sachen, wird schon passen
+    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+        SSLOptions +StdEnvVars
+    </Files>
+    <Directory "/var/www/cgi-bin">
+        SSLOptions +StdEnvVars
+    </Directory>
+    # Wird wohl für den Internet Explorer gebraucht
+    SetEnvIf User-Agent ".*MSIE.*" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+
+    # Proxy-Regeln für Backend
+    ProxyVia On
+    ProxyRequests Off
+    ProxyPreserveHost On
+
+    # prevent your web server from being used as global HTTP proxy
+    <LocationMatch "^[^/]">
+        Deny from all
+    </LocationMatch>
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+{% for instance in redmine_instance.values() %}
+{% for alias in instance.alias + [instance.name] %}
+    ProxyPass /{{ alias}} http://127.0.0.1:{{ instance.nginx_port }}
+    ProxyPassReverse /{{ alias }} http://127.0.0.1:{{ instance.nginx_port }}
+{% endfor %}
+{% endfor %}
+
+
+</VirtualHost>

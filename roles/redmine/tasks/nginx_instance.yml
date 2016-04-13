@@ -1,0 +1,31 @@
+---
+
+- set_fact: instance="{{ item.value }}"
+
+- name: "Install vhost.confs for sites"
+  template:
+    src="templates/nginx-redmine.conf.j2"
+    dest="/etc/nginx/sites-available/redmine-{{ instance.name }}.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload NGINX"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
+  file:
+    src=/etc/nginx/sites-available/redmine-{{ instance.name }}.conf
+    path=/etc/nginx/sites-enabled/redmine-{{ instance.name }}.conf
+    force=yes
+    state=link
+    owner=root
+    group=root
+  notify:
+    - "Reload NGINX"
+  tags:
+    - redmine_setup
+    - redmine_upgrade

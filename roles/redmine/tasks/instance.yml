@@ -21,7 +21,7 @@
 
 - name: "Ensure Redmine Database for {{ instance.name }} is present"
   postgresql_db:
-    name="redmine-{{ instance.db_name }}"
+    name="'redmine-{{ instance.db_name }}'"
     login_user="{{ instance.db_user}}"
     login_password="{{ instance.db_passwd }}"
     login_host="127.0.0.1"
@@ -79,6 +79,21 @@
     - redmine_setup
     - redmine_upgrade
 
+- name: "Ensure Redmine Instance plugin / themes directory are writeable (SSH-Agent Forwarding requirement)"
+  file:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}/{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rwx"
+    recurse=yes
+  with_items:
+    - "plugins"
+    - "public/themes/"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
 - name: "Get Redmine Plugins ({{ instance.name }})"
   git:
     repo="{{ item.value.url }}"
@@ -86,8 +101,10 @@
     version="{{ item.value.version | default(omit) }}"
     force=yes
     update=yes
+    accept_hostkey=yes
   with_dict: "{{ instance.plugins }}"
   when: '"{{ item.value.url }}" != ""'
+  become: no
   tags:
     - redmine_setup
     - redmine_upgrade
@@ -99,7 +116,9 @@
     version="{{ item.value.version | default(omit) }}"
     force=yes
     update=yes
+    accept_hostkey=yes
   with_dict: "{{ instance.themes }}"
+  become: no
   tags:
     - redmine_setup
     - redmine_upgrade

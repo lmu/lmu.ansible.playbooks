@@ -7,7 +7,18 @@
     force=yes
     owner=root
     group=root
-    mode="u=r,g=,o="
+    mode="u=r,g=r,o="
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Get LMU-CACERT-Chain"
+  get_url:
+    url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
+    dest="/etc/ssl/private/lmu-chain.pem"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o="
   tags:
     - redmine_setup
     - redmine_upgrade
@@ -15,9 +26,9 @@
 - name: "Construct SSL-Certificate"
   assemble:
     src="files/server-ssl/crt/{{ redmine.domain}}.d/"
-    dest="/etc/ssl/certs/{{ redmine.domain }}_chained_crt.pem"
+    dest="/etc/ssl/private/{{ redmine.domain }}_chained_crt.pem"
     remote_src=False
-    mode="u=r,g=,o="
+    mode="u=r,g=r,o="
     owner=root
     group=root
   tags:
@@ -26,7 +37,7 @@
 
 - name: "Install vhost.confs for sites"
   template:
-    src=templates/nginx-redmine.conf.j2
+    src=templates/nginx-redmine-multi-instance-wrapper.conf.j2
     dest=/etc/nginx/sites-available/redmine-multiinstance.conf
     force=yes
     mode="u=rw,g=r,o=r"

@@ -10,6 +10,9 @@
 config.log_level = :"{{ instance.log_level }}"
 config.paths['log'] = "{{ redmine.log_base_path }}/{{ instance.name }}/redmine_production.log"
 
+#Redmine::Utils::relative_url_root = "/{{ instance.name }}"
+config.action_controller.relative_url_root = "/{{ instance.name }}"
+
 config.cache_store = :dalli_store, 'localhost', {
   :namespace => 'redmine-{{ instance.name }}',
   :expires_in => 1.hour,

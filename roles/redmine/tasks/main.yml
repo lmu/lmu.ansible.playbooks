@@ -1,4 +1,5 @@
 ---
+
 - name: "Setup Redmine Multi-Instance"
   debug:
     msg="Start Setup of Redmine Multi-Instance"
@@ -15,7 +16,17 @@
 - include: instance.yml
   with_dict: "{{ redmine_instance }}"
 
+
+- name: "Finish Setup"
+  debug:
+    msg="Finish setup --> Install nginx and supervisor"
+
+- include: nginx_instance.yml
+  with_dict: "{{ redmine_instance }}"
+
 - include: nginx.yml
+
+#- include: apache_httpd.yml
 
 - include: supervisor.yml
   with_dict: "{{ redmine_instance }}"
