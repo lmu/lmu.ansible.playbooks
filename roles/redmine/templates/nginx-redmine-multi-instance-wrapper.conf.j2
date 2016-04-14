@@ -37,10 +37,9 @@ server {
     break;
   }
 
-
   proxy_set_header Host $http_host;
   proxy_set_header X-Forwarded-Proto $scheme;
-  proxy_set_header X-Real-IP  $remote_addr;
+  proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
   proxy_redirect off;
@@ -49,7 +48,8 @@ server {
 {% for instance in redmine_instance.values() %}
 {% for alias in instance.alias + [instance.name] %}
   location /{{ alias }}/ {
-    proxy_pass "http://127.0.0.1:{{ instance.nginx_port }}";
+    proxy_pass "http://127.0.0.1:{{ instance.nginx_port }}/";
+    env RAILS_RELATIVE_URL_ROOT="/{{ alias }}";
   }
 {% endfor %}
 {% endfor %}

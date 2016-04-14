@@ -14,8 +14,8 @@ daemonize false
 pidfile '{{ redmine.run_base_path}}/{{ instance.name }}-puma.pid'
 state_path '{{ redmine.run_base_path}}/{{ instance.name }}-puma.state'
 
-# stdout_redirect 'log/puma.log', 'log/puma_err.log'
-
+stdout_redirect '{{ redmine.log_base_path}}/{{ instance.name }}/puma.log', '{{ redmine.log_base_path}}/{{ instance.name }}/puma_err.log', true
+debug
 # quiet
 threads 0, 16
 bind 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock'
