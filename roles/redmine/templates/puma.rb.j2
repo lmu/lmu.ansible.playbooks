@@ -15,8 +15,11 @@ pidfile '{{ redmine.run_base_path}}/{{ instance.name }}-puma.pid'
 state_path '{{ redmine.run_base_path}}/{{ instance.name }}-puma.state'
 
 stdout_redirect '{{ redmine.log_base_path}}/{{ instance.name }}/puma.log', '{{ redmine.log_base_path}}/{{ instance.name }}/puma_err.log', true
-debug
+# debug
 # quiet
+
+config.log_level = :debug
+
 threads 0, 16
 bind 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock'
 {% if instance.puma_port is defined %}

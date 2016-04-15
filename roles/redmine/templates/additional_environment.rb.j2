@@ -7,7 +7,7 @@
 #   config.log_level = :debug
 #   ...
 #
-config.log_level = :"{{ instance.log_level }}"
+config.log_level = :{{ instance.log_level }}
 config.paths['log'] = "{{ redmine.log_base_path }}/{{ instance.name }}/redmine_production.log"
 
 #Redmine::Utils::relative_url_root = "/{{ instance.name }}"

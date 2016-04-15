@@ -50,6 +50,7 @@ server {
   location /{{ alias }}/ {
     proxy_pass "http://127.0.0.1:{{ instance.nginx_port }}/";
     env RAILS_RELATIVE_URL_ROOT="/{{ alias }}";
+    proxy_set_header RAILS_RELATIVE_URL_ROOT="/{{ alias }}";
   }
 {% endfor %}
 {% endfor %}
