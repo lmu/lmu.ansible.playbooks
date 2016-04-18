@@ -1,0 +1,18 @@
+---
+
+- hosts: nodemasters
+  become: true
+
+  vars:
+    maintenance:
+      allow_reboot: false
+  #vars_files:
+
+  roles:
+    - base-preseed
+    - { role: maintenance,
+        maintenance.allow_reboot: false
+      }
+
+
+...
