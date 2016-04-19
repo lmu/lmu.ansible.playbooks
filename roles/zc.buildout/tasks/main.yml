@@ -135,6 +135,7 @@
       paths="{{ buildout.path }}{{ buildout.directory }}/src/"
       file_type=directory
       recurse=no
+    register: src_dirs
 
   - name: "Update git config"
     command: git config core.fileMode false
