@@ -3,4 +3,3 @@
 psdash:
   path: "/usr/local/venv-psdash"
   mode: "agent"
-  version: "0.6.2"

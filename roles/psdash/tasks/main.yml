@@ -24,7 +24,7 @@
   pip:
     name="psdash"
     state="present"
-    version="{{ psdash.version }}"
+    version="{{ psdash.version | default(omit)}}"
     virtualenv="{{ psdash.path }}"
     chdir="{{ psdash.path }}"
     #virtualenv_python=""
@@ -88,7 +88,6 @@
   notify:
     - "Reload Supervisor"
     - "Restart Supervisor"
-
 
 - name: "Update Supervisorctl - Ensure psdash-agent are present"
   supervisorctl:
