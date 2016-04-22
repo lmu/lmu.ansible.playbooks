@@ -13,6 +13,11 @@
     - { role: maintenance,
         maintenance.allow_reboot: false
       }
+#    - ansible-master
+#    - theforeman
+#    - jenkins
+    - { role: nginx,
+      }
 
 
 ...
