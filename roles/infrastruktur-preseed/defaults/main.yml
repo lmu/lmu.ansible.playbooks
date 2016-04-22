@@ -1,15 +1,14 @@
 
 proxy:
-  no_proxy: 
+  no_proxy:
     - "www.scm.verwaltung.uni-muenchen.de"
     - "pypi.verwaltung.uni-muenchen.de"
     - "*.zuv.uni-munechen.de"
     - "172.23.0.0/24"
 
-apt: {
-  use_partner: false,
+apt:
+  use_partner: false
   use_extras: false
-}
-user: {
-  fachadmin_password=None
-}
+
+user:
+  fachadmin_password:None

@@ -1,12 +1,12 @@
 ---
 
-- name: Change Password for "fachadmin"
+- name: "Change Password for 'fachadmin'"
   user:
     name=fachadmin
     password={{ fachadmin_password }}
     update_password=always
 
-- name: Make ZUV-Proxy Settings
+- name: "Make ZUV-Proxy Settings"
   template:
     dest=/etc/profile.d/zuv_proxy.sh
     src=zuv_proxy.sh.j2
@@ -15,7 +15,7 @@
     owner=root
     group=root
 
-- name: Make APT respect ZUV-Proxy Settings
+- name: "Make APT respect ZUV-Proxy Settings"
   # Clerifiy if this is the best way.
   copy:
     dest=/etc/apt/apt.conf.d/zuv_proxy.conf
@@ -48,7 +48,7 @@
     owner=root
     group=root
 
-- name: copy ZUV-Proxy-CA and Chain
+- name: "Copy ZUV-Proxy-CA and Chain"
   copy:
     dest=/usr/local/share/ca-certificates/lmu/{{ item }}
     src=certs/{{ item }}
@@ -60,12 +60,12 @@
     - LMU-CA.crt
     - lmu-proxy-CA.crt
 
-- name: Install ZUV-Proxy-CA
+- name: "Install ZUV-Proxy-CA"
   command: update-ca-certificates
   register: ca_update_result
   changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
 
-- name: Add alias for "pip" to always use ZUV-Proxy-CA
+- name: "Add alias for 'pip' to always use ZUV-Proxy-CA"
   copy:
     dest=/etc/profile.d/zuv_proxy_alias.sh
     src=zuv_proxy_alias.sh
@@ -73,7 +73,7 @@
     owner=root
     group=root
 
-- name: Update apt/sources.list
+- name: "Update apt/sources.list"
   template:
     dest=/etc/apt/sources.list
     src=zuv_source.list.j2
@@ -81,12 +81,12 @@
     owner=root
     group=root
 
-- name: Update Apt-Keys
+- name: "Update Apt-Keys"
   apt_key:
     url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
     state=present
 
-- name: Ensure Base-Packages (ZUV-common) are installed
+- name: "Ensure Base-Packages (ZUV-common) are installed"
   apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     - vim
@@ -99,7 +99,7 @@
     - Restart xinetd
 
 
-- name: Ensure current Kernel-Packages (Hyper-V Support) are installed
+- name: "Ensure current Kernel-Packages (Hyper-V Support) are installed"
   apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     # Kernelmodules for hyper-v support
