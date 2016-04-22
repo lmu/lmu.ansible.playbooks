@@ -1,0 +1,20 @@
+---
+
+dependencies:
+
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
+      }
+    }
+  - { role: psdash,
+      psdash: {
+        path: "/usr/local/venv-psdash",
+        mode: "agent"
+      }
+    }
+  - { role: supervisor,
+    }
+
+...
