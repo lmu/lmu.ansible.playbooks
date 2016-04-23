@@ -1,0 +1,21 @@
+---
+
+foreman_db:
+  user: "foreman"
+  passwd: "foreman"
+  socket: "/var/run/postgresql/.s.PGSQL.5432"
+  host: "localhost"
+  post: "5432"
+
+foreman_ruby:
+  version: "ruby2.2"
+  rubygem_version: "gem2.2"
+  ppa: "ppa:brightbox/ruby-ng"
+  use_ppa: "yes"
+
+nginx:
+  use_ppa: "yes"
+  ppa: "ppa:nginx/stable"
+
+
+...

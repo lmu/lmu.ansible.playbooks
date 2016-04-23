@@ -1,19 +1,101 @@
 ---
 
+- name: "Ensure Ruby PPA is avaliable"
+  apt_repository:
+    repo="{{ foreman_ruby.ppa }}"
+    state=present
+  when: 'ansible_distribution == "Ubuntu" and foreman_ruby.use_ppa == "yes"'
+  tags:
+    - theforeman_setup
+    - ruby_setup
+
+- name: "Ensure Ruby is installed"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - "{{ foreman_ruby.version }}"
+    - "{{ foreman_ruby.version }}-dev"
+    - ruby-dev
+    #- bundler
+    - build-essential
+    - git
+    - gawk
+    - libffi-dev
+    - libgdbm-dev
+    - libncurses5-dev
+    - libreadline6-dev
+    - libssl-dev
+    - libyaml-dev
+    - libxml2-dev
+    - libxslt1-dev
+  when: 'ansible_os_family == "Debian"'
+  tags:
+    - theforeman_setup
+    - ruby_setup
+
 - name: "Ensure TheForeman Repository Key is present"
   apt_key:
     url=http://deb.theforeman.org/pubkey.gpg
     state=present
+  tags:
+    - theforeman_setup
 
 - name: "Ensure The Foreman Repository is present"
   apt_repository:
     repo="deb http://deb.theforeman.org/ {{ ansible_distribution_release }} stable"
     state=present
+  tags:
+    - theforeman_setup
 
 - name: "Ensure TheForeman Plugins Reposititory is present"
   apt_repository:
     repo="deb http://deb.theforeman.org/ plugins stable"
     state=present
+  tags:
+    - theforeman_setup
+
+- name: "Ensure TheForeman directories are present"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rwx,o=rx"
+  with_items:
+    - "/etc/foreman"
+  tags:
+    - theforeman_setup
+
+- name: "Create TheForeman PostgerSQL DB User"
+  postgresql_user:
+    name="{{ foreman_db.user }}"
+    password="{{ foreman_db.passwd }}"
+    role_attr_flags="SUPERUSER"
+    #role_attr_flags="NOSUPERUSER,CREATEDB,CREATEROLE,CREATEUSER"
+  become_user: postgres
+  become: yes
+  tags:
+    - theforeman_setup
+
+- name: "Create Foremane Database"
+  postgresql_db:
+    name="foreman"
+    login_user="{{ foreman_db.user }}"
+    login_password="{{ foreman_db.passwd}}"
+    login_host="127.0.0.1"
+    login_unix_socket="{{ foreman_db.socket }}"
+    encoding='UTF-8'
+    template='template0'
+    state=present
+    owner="{{ foreman_db.user}}"
+    lc_ctype='en_US.UTF-8'
+    lc_collate='en_US.UTF-8'
+  tags:
+    - foreman_setup
+  ignore_errors: true
 
 - name: "Install TheForeman Packages"
   apt:
@@ -24,8 +106,40 @@
   with_items:
     - foreman
     - foreman-pgsql
-    - foreman-ansible
+    #- foreman-sqlite3
     - foreman-libvirt
     - ruby-hammer-cli
     - ruby-hammer-cli-foreman
+    - ruby-foreman-ansible
+    - ruby-foreman-memcache
+  tags:
+    - theforeman_setup
+    - theforeman_update
+
+- name: "Copy TheForeman Config files"
+  template:
+    src={{ item }}.j2
+    dest="/etc/foreman/{{ item }}"
+    force=yes
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - database.yml
+    - email.yaml
+    - settings.yaml
+  tags:
+    - foreman_setup
+    - foreman_upgrade
+
+- name: "Run initial DB setup"
+  command: foreman-rake {{ item }}
+    chdir="/etc/foreman"
+  with_items:
+    - "db:migrate"
+    - "db:seed"
+  tags:
+    - theforeman_setup
+
+
 ...

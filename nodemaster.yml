@@ -11,10 +11,13 @@
   roles:
     - base-preseed
     - { role: maintenance,
-        maintenance.allow_reboot: false
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
       }
-#    - ansible-master
-#    - theforeman
+    - ansible-master
+    - theforeman
 #    - jenkins
     - { role: dashing,
       }
@@ -25,6 +28,10 @@
         }
       }
     - { role: nginx,
+        nginx: {
+          use_ppa: "yes",
+          ppa: "ppa:nginx/stable"
+        }
       }
 
 

@@ -1,0 +1,36 @@
+---
+
+- name: "Ensure Ansible Repository is present"
+  apt_repository:
+    repo="ppa:ansible/ansible"
+    state=present
+  tags:
+    - ansible_setup
+
+- name: "Install Ansible Packages"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - software-properties-common
+    - ansible
+  tags:
+    - ansible_setup
+
+- name: "Copy Ansible Config files"
+  template:
+    src={{ item }}.j2
+    dest="/etc/ansible/{{ item }}"
+    force=yes
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - ansible.cfg
+  tags:
+    - ansible_setup
+    - ansible_upgrade
+
+...

@@ -8,6 +8,7 @@
     install_recommends=yes
   with_items:
     - python-dev
+    - python-virtualenv
     - build-essential
     - libzmq-dev
   when: ansible_os_family == "Debian"
@@ -64,7 +65,7 @@
 - name: "Install Supervisor Conf for psdash-master"
   template:
     src: psdash-master-supervisor.conf.j2
-    dest: "/etc/supervisor/conf.d/psdash.conf"
+    dest: "/etc/supervisor/conf.d/psdash-master.conf"
     owner: root
     group: root
     mode: "u=rwx,g=rx,o=rx"
@@ -104,3 +105,20 @@
   with_items:
     - "psdash-agent"
   when: psdash.mode == "agent"
+
+
+- name: "Update Supervisorctl - Ensure psdash-agent are present"
+  supervisorctl:
+    name={{ item }}
+    state=present
+  with_items:
+    - "psdash-agent"
+  when: psdash.mode == "master"
+
+- name: "Start psdash-master via Supervisor"
+  supervisorctl:
+    name={{ item }}
+    state=started
+  with_items:
+    - "psdash-master"
+  when: psdash.mode == "master"

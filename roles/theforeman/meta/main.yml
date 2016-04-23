@@ -1,0 +1,8 @@
+---
+
+dependencies:
+  - memcached
+  - postgres
+  - nginx
+
+...
