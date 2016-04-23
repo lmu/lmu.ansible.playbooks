@@ -1,0 +1,31 @@
+---
+
+- name: "Ensure TheForeman Repository Key is present"
+  apt_key:
+    url=http://deb.theforeman.org/pubkey.gpg
+    state=present
+
+- name: "Ensure The Foreman Repository is present"
+  apt_repository:
+    repo="deb http://deb.theforeman.org/ {{ ansible_distribution_release }} stable"
+    state=present
+
+- name: "Ensure TheForeman Plugins Reposititory is present"
+  apt_repository:
+    repo="deb http://deb.theforeman.org/ plugins stable"
+    state=present
+
+- name: "Install TheForeman Packages"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - foreman
+    - foreman-pgsql
+    - foreman-ansible
+    - foreman-libvirt
+    - ruby-hammer-cli
+    - ruby-hammer-cli-foreman
+...

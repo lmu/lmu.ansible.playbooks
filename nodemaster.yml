@@ -21,7 +21,6 @@
     - { role: psdash,
         psdash: {
           path: "/usr/local/venv-psdash",
-          version: '0.6.2',
           mode: "master"
         }
       }
