@@ -46,7 +46,7 @@
   with_items:
     - aptitude
     - ssl-cert
-    - update-notifier-common
+    #- update-notifier-common
     - software-properties-common
     - apt-transport-https
     - facter

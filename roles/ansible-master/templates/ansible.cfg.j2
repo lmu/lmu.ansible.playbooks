@@ -12,7 +12,7 @@
 # some basic default values...
 
 #inventory      = /etc/ansible/hosts
-#library        = /usr/share/my_modules/
+#library        = /usr/share/ansible/modules/
 #remote_tmp     = $HOME/.ansible/tmp
 #forks          = 5
 #poll_interval  = 15
@@ -147,7 +147,7 @@
 
 # set plugin path directories here, separate with colons
 #action_plugins     = /usr/share/ansible/plugins/action
-#callback_plugins   = /usr/share/ansible/plugins/callback
+callback_plugins   = /usr/share/ansible/plugins/callback
 #connection_plugins = /usr/share/ansible/plugins/connection
 #lookup_plugins     = /usr/share/ansible/plugins/lookup
 #vars_plugins       = /usr/share/ansible/plugins/vars
@@ -159,6 +159,7 @@
 # want, for example, a notification or logging callback to also apply to
 # /bin/ansible runs
 #bin_ansible_callbacks = False
+bin_ansible_callbacks = True
 
 
 # don't like cows?  that's unfortunate.

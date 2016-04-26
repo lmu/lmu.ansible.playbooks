@@ -2,6 +2,14 @@
 
 - hosts: nodemasters
   become: true
+  gather_facts: false
+
+  tasks:
+    - name: "Ensure Python2 and Aptitude is installed"
+      raw: apt-get -y install python aptitude
+
+- hosts: nodemasters
+  become: true
 
   vars:
     maintenance:

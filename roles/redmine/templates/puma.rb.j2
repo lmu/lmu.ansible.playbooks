@@ -18,7 +18,7 @@ stdout_redirect '{{ redmine.log_base_path}}/{{ instance.name }}/puma.log', '{{ r
 # debug
 # quiet
 
-config.log_level = :debug
+#config.log_level = :debug
 
 threads 0, 16
 bind 'unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock'

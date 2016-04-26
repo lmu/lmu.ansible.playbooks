@@ -107,12 +107,12 @@
   when: psdash.mode == "agent"
 
 
-- name: "Update Supervisorctl - Ensure psdash-agent are present"
+- name: "Update Supervisorctl - Ensure psdash-master are present"
   supervisorctl:
     name={{ item }}
     state=present
   with_items:
-    - "psdash-agent"
+    - "psdash-master"
   when: psdash.mode == "master"
 
 - name: "Start psdash-master via Supervisor"

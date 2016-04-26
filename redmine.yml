@@ -112,7 +112,7 @@
               #"redmine_contacts_helpdesk": { 'url': '' },
             },
             themes: {
-              "redmine-theme-lmu": { 'url': "https://github.com/loechel/redmine-theme-lmu.git", version: "master" },
+              "redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
               "redmine-theme-gitmike": { url: "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.7" }
             },
             puma_port: "3000",

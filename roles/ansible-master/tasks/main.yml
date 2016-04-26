@@ -4,6 +4,7 @@
   apt_repository:
     repo="ppa:ansible/ansible"
     state=present
+  when: ansible_distribution == "Ubuntu"
   tags:
     - ansible_setup
 
@@ -16,6 +17,31 @@
   with_items:
     - software-properties-common
     - ansible
+  when: ansible_os_family == "Debian"
+  tags:
+    - ansible_setup
+
+- name: "Ensure Ansible directories are present"
+  file:
+    path={{ item }}
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "/etc/ansible"
+    - "/etc/ansible/roles"
+    - "/usr/share/ansible/plugins"
+    - "/usr/share/ansible/plugins/action"
+    - "/usr/share/ansible/plugins/callback"
+    - "/usr/share/ansible/plugins/connection"
+    - "/usr/share/ansible/plugins/lookup"
+    - "/usr/share/ansible/plugins/vars"
+    - "/usr/share/ansible/plugins/filter"
+    - "/usr/share/ansible/plugins/test"
+    - "/usr/share/ansible/plugins/strategy"
+    - "/usr/share/ansible/modules/"
+    - "/usr/share/ansible/roles"
   tags:
     - ansible_setup
 
