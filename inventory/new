@@ -1,44 +1,4 @@
 [new_servers]
 
-
-
-[zope-dbs-production]
-#cms-live-appdb1.verwaltung.uni-muenchen.de
-
-[zope-dbs-failover-production]
-#cms-live-appdb2.verwaltung.uni-muenchen.de
-
-
-[zope-clients-staging]
-#cms-live-app2.verwaltung.uni-muenchen.de
-
-[zope-clients-production]
-#cms-live-app2.verwaltung.uni-muenchen.de
-#cms-live-app3.verwaltung.uni-muenchen.de
-#cms-live-app4.verwaltung.uni-muenchen.de
-
-[zope-clients-ludwig27-production]
-#cms-live-app2.verwaltung.uni-muenchen.de
-#cms-live-app3.verwaltung.uni-muenchen.de
-#cms-live-app4.verwaltung.uni-muenchen.de
-
-[webproxies-production]
-#webproxy1.verwaltung.uni-muenchen.de
-#webproxy2.verwaltung.uni-muenchen.de
-
-[webproxies:children]
-#webproxies-production
-
-
-[zope-dbs:children]
-#zope-dbs-production
-#zope-dbs-failover-production
-#zope-dbs-staging
-
-[zope-clients:children]
-zope-clients-production
-zope-clients-staging
-
-[plone:children]
-#zope-dbs
-zope-clients
+redmine2.verwaltung.uni-muenchen.de ansible_host=10.153.81.129
+ansiblem1.zuv.uni-muenchen.de ansible_host=172.23.3.81
