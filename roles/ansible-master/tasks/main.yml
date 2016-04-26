@@ -4,6 +4,10 @@
   apt_repository:
     repo="ppa:ansible/ansible"
     state=present
+    #validate_certs=no
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   when: ansible_distribution == "Ubuntu"
   tags:
     - ansible_setup

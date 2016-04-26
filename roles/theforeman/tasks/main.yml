@@ -7,6 +7,9 @@
   apt_key:
     url=http://deb.theforeman.org/pubkey.gpg
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   tags:
     - theforeman_setup
 
@@ -14,6 +17,9 @@
   apt_repository:
     repo="deb http://deb.theforeman.org/ {{ ansible_distribution_release }} stable"
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   tags:
     - theforeman_setup
 
@@ -21,6 +27,9 @@
   apt_repository:
     repo="deb http://deb.theforeman.org/ plugins stable"
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   tags:
     - theforeman_setup
 
