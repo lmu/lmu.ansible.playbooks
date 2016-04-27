@@ -85,6 +85,7 @@
     - dnstop
     - logtop
     - powertop
+    - kerneltop
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Data Directory exists"

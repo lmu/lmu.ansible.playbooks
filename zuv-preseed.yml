@@ -44,3 +44,23 @@
           allow_reboot: false
         }
       }
+
+  tasks:
+
+  - name: Restart Server
+    command: shutdown -r now "Forced Reboot triggered by Ansible"
+    async: 0
+    poll: 0
+    ignore_errors: true
+    when: ansible_os_family == "Debian" and ansible_hostname != "CZC52447XZ"
+
+  - name: Wait for Server to come back
+    local_action:
+      wait_for 
+      host={{ ansible_ssh_host | default(inventory_hostname) }}
+      port=22
+      search_regex=OpenSSH
+      state=started
+      delay=20
+      timeout=300
+    become: false
