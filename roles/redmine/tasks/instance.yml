@@ -47,8 +47,8 @@
     template='template0'
     state=present
     owner="{{ instance.db_user}}"
-    lc_ctype='de_DE.UTF-8'
-    lc_collate='de_DE.UTF-8'
+    #lc_ctype='de_DE.UTF-8'
+    #lc_collate='de_DE.UTF-8'
   tags:
     - redmine_update
 
@@ -192,6 +192,15 @@
   tags:
     - redmine_setup
     - redmine_upgrade
+
+- name: "Database Cleanup (RedmineCRM Agile)"
+  command: psql -c {{ item }} redmine-{{ instance.db_name }}
+  with_items:
+    - "ALTER INDEX IF EXISTS issue_status_orders_pkey RENAME TO agile_ranks_pkey;"
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
+  become_user: postgres
+  become: yes
 
 - block:
 
