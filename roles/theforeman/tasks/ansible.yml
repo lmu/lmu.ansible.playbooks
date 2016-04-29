@@ -1,0 +1,11 @@
+---
+
+- name: "Install Ansible Callback"
+  get_url:
+    url="https://raw.githubusercontent.com/theforeman/foreman_ansible/master/extras/foreman_callback.py"
+    dest="/usr/share/ansible/plugins/callback/foreman_callback.py"
+    mode="u=rwx,g=rx,o=rx"
+    owner=root
+    group=root
+
+...

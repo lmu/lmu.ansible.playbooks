@@ -1,0 +1,39 @@
+---
+
+- name: "Ensure Ruby PPA is avaliable"
+  apt_repository:
+    repo="{{ foreman_ruby.ppa }}"
+    state=present
+  when: 'ansible_distribution == "Ubuntu" and foreman_ruby.use_ppa == "yes"'
+  tags:
+    - theforeman_setup
+    - ruby_setup
+
+- name: "Ensure Ruby is installed"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - "{{ foreman_ruby.version }}"
+    - "{{ foreman_ruby.version }}-dev"
+    - ruby-dev
+    #- bundler
+    - build-essential
+    - git
+    - gawk
+    - libffi-dev
+    - libgdbm-dev
+    - libncurses5-dev
+    - libreadline6-dev
+    - libssl-dev
+    - libyaml-dev
+    - libxml2-dev
+    - libxslt1-dev
+  when: 'ansible_os_family == "Debian"'
+  tags:
+    - theforeman_setup
+    - ruby_setup
+
+...
