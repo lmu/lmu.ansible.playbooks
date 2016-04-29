@@ -194,13 +194,31 @@
     - redmine_upgrade
 
 - name: "Database Cleanup (RedmineCRM Agile)"
-  command: psql -c {{ item }} redmine-{{ instance.db_name }}
+  command: psql -c "{{ item }}" redmine-{{ instance.db_name }}
   with_items:
     - "ALTER INDEX IF EXISTS issue_status_orders_pkey RENAME TO agile_ranks_pkey;"
-    - "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
-    - "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
+    #- "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
+    #- "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
   become_user: postgres
   become: yes
+
+- name: "Patch Redmine / Plugins"
+  copy:
+    src="redmine/{{ item }}"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o=r"
+  with_items:
+    - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
+    - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
+    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_order.rb"
+    - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
+    - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - block:
 
@@ -297,6 +315,15 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
     LC_ALL: C
     LANG: en
+
+- name: "Database Cleanup (RedmineCRM Agile)"
+  command: psql -c "{{ item }}" redmine-{{ instance.db_name }}
+  with_items:
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
+  become_user: postgres
+  become: yes
+
 
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
