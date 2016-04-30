@@ -1,0 +1,27 @@
+---
+
+- name: "Install Postfix Packages"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - postfix
+  when: ansible_os_family == "Debian"
+  tags:
+    - postfix_setup
+
+- name: "Ensure Postfix directories are present"
+  file:
+    path={{ item }}
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "/etc/postfix"
+  tags:
+    - postfix_setup
+
+...
