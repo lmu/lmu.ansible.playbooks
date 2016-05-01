@@ -1,25 +1,57 @@
 
-- name: install supervisor debian/ubuntu
-  apt: pkg=supervisor state=latest
-  when: ansible_os_family == "Debian"
+- block: "Install Supervisor via Debian / Ubuntu Repository"
 
-- name: ensure supervisor conf.d directory exists
+  - name: "Install supervisor"
+    apt:
+      pkg=supervisor
+      state=present
+
+  when: ansible_os_family == "Debian" and supervisor.use_system == "yes"
+
+- bock: "Install Supervisor via Python Package Index"
+
+  - name: "Install Supervisor"
+    pip:
+      name="{{ item }}"
+      state="present"
+      version="{{ supervisor.version | default(omit)}}"
+      virtualenv="{{ supervisor.path }}"
+      chdir="{{ supervisor.path }}"
+      #virtualenv_python=""
+    with_items:
+      - supervisor
+      - superlance
+    environment:
+      http_proxy: "{{ lookup('env', 'http_proxy') }}"
+      https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
+  - name: "Install Supervisor Init-Script"
+    template:
+      src="supervisord.init.j2"
+      dest="/etc/init.d/supervisor"
+      owner=root
+      group=root
+      mode="u=rw,g=r,o=r"
+      validate=""
+
+  when: supervisor.use_system == "no"
+
+- name: "Ensure supervisor Directory exists"
   file:
-    path=/etc/supervisor/conf.d
+    path="{{ item }}"
     state=directory
     owner=root
     group=root
     mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "/etc/supervisor"
+    - "/etc/supervisor/conf.d"
+    - "/var/log/supervisor"
 
-- name: ensure supervisor log directory exists
-  file:
-    path=/var/log/supervisor
-    state=directory
-
-- name: Copy supervisor global configuration
-  template: 
-    src=supervisord.conf.j2
-    dest=/etc/supervisor/supervisord.conf
+- name: "Copy supervisor global configuration"
+  template:
+    src="supervisord.conf.j2"
+    dest="/etc/supervisor/supervisord.conf"
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
@@ -30,4 +62,3 @@
     name=supervisor
     state=started
     enabled=yes
-

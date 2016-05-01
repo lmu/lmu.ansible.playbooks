@@ -1,5 +1,7 @@
 
 supervisor: {
   username: "admin",
-  password: "admin"
+  password: "admin",
+  use_system: "no",
+  path: "/usr/local/venv-supervisor"
   }
