@@ -2,7 +2,7 @@
 - block:
   # "Install Supervisor via Debian / Ubuntu Repository"
 
-  - name: "Install supervisor"
+  - name: "Install Supervisor"
     apt:
       pkg=supervisor
       state=present
@@ -34,6 +34,12 @@
       - bzip2
       - gzip
       - unzip
+    when: ansible_os_family == "Debian"
+
+  - name: "Ensure Supervisor is not installed via System Repository"
+    apt:
+      pkg=supervisor
+      state=absent
     when: ansible_os_family == "Debian"
 
   - name: "Install Supervisor"
