@@ -1,10 +1,10 @@
 # Inventory for Redmine
 
 [redmine-dbs-production]
-#redmine2.verwaltung.uni-muenchen.de
+redmine2.verwaltung.uni-muenchen.de
 
 [redmine-workers-production]
-#redmine2.verwaltung.uni-muenchen.de
+redmine2.verwaltung.uni-muenchen.de
 
 [redmine-production:children]
 redmine-dbs-production

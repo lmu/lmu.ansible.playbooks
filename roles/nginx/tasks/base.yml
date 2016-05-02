@@ -8,6 +8,20 @@
   tags:
     - setup
 
+- name: "Ensure NGINX Repository Key is avalibale"
+  apt_key: 
+    url="http://nginx.org/keys/nginx_signing.key"
+    state=present
+
+- name: "Ensure NGINX Repository is avaliable"
+  apt_repository:
+    repo="deb http://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
+    state=present
+    filename="nginx.list"
+  when: 'ansible_distribution == "Ubuntu" and nginx.use_repo == "yes"'
+  tags:
+    - setup
+
 - name: "Install NGINX packages"
   apt:
     name={{ item }}

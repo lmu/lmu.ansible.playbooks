@@ -1,11 +1,6 @@
 ---
 
-nginx_max_clients: 512
-
-nginx_http_params:
-  sendfile: "on"
-  tcp_nopush: "on"
-  tcp_nodelay: "on"
-  keepalive_timeout: "65"
-  access_log: "/var/log/nginx/access.log"
-  error_log: "/var/log/nginx/error.log"
+nginx: 
+  use_ppa: "no"
+  use_repo: "yes"
+  ppa: "ppa:nginx/stable"

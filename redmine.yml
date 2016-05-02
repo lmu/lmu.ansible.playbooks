@@ -118,10 +118,5 @@
             puma_port: "3000",
             nginx_port: "8065",
           },
-
-        },
-        nginx: {
-          use_ppa: "yes",
-          ppa: "ppa:nginx/stable"
         }
       }
