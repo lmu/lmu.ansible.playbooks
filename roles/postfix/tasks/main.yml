@@ -25,12 +25,26 @@
     - postfix_setup
 
 - name: "Copy Postfix Config Files"
-
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/supervisor/{{ item }}"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+    validate=""
+  with_items:
+    - "main.cf"
+    - "master.cf"
+    - "dynamicmaps.cf"
+  tags:
+    - postfix_setup
 
 - name: "Start the Postfix service and enable on boot"
   service:
     name=postfix
     state=started
     enabled=yes
+  tags:
+    - postfix_setup
 
 ...
