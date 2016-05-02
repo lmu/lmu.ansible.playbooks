@@ -1,3 +1,4 @@
+---
 
 - block:
   # "Install Supervisor via Debian / Ubuntu Repository"
@@ -117,3 +118,5 @@
     name=supervisor
     state=started
     enabled=yes
+
+...

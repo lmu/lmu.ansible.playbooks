@@ -14,6 +14,8 @@
   supervisorctl:
       name="puma-{{ instance.name }}"
       state=stopped
+      username={{ supervisor.username }}
+      password={{ supervisor.password }}
   ignore_errors: true
   tags:
     - redmine_setup
@@ -374,6 +376,8 @@
   supervisorctl:
       name="puma-{{ instance.name }}"
       state=restarted
+      username={{ supervisor.username }}
+      password={{ supervisor.password }}
   tags:
     - redmine_setup
     - redmine_upgrade

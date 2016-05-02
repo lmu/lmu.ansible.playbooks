@@ -94,6 +94,8 @@
   supervisorctl:
     name={{ item }}
     state=present
+    username={{ supervisor.username }}
+    password={{ supervisor.password }}
   with_items:
     - "psdash-agent"
   when: psdash.mode == "agent"
@@ -102,6 +104,8 @@
   supervisorctl:
     name={{ item }}
     state=started
+    username={{ supervisor.username }}
+    password={{ supervisor.password }}
   with_items:
     - "psdash-agent"
   when: psdash.mode == "agent"
@@ -111,6 +115,8 @@
   supervisorctl:
     name={{ item }}
     state=present
+    username={{ supervisor.username }}
+    password={{ supervisor.password }}
   with_items:
     - "psdash-master"
   when: psdash.mode == "master"
@@ -119,6 +125,8 @@
   supervisorctl:
     name={{ item }}
     state=started
+    username={{ supervisor.username }}
+    password={{ supervisor.password }}
   with_items:
     - "psdash-master"
   when: psdash.mode == "master"
