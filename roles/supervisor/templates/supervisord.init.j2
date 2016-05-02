@@ -37,6 +37,7 @@ DODTIME=5                   # Time to wait for the server to die, in seconds
                             # let some servers to die gracefully and
                             # 'restart' will not work
 
+DAEMON_OPTS=""
 # Include supervisor defaults if available
 if [ -f /etc/default/supervisor ] ; then
 	. /etc/default/supervisor
