@@ -12,12 +12,15 @@
   apt_key: 
     url="http://nginx.org/keys/nginx_signing.key"
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: "Ensure NGINX Repository is avaliable"
   apt_repository:
-    repo="deb http://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
+    repo="deb http://nginx.org/packages/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
     state=present
-    filename="nginx.list"
+    #filename="nginx.list"
   when: 'ansible_distribution == "Ubuntu" and nginx.use_repo == "yes"'
   tags:
     - setup
@@ -29,6 +32,8 @@
     update_cache=yes
   with_items:
     - nginx
+    #- nginx-full
+    #- nginx-extras
     - python-selinux
   when: ansible_os_family == "Debian"
   tags:
@@ -81,3 +86,5 @@
   tags:
     - setup
     - configuration
+
+...
