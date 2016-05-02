@@ -1,22 +1,25 @@
 
-- block: "Install Supervisor via Debian / Ubuntu Repository"
+- block:
+  # "Install Supervisor via Debian / Ubuntu Repository"
 
   - name: "Install supervisor"
     apt:
       pkg=supervisor
       state=present
+    when: ansible_os_family == "Debian"
 
-  when: ansible_os_family == "Debian" and supervisor.use_system == "yes"
+  when: '"{{ supervisor.use_system | default("no") }}" == "yes"'
 
-- bock: "Install Supervisor via Python Package Index"
+- block:
+  # "Install Supervisor via Python Package Index"
 
   - name: "Install Supervisor"
     pip:
       name="{{ item }}"
       state="present"
       version="{{ supervisor.version | default(omit)}}"
-      virtualenv="{{ supervisor.path }}"
-      chdir="{{ supervisor.path }}"
+      virtualenv="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
+      chdir="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       #virtualenv_python=""
     with_items:
       - supervisor
@@ -33,8 +36,9 @@
       group=root
       mode="u=rw,g=r,o=r"
       validate=""
+    when: ansible_os_family == "Debian"
 
-  when: supervisor.use_system == "no"
+  when: '"{{ supervisor.use_system | default("no") }}" == "no"'
 
 - name: "Ensure supervisor Directory exists"
   file:

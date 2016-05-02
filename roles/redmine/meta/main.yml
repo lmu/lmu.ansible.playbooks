@@ -8,6 +8,10 @@ dependencies:
   - { role: nginx,
     }
 
+  - { role: postfix,
+      
+    }
+
 #  - { role: apache_httpd,
 #    }
 
