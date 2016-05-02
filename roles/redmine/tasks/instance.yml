@@ -213,7 +213,7 @@
   with_items:
     - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
     - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
-    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_order.rb"
+    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
     - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
     - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
   tags:

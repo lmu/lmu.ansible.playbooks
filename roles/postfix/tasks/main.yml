@@ -24,4 +24,13 @@
   tags:
     - postfix_setup
 
+- name: "Copy Postfix Config Files"
+
+
+- name: "Start the Postfix service and enable on boot"
+  service:
+    name=postfix
+    state=started
+    enabled=yes
+
 ...
