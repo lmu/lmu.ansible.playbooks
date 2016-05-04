@@ -36,6 +36,8 @@
     - "main.cf"
     - "master.cf"
     - "dynamicmaps.cf"
+  notify:
+    - "Reload Postfix"
   tags:
     - postfix_setup
 
