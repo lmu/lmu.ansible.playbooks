@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 
 {% for name, instance in redmine_instance.items() %}
 upstream redmin_{{ instance.name | regex_replace('\.', '_') }} {
@@ -44,11 +45,32 @@ server {
     break;
   }
 
-{#% for instance in redmine_instance.values() %}
-{#% for alias in instance.alias + [instance.name] %#}
-#  location /{{ instance.alias | default(instance.name | default('/') ) }}/ {
-#  location /{{ alias }}/ {
-  localtion / {
+{% for name, instance in redmine_instance.items() %}
+{% for alias in instance.alias %}
+  location ^~ /{{ alias }}/ {
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_max_temp_file_size 0;
+    proxy_redirect off;
+
+    proxy_pass http://redmin_{{ instance.name | regex_replace('\.', '_') }};
+
+    proxy_connect_timeout      90;
+    proxy_send_timeout         90;
+    proxy_read_timeout         90;
+
+    proxy_buffer_size          4k;
+    proxy_buffers              4 32k;
+    proxy_busy_buffers_size    64k;
+    proxy_temp_file_write_size 64k;
+  }
+
+{% endfor %}
+{% endfor %}
+
+  location / {
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP  $remote_addr;
@@ -86,9 +108,6 @@ server {
     break;
     # try_files $uri/index.html $uri.html $uri @ruby;
   }
-
-{#% endfor %#}
-{#% endfor %#}
 
 
   # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
