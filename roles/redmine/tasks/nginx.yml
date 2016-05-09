@@ -19,6 +19,11 @@
     owner=root
     group=root
     mode="u=rw,g=r,o="
+    use_proxy=yes
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  become: false
   tags:
     - redmine_setup
     - redmine_upgrade

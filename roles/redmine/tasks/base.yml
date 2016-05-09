@@ -4,6 +4,9 @@
   apt_repository:
     repo="{{ redmine.ruby_ppa }}"
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    #https_proxy: "{{ lookup('env', 'https_proxy') }}"
   when: 'ansible_distribution == "Ubuntu" and redmine.use_ppa == "yes"'
   tags:
     - setup
