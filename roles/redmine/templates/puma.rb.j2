@@ -18,6 +18,8 @@ stdout_redirect '{{ redmine.log_base_path}}/{{ instance.name }}/puma.log', '{{ r
 # debug
 # quiet
 
+ENV['RAILS_RELATIVE_URL_ROOT'] = ENV['HTTP_RAILS_RELATIVE_URL_ROOT']
+
 #config.log_level = :debug
 
 threads 0, 16

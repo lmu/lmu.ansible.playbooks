@@ -44,7 +44,7 @@
   template:
     #src=templates/nginx-redmine-multi-instance-wrapper.conf.j2
     src=templates/nginx-redmine-multi-instance.conf.j2
-    dest=/etc/nginx/sites-available/redmine-multiinstance.conf
+    dest=/etc/nginx/sites-available/redmine-multi-instance.conf
     force=yes
     mode="u=rw,g=r,o=r"
     owner=root
@@ -57,8 +57,8 @@
 
 - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
   file:
-    src=/etc/nginx/sites-available/redmine-multiinstance.conf
-    path=/etc/nginx/sites-enabled/redmine-multiinstance.conf
+    src=/etc/nginx/sites-available/redmine-multi-instance.conf
+    path=/etc/nginx/sites-enabled/redmine-multi-instance.conf
     force=yes
     state=link
     owner=root

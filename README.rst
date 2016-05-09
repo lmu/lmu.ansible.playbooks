@@ -19,3 +19,5 @@ Services
 * Piwik
 * Solr
 * Dashing
+* Jenkins
+* The Foreman
