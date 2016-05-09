@@ -80,7 +80,11 @@
           # },
           ref_vi-5: {
             name: "ref_vi.5",
-            alias: ["internetdienste", "fiona"],
+            alias: "internetdienste",
+            aliases: [
+              #"internetdienste",
+              "fiona"
+            ],
             db_name: "ref_vi.5",
             db_user: "{{ redmine_db.user }}",
             db_passwd: "{{ redmine_db.passwd }}",

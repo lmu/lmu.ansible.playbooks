@@ -40,7 +40,7 @@
     - redmine_setup
     - redmine_upgrade
 
-- name: "Install vhost.confs for sites"
+- name: "Install vhost.confs for Redmine Multi-Instance sites"
   template:
     #src=templates/nginx-redmine-multi-instance-wrapper.conf.j2
     src=templates/nginx-redmine-multi-instance.conf.j2
