@@ -381,6 +381,17 @@
     - redmine_setup
     - redmine_upgrade
 
+- name: "Ensure Puma Script for Supervisor for {{ instance.name }} is avaliable"
+  supervisorctl:
+      name="puma-{{ instance.name }}"
+      state=present
+      username={{ supervisor.username }}
+      password={{ supervisor.password }}
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+  ignore_errors: true
+
 - name: "Start/Restart Puma via Supervisor for {{ instance.name }}"
   supervisorctl:
       name="puma-{{ instance.name }}"
