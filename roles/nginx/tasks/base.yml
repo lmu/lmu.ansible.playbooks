@@ -1,43 +1,42 @@
 ---
 
-- name: "Ensure NGINX PPA is avaliable"
-  apt_repository:
-    repo="{{ nginx.ppa }}"
-    state=present
-  when: 'ansible_distribution == "Ubuntu" and nginx.use_ppa == "yes"'
-  tags:
-    - setup
+- block:
+  # Ubuntu/ Debian specific
+  # Use NGINX own repository to stay upstream
+  # Attention: this means roling release
+  # Nginx may break due to upstream changes that are not backward compatible.
 
-- name: "Ensure NGINX Repository Key is avalibale"
-  apt_key: 
-    url="http://nginx.org/keys/nginx_signing.key"
-    state=present
-  environment:
-    http_proxy: "{{ lookup('env', 'http_proxy') }}"
-    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  - name: "Ensure NGINX Repository Key is avalibale"
+    apt_key:
+      url="http://nginx.org/keys/nginx_signing.key"
+      state=present
+    environment:
+      http_proxy: "{{ lookup('env', 'http_proxy') }}"
+      https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-- name: "Ensure NGINX Repository is avaliable"
-  apt_repository:
-    repo="deb http://nginx.org/packages/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
-    state=present
-    #filename="nginx.list"
-  when: 'ansible_distribution == "Ubuntu" and nginx.use_repo == "yes"'
-  tags:
-    - setup
+  - name: "Ensure NGINX Repository is avaliable"
+    apt_repository:
+      repo="deb http://nginx.org/packages/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
+      state=present
+      #filename="nginx.list"
+    when: nginx.use_repo == "yes"
+    tags:
+      - setup
 
-- name: "Install NGINX packages"
-  apt:
-    name={{ item }}
-    state=present
-    update_cache=yes
-  with_items:
-    - nginx
-    #- nginx-full
-    #- nginx-extras
-    - python-selinux
-  when: ansible_os_family == "Debian"
-  tags:
-    - setup
+  - name: "Install NGINX packages"
+    apt:
+      name={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      - nginx
+      #- nginx-full
+      #- nginx-extras
+      - python-selinux
+    tags:
+      - setup
+
+  when: 'ansible_os_family == "Debian"'
 
 - name: "Ensure directories for site specific configurations are present"
   file:

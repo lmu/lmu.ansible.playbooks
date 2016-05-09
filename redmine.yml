@@ -96,7 +96,7 @@
               "redmine_tweaks": { 'url': "https://github.com/alexandermeindl/redmine_tweaks.git", 'version': 'master'},
               "redmine_auto_watch": { 'url': "https://github.com/mephi-ut/redmine_auto_watch.git", 'version': 'master'},
               #"redmine_knowledgebase": { 'url': "https://github.com/alexbevi/redmine_knowledgebase.git", 'version': 'v3.1.0'},
-              #"redmine_lmu_modifications": { 'url': "https://github.com/loechel/redmine_lmu_modifications.git", 'version': 'master'},
+              "redmine_lmu_modifications": { 'url': "https://github.com/loechel/redmine_lmu_modifications.git", 'version': 'master'},
               "redmine_wiki_lists": { 'url': "https://github.com/tkusukawa/redmine_wiki_lists.git", 'version': '0.0.6'},
               "redmine_local_avatars": { 'url': "https://github.com/thorin/redmine_local_avatars.git", 'version': 'master'},
               "sidebar_hide": { 'url': "https://github.com/bdemirkir/sidebar_hide.git", 'version': 'master'},

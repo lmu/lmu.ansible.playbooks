@@ -39,4 +39,9 @@ redmine_plugins:
     url: "https://mneme.informatik.unibw-muenchen.de/redmine-plugins"
     version: "3.1.3-pro"
 
+nginx:
+  use_ppa: "no"
+  use_repo: "yes"
+  ppa: "ppa:nginx/stable"
+
 ...

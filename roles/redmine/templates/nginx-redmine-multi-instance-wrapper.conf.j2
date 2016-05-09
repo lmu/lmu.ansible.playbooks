@@ -8,7 +8,7 @@ server {
 }
 
 server {
-  listen {{ redmine.nginx_ssl_port }} ssl spdy default_server;
+  listen {{ redmine.nginx_ssl_port }} ssl http2 default_server;
   server_name {{ redmine.domain }};
 
   ssl on;

@@ -1,7 +1,8 @@
 # Inventory for Ansible / Management Node Masters
 
 [nodemasters]
-ansiblem1.verwaltung.uni-muenchen.de
-ansiblem2.verwaltung.uni-muenchen.de
-ansiblem3.verwaltung.uni-muenchen.de
+ansiblem0.zuv.uni-muenchen.de
 ansiblem1.zuv.uni-muenchen.de
+ansiblem2.zuv.uni-muenchen.de
+ansiblem3.zuv.uni-muenchen.de
+ansiblem4.zuv.uni-muenchen.de
