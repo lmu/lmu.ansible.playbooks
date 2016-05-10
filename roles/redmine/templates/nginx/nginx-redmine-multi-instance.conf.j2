@@ -58,10 +58,10 @@ server {
     proxy_redirect off;
 
     proxy_set_header RAILS_RELATIVE_URL_ROOT /{{ instance.alias }};
-    proxy_redirect http://redmine_{{ instance.name | regex_replace('\.', '_') }} /{{ instance.alias }}/;
+    #proxy_redirect http://redmine_{{ instance.name | regex_replace('\.', '_') }} /{{ instance.alias }}/;
     rewrite ^/{{ instance.alias }}/(.*)$ /$1 break;
 
-    proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }};
+    proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }}/{{ instance.alias }}/;
 
     proxy_connect_timeout      90;
     proxy_send_timeout         90;

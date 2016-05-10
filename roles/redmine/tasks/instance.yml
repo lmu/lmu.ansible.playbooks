@@ -163,6 +163,7 @@
     - "Gemfile.local"
     - "config.ru"
     - "config/database.yml"
+    - "config/environment.rb"
     - "config/additional_environment.rb"
     - "config/configuration.yml"
     - "config/puma.rb"
