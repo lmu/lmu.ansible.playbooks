@@ -151,31 +151,21 @@
     - redmine_setup
     - redmine_upgrade
 
-- name: "Copy Dependency File ({{ instance.name }})"
-  copy:
-    src="Gemfile.local"
-    dest="{{ redmine.app_base_path}}/{{ instance.name }}/Gemfile.local"
+- name: "Copy Dependency File and Config Files ({{ instance.name }})"
+  template:
+    src="{{ item }}.j2"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
     force=yes
     owner=redmine
     group=redmine
     mode="u=rwx,g=r,o=r"
-  tags:
-    - redmine_setup
-    - redmine_upgrade
-
-- name: "Copy Config Files ({{ instance.name }})"
-  template:
-    src={{ item }}.j2
-    dest="{{ redmine.app_base_path}}/{{ instance.name }}/config/{{ item }}"
-    force=yes
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=rx,o=rx"
   with_items:
-    - database.yml
-    - additional_environment.rb
-    - configuration.yml
-    - puma.rb
+    - "Gemfile.local"
+    - "config.ru"
+    - "config/database.yml"
+    - "config/additional_environment.rb"
+    - "config/configuration.yml"
+    - "config/puma.rb"
   tags:
     - redmine_setup
     - redmine_upgrade
