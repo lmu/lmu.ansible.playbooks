@@ -1,5 +1,5 @@
 [program:psdash-agent]
-command={{ psdash.path }}/bin/psdash -a
+command={{ psdash.path }}/bin/psdash -a -p 5000 -l /var/log/*.log -l /var/log/**/*.log
 ;command={{ psdash.path }}/bin/psdash -a -l /var/log/**/*.log -l /var/log/*.log
 ;directory="{{ psdash.path }}"
 ;environment=PATH="{{ psdash.path }}/bin:{{ lookup('env', 'PATH') }}"
