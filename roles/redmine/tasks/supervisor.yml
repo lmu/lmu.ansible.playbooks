@@ -4,7 +4,7 @@
 
 - name: "Install Supervisor Conf for Puma/Redmine"
   template:
-    src: redmine-puma-supervisor.conf.j2
+    src: "supervisor/redmine-puma-supervisor.conf.j2"
     dest: "/etc/supervisor/conf.d/puma-{{ instance.name }}.conf"
     owner: root
     group: root

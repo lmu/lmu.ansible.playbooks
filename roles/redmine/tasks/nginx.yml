@@ -42,8 +42,8 @@
 
 - name: "Install vhost.confs for Redmine Multi-Instance sites"
   template:
-    #src=templates/nginx-redmine-multi-instance-wrapper.conf.j2
-    src=templates/nginx-redmine-multi-instance.conf.j2
+    #src=nginx/nginx-redmine-multi-instance-wrapper.conf.j2
+    src=nginx/nginx-redmine-multi-instance.conf.j2
     dest=/etc/nginx/sites-available/redmine-multi-instance.conf
     force=yes
     mode="u=rw,g=r,o=r"

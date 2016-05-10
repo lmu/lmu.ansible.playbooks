@@ -4,7 +4,7 @@
 
 - name: "Install vhost.confs for sites ({{ instance }})"
   template:
-    src="templates/nginx-redmine.conf.j2"
+    src="nginx/nginx-redmine.conf.j2"
     dest="/etc/nginx/sites-available/redmine-{{ instance.name }}.conf"
     force=yes
     mode="u=rw,g=r,o=r"
