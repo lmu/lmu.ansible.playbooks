@@ -3,6 +3,7 @@
 - name: "Rename hostname to intended hostname"
   hostname:
     name={{ inventory_hostname }}
+  when: '"{{ inventory_hostname }}" != "localhost"'
 
 - name: "Ensure User 'ansible' exists"
   user:
