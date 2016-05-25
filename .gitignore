@@ -67,6 +67,9 @@ files/server-ssl/
 downloads/
 downloads
 tree/
+cmdb/
+copy/
+out/
 *.retry
 
 # Mac specifics
