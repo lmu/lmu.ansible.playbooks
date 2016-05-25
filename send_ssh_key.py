@@ -16,9 +16,7 @@ if __name__ == '__main__':
 
     for host in hosts:
         try:
-            subprocess.check_call(['ssh-keyscan', '-H', host.strip()],
-                                  stdout=None,
-                                  stderr=None)
+            subprocess.check_call(['ssh-copy-id', 'fachadmin' + host.strip()])
         except subprocess.CalledProcessError as e:
             print(e)
         except:
