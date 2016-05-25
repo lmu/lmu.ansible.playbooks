@@ -63,6 +63,10 @@ target/
 secrets/
 secrets.yml
 graphs/
+files/server-ssl/
+downloads/
+downloads
+tree/
 *.retry
 
 # Mac specifics
