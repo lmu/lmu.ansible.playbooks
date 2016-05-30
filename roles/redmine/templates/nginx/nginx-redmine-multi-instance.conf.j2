@@ -3,7 +3,6 @@
 {% for name, instance in redmine_instance.items() %}
 upstream redmine_{{ instance.name | regex_replace('\.', '_') }} {
   server unix://{{ redmine.run_base_path}}/{{ instance.name }}-puma.sock fail_timeout=0;
-  #server 127.0.0.1:3000;
 }
 {% endfor %}
 
@@ -19,11 +18,11 @@ server {
   listen {{ redmine.nginx_ssl_port }} ssl http2 default_server;
   server_name {{ redmine.domain }};
 
-  ssl on;
   ssl_certificate /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem; # Chain
   ssl_certificate_key /etc/ssl/private/{{ redmine.domain }}_key.pem; # Key
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_ciphers HIGH:!aNULL:!MD5;
+  # see https://cipherli.st/
+  ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 10m;
 
@@ -33,7 +32,6 @@ server {
   keepalive_timeout 5;
 
   # path for static files
-  #root {{ redmine.app_base_path}}/{{ instance.name }}/public;
   root /var/www/htdocs;
   access_log {{ redmine.log_base_path}}/production.access.log;
   error_log {{ redmine.log_base_path}}/production.error.log info;
@@ -47,55 +45,37 @@ server {
   }
 
 {% for name, instance in redmine_instance.items() %}
-  location ^~ /{{ instance.alias }}/ {
+  location ^~ /{{ instance.alias }} {
+    alias {{ redmine.app_base_path}}/{{ instance.name }}/public;
+
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Server $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_max_temp_file_size 0;
     proxy_redirect off;
-
-    proxy_set_header RAILS_RELATIVE_URL_ROOT /{{ instance.alias }};
-    #proxy_redirect http://redmine_{{ instance.name | regex_replace('\.', '_') }} /{{ instance.alias }}/;
-    rewrite ^/{{ instance.alias }}/(.*)$ /$1 break;
 
     proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }}/{{ instance.alias }}/;
 
     proxy_connect_timeout      90;
     proxy_send_timeout         90;
     proxy_read_timeout         90;
-
-    proxy_buffer_size          4k;
-    proxy_buffers              4 32k;
-    proxy_busy_buffers_size    64k;
-    proxy_temp_file_write_size 64k;
   }
 
 {% for alias in instance.aliases %}
-  location ^~ /{{ alias }}/ {
+  location ^~ /{{ alias }} {
+    alias {{ redmine.app_base_path}}/{{ instance.name }}/public;
+
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Server $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_max_temp_file_size 0;
     proxy_redirect off;
-
-    proxy_set_header RAILS_RELATIVE_URL_ROOT /{{ alias }};
 
     proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }};
 
     proxy_connect_timeout      90;
     proxy_send_timeout         90;
     proxy_read_timeout         90;
-
-    proxy_buffer_size          4k;
-    proxy_buffers              4 32k;
-    proxy_busy_buffers_size    64k;
-    proxy_temp_file_write_size 64k;
   }
 
 {% endfor %}

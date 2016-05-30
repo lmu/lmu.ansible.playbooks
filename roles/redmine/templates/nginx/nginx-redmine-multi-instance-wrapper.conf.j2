@@ -11,11 +11,11 @@ server {
   listen {{ redmine.nginx_ssl_port }} ssl http2 default_server;
   server_name {{ redmine.domain }};
 
-  ssl on;
   ssl_certificate /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem; # Chain
   ssl_certificate_key /etc/ssl/private/{{ redmine.domain }}_key.pem; # Key
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_ciphers HIGH:!aNULL:!MD5;
+  # see https://cipherli.st/
+  ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 10m;
 
@@ -47,10 +47,9 @@ server {
 
 {% for instance in redmine_instance.values() %}
 {% for alias in instance.alias + [instance.name] %}
-  location /{{ alias }}/ {
+  location /{{ alias }} {
+    alias {{ redmine.app_base_path}}/{{ instance.name }}/public;
     proxy_pass "http://127.0.0.1:{{ instance.nginx_port }}/";
-    env RAILS_RELATIVE_URL_ROOT="/{{ alias }}";
-    proxy_set_header RAILS_RELATIVE_URL_ROOT="/{{ alias }}";
   }
 {% endfor %}
 {% endfor %}
