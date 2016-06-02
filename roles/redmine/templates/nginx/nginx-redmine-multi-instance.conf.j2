@@ -48,94 +48,35 @@ server {
   location ^~ /{{ instance.alias }} {
     alias {{ redmine.app_base_path}}/{{ instance.name }}/public;
 
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_redirect off;
-
-    proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }}/{{ instance.alias }}/;
-
     proxy_connect_timeout      90;
     proxy_send_timeout         90;
     proxy_read_timeout         90;
+
+    try_files $uri @puma_{{ instance.name }};
   }
 
 {% for alias in instance.aliases %}
   location ^~ /{{ alias }} {
     alias {{ redmine.app_base_path}}/{{ instance.name }}/public;
 
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_redirect off;
-
-    proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }};
-
     proxy_connect_timeout      90;
     proxy_send_timeout         90;
     proxy_read_timeout         90;
+
+    try_files $uri @puma_{{ instance.name }};
   }
-
-{% endfor %}
 {% endfor %}
 
-  location / {
+  ## Location
+  location @puma_{{ instance.name }} {
+    proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Host $http_host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
+    proxy_pass http://redmine_{{ instance.name | regex_replace('\.', '_') }}/{{ instance.alias }}/;
     proxy_redirect off;
-    proxy_read_timeout 300;
-
-    # If the file exists as a static file serve it directly without
-    # running all the other rewite tests on it
-    if (-f $request_filename) {
-      break;
-    }
-
-    # check for index.html for directory index
-    # if its there on the filesystem then rewite
-    # the url to add /index.html to the end of it
-    # and then break to send it to the next config rules.
-    if (-f $request_filename/index.html) {
-      rewrite (.*) $1/index.html break;
-    }
-
-    # this is the meat of the rack page caching config
-    # it adds .html to the end of the url and then checks
-    # the filesystem for that file. If it exists, then we
-    # rewite the url to have explicit .html on the end
-    # and then send it on its way to the next config rule.
-    # if there is no file on the fs then it sets all the
-    # necessary headers and proxies to our upstream mongrels
-    if (-f $request_filename.html) {
-      rewrite (.*) $1.html break;
-    }
-
-    # proxy_pass "http://redmine_{{ instance.name | regex_replace('\.', '_') }}";#/{{ instance.name }}/";
-    break;
-    # try_files $uri/index.html $uri.html $uri @ruby;
   }
+{% endfor %}
 
-
-  # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
-  # BUT there's a chance it could break the ajax calls.
-  location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
-     expires max;
-     break;
-  }
-
-  location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
-     expires max;
-     break;
-  }
-
-  # Error pages
-  # error_page 500 502 503 504 /500.html;
-  location = /500.html {
-    root /redmine/current/public;
-  }
 }
