@@ -41,14 +41,14 @@
     - redmine_upgrade
 
 - name: "Construct SSL-Certificate"
-  shell: cat /etc/ssl/certs/{{ redmine.domain }}_crt.pem /etc/ssl/certs/lmu-chain_crt.pem > /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem
+  shell: cat /etc/ssl/certs/{{ redmine.domain }}_crt.pem /etc/ssl/certs/lmu-chain_crt.pem > /etc/ssl/certs/{{ redmine.domain }}_chained_crt.pem
   tags:
     - redmine_setup
     - redmine_upgrade
 
 - name: "Set permission for Chained-SSL-Certificate"
   file:
-    path: /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem
+    path: /etc/ssl/certs/{{ redmine.domain }}_chained_crt.pem
     mode: 0755
     owner: root
     group: ssl-cert

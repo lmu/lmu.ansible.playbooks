@@ -18,7 +18,7 @@ server {
   listen {{ redmine.nginx_ssl_port }} ssl http2 default_server;
   server_name {{ redmine.domain }};
 
-  ssl_certificate /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem; # Chain
+  ssl_certificate /etc/ssl/certs/{{ redmine.domain }}_chained_crt.pem; # Chain
   ssl_certificate_key /etc/ssl/private/{{ redmine.domain }}_key.pem; # Key
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   # see https://cipherli.st/
