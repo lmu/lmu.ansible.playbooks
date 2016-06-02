@@ -12,13 +12,25 @@
     - redmine_setup
     - redmine_upgrade
 
+- name: "Copy SSL Cert"
+  copy:
+    src="server-ssl/crt/{{ redmine.domain }}_crt.pem"
+    dest="/etc/ssl/certs/{{ redmine.domain }}_crt.pem"
+    force=yes
+    owner=root
+    group="ssl-cert"
+    mode="u=rw,g=r,o=r"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
 - name: "Get LMU-CACERT-Chain"
   get_url:
     url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
-    dest="/etc/ssl/private/lmu-chain.pem"
+    dest="/etc/ssl/certs/lmu-chain_crt.pem"
     owner=root
     group="ssl-cert"
-    mode="u=rw,g=r,o="
+    mode="u=rw,g=r,o=r"
     use_proxy=yes
     validate_certs=no
   environment:
@@ -29,16 +41,17 @@
     - redmine_upgrade
 
 - name: "Construct SSL-Certificate"
-  assemble:
-    src="files/server-ssl/crt/{{ redmine.domain}}.d/"
-    dest="/etc/ssl/private/{{ redmine.domain }}_chained_crt.pem"
-    remote_src=False
-    mode="u=rw,g=r,o="
-    owner=root
-    group="ssl-cert"
+  shell: cat /etc/ssl/certs/{{ redmine.domain }}_crt.pem /etc/ssl/certs/lmu-chain_crt.pem > /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem
   tags:
     - redmine_setup
     - redmine_upgrade
+
+- name: "Set permission for Chained-SSL-Certificate"
+  file:
+    path: /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem
+    mode: 0755
+    owner: root
+    group: ssl-cert
 
 - name: "Install vhost.confs for Redmine Multi-Instance sites"
   template:
