@@ -23,7 +23,7 @@
     validate_certs=no
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
-    #https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   tags:
     - redmine_setup
     - redmine_upgrade
