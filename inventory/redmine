@@ -23,4 +23,3 @@ redmine-workers-staging
 [redmine:children]
 redmine-production
 redmine-staging
-

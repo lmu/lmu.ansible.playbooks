@@ -6,8 +6,8 @@
     dest="/etc/ssl/private/{{ redmine.domain }}_key.pem"
     force=yes
     owner=root
-    group=root
-    mode="u=r,g=r,o="
+    group="ssl-cert"
+    mode="u=rw,g=r,o="
   tags:
     - redmine_setup
     - redmine_upgrade
@@ -17,7 +17,7 @@
     url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
     dest="/etc/ssl/private/lmu-chain.pem"
     owner=root
-    group=root
+    group="ssl-cert"
     mode="u=rw,g=r,o="
     use_proxy=yes
     validate_certs=no
@@ -33,9 +33,9 @@
     src="files/server-ssl/crt/{{ redmine.domain}}.d/"
     dest="/etc/ssl/private/{{ redmine.domain }}_chained_crt.pem"
     remote_src=False
-    mode="u=r,g=r,o="
+    mode="u=rw,g=r,o="
     owner=root
-    group=root
+    group="ssl-cert"
   tags:
     - redmine_setup
     - redmine_upgrade

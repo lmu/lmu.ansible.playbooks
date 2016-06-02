@@ -1,15 +1,13 @@
-# Temporarily disabled because of firewall problems
-#server {
-#  listen {{ redmine.nginx_port }};
-#  listen [::]:{{ redmine.nginx_port }};
-#  server_name {{ redmine.domain }};
-#
-#  return 301 https://$server_name$request_uri;
-#}
+server {
+  listen {{ redmine.nginx_port }};
+  listen [::]:{{ redmine.nginx_port }};
+  server_name {{ redmine.domain }};
+
+  return 301 https://$server_name$request_uri;
+}
 
 server {
   listen {{ redmine.nginx_ssl_port }} ssl http2 default_server;
-  listen {{ redmine.nginx_port }} default_server;
   server_name {{ redmine.domain }};
 
   ssl_certificate /etc/ssl/private/{{ redmine.domain }}_chained_crt.pem; # Chain
