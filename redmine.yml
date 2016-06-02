@@ -34,7 +34,7 @@
           src_url: "http://www.redmine.org/releases/",
           src_file: "redmine-3.2.0.tar.gz",
           checksum: "b1050c3a0e6effd5a704ef5003d9df06",
-          domain: "redminetest.verwaltung.uni-muenchen.de",
+          domain: "redmine2.verwaltung.uni-muenchen.de",
           nginx_port: "80",
           nginx_ssl_port: "443",
           use_ppa: "yes",
