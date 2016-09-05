@@ -5,10 +5,12 @@ from __future__ import print_function
 
 import csv
 import os
+import ipdb
 
 
 def check_fs_is_readonly():
 
+    ipdb.set_trace()
     fs_table = {}
     if os.path.exists('proc/mounts'):
         with open('/proc/mounts', 'rb+') as f:
