@@ -3,4 +3,12 @@
 database:
   port: "5432"
   start_mode: "auto"
-  data_directory: "/var/lib/postgresql/9.3/main"
+  data_directory: "/data/postgres"
+  max_connections: "100"
+  shared_buffers: "512MB"
+  temp_buffers: "32MB"
+  work_mem: "64MB"
+  maintenance_work_mem: "256MB"
+  max_stack_depth: "6MB"
+
+  #data_directory: "/var/lib/postgresql/9.3/main"

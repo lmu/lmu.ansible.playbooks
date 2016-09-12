@@ -39,8 +39,8 @@
 # option or PGDATA environment variable, represented here as ConfigDir.
 
 #data_directory = '/var/lib/postgresql/9.3/main'		# use data in another directory
-#data_directory = '{{ database.data_directory }}'					# (change requires restart)
-data_directory = '/var/lib/postgresql/9.3/main'
+data_directory = '{{ database.data_directory }}'					# (change requires restart)
+
 
 hba_file = '/etc/postgresql/9.3/main/pg_hba.conf'	# host-based authentication file
 					# (change requires restart)
@@ -64,7 +64,7 @@ external_pid_file = '/var/run/postgresql/9.3-main.pid'			# write an extra PID fi
 					# (change requires restart)
 listen_addresses = '0.0.0.0'
 port = '{{ database.port }}'				# (change requires restart)
-max_connections = 100			# (change requires restart)
+max_connections = {{ database.max_connections }}			# (change requires restart)
 # Note:  Increasing max_connections costs ~400 bytes of shared memory per
 # connection slot, plus lock space (see max_locks_per_transaction).
 #superuser_reserved_connections = 3	# (change requires restart)
@@ -116,16 +116,16 @@ ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'		# (change requires rest
 
 shared_buffers = 128MB			# min 128kB
 					# (change requires restart)
-#temp_buffers = 8MB			# min 800kB
+temp_buffers = {{ database.temp_buffers }}			# min 800kB
 #max_prepared_transactions = 0		# zero disables the feature
 					# (change requires restart)
 # Note:  Increasing max_prepared_transactions costs ~600 bytes of shared memory
 # per transaction slot, plus lock space (see max_locks_per_transaction).
 # It is not advisable to set max_prepared_transactions nonzero unless you
 # actively intend to use prepared transactions.
-#work_mem = 1MB				# min 64kB
-#maintenance_work_mem = 16MB		# min 1MB
-#max_stack_depth = 2MB			# min 100kB
+work_mem = {{ database.work_mem }}				# min 64kB
+maintenance_work_mem = {{ database.maintenance_work_mem }}		# min 1MB
+max_stack_depth = {{ database.max_stack_depth }}			# min 100kB
 
 # - Disk -
 
