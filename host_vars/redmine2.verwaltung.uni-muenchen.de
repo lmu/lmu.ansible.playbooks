@@ -1,0 +1,7 @@
+---
+
+redmine:
+  domain = "www.scm.verwaltung.uni-muenchen.de"
+
+
+...

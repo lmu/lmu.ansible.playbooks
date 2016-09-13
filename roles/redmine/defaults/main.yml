@@ -7,9 +7,9 @@ redmine:
   run_base_path: "/var/run/redmine"
 
   src_url: "http://www.redmine.org/releases/"
-  src_file: "redmine-3.2.0.tar.gz"
-  checksum: "b1050c3a0e6effd5a704ef5003d9df06"
-  version: "3.2"
+  src_file: "redmine-3.3.0.tar.gz"
+  checksum: "0c0abb2d4efde455c3505d8caf01cb2d"
+  version: "3.3"
 
   domain: "redmine.test"
 
