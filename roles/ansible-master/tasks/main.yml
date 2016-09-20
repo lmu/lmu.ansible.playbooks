@@ -65,7 +65,7 @@
     state=directory
     owner=fachadmin
     group=ansible
-    mode="u=rwx,g=rx,o=rx"
+    mode="u=rwx,g=rwx,o=rx"
     recurse=yes
 
 - name: "Ensure Ansible directories links are present"
@@ -78,7 +78,7 @@
     mode="u=rwx,g=rx,o=rx"
   with_items:
     - { path: "/etc/ansible/inventory", src: "/opt/lmu.ansible.playbooks/inventory" }
-    - { path: "/etc/ansible/inventory", src: "/opt/ansible/roles" }
+    - { path: "/etc/ansible/roles", src: "/opt/ansible/roles" }
   tags:
     - ansible_setup
 
