@@ -59,7 +59,16 @@
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-- name: "Ensure Ansible directories are present"
+- name: "Ensure playbook directories has correct owner and group"
+  file:
+    path="/opt/lmu.ansible.playbooks"
+    state=directory
+    owner=fachadmin
+    group=ansible
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+
+- name: "Ensure Ansible directories links are present"
   file:
     path={{ item.path }}
     src={{ item.src }}
