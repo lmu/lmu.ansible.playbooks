@@ -34,7 +34,8 @@
     mode="u=rwx,g=rx,o=rx"
   with_items:
     - "/etc/ansible"
-    - "/etc/ansible/roles"
+    - "/opt/ansible"
+    - "/opt/ansible/roles"
     - "/usr/share/ansible/plugins"
     - "/usr/share/ansible/plugins/action"
     - "/usr/share/ansible/plugins/callback"
@@ -46,6 +47,26 @@
     - "/usr/share/ansible/plugins/strategy"
     - "/usr/share/ansible/modules/"
     - "/usr/share/ansible/roles"
+  tags:
+    - ansible_setup
+
+- name: "Download lmu.ansible.playbooks"
+  git:
+    repo="https://github.com/lmu/lmu.ansible.playbooks.git"
+    dest="/opt/lmu.ansible.playbooks"
+    update=yes
+
+- name: "Ensure Ansible directories are present"
+  file:
+    path={{ item.path }}
+    src={{ item.src }}
+    state=link
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - { path: "/etc/ansible/inventory", src: "/opt/lmu.ansible.playbooks/inventory" }
+    - { path: "/etc/ansible/inventory", src: "/opt/ansible/roles" }
   tags:
     - ansible_setup
 
@@ -62,5 +83,7 @@
   tags:
     - ansible_setup
     - ansible_upgrade
+
+
 
 ...
