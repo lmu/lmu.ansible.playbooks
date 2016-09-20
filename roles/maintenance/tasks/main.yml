@@ -1,45 +1,18 @@
 ---
 
-- name: "Update all Packages (Mode: {{ maintenance.upgrade_type }})"
-  apt:
-    upgrade={{ maintenance.upgrade_type }}
-    update_cache=yes
-    force=yes
-    install_recommends=yes
+- name: "Run Debian Update Process"
+  include: debian.yml
   when: ansible_os_family == "Debian"
-  register: check_install
-  changed_when: "'No packages will be installed' not in check_install.stdout"
-  #changed_when: "'No packages will be installed, upgraded, or removed.' not in check_install.stdout"
-  environment:
-    LC_ALL: C
-    LANG: en
-  notify:
-  - "Restart Server"
-  - "Wait for Server to come back"
+
+- name: "Run SLES Update Process"
+  include: sles.yml
+  when: ansible_os_family == "Suse"
+
+# Check for Reboot
 
 - stat: path=/var/run/reboot-required
   register: reboot_required
   always_run: True
-
-- name: "Check if anything needs autoremoving"
-  shell: apt-get autoremove -y --dry-run
-  become: True
-  register: check_autoremove
-  changed_when: "' 0 to remove' not in check_autoremove.stdout"
-  failed_when: "check_autoremove.rc != 0"
-  always_run: True
-  environment:
-    LC_ALL: C
-    LANG: en
-
-- name: "Autoremove unused Packages"
-  apt: autoremove=yes
-  ignore_errors: yes
-
-- name: "Autoremove unused Packages"
-  command: apt-get autoremove -y
-  when: "check_autoremove.rc == 0 and ' 0 to remove' not in check_autoremove.stdout"
-  register: autoremove
 
 - name: "Inform that Server needs restart and is disallowed"
   debug:
@@ -55,3 +28,5 @@
   notify:
   - "Restart Server"
   - "Wait for Server to come back"
+
+...

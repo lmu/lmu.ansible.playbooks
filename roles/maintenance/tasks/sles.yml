@@ -1,0 +1,17 @@
+---
+
+
+- name: "Update all Packages (Patch-Mode)"
+  zypper:
+    name=*
+    state=latest
+    type=patch
+  when: ansible_os_family == "Suse"
+
+- name: "Update all Packages"
+  zypper:
+    name=*
+    state=latest
+  when: ansible_os_family == "Suse"
+
+...
