@@ -4,6 +4,9 @@
   apt_repository:
     repo="{{ foreman_ruby.ppa }}"
     state=present
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
   when: 'ansible_distribution == "Ubuntu" and foreman_ruby.use_ppa == "yes"'
   tags:
     - theforeman_setup
