@@ -5,6 +5,11 @@
     name={{ inventory_hostname }}
   when: '"{{ inventory_hostname }}" != "localhost"'
 
+- name: "Ensure Group 'sudo' exists"
+  group:
+    name=sudo
+    state=present
+
 - name: "Ensure User 'ansible' exists"
   user:
     name=ansible
@@ -70,6 +75,7 @@
     - unzip
     - libffi-dev
     - libssl-dev
+  when: ansible_os_family == "Debian"
 
 - name: "Ensure Base-Packages (Analysis Tools / top's) are installed"
   apt:
@@ -105,5 +111,6 @@
     state=present
     special_time=hourly
   become: true
+  when: ansible_os_family == "Debian"
 
 ...
