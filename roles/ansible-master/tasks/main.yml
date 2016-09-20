@@ -55,6 +55,9 @@
     repo="https://github.com/lmu/lmu.ansible.playbooks.git"
     dest="/opt/lmu.ansible.playbooks"
     update=yes
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: "Ensure Ansible directories are present"
   file:
