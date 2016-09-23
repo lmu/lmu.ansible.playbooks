@@ -3,23 +3,37 @@
 [redmine-dbs-production]
 redmine2.verwaltung.uni-muenchen.de
 
-[redmine-workers-production]
-redmine2.verwaltung.uni-muenchen.de
-
-[redmine-production:children]
-redmine-dbs-production
-redmine-workers-production
-
 [redmine-dbs-staging]
 redminetest2.verwaltung.uni-muenchen.de
+
+[redmine-workers-production]
+redmine2.verwaltung.uni-muenchen.de
 
 [redmine-workers-staging]
 redminetest2.verwaltung.uni-muenchen.de
 
-[redmine-staging:children]
+[redmine-frontends-production]
+redmine2.verwaltung.uni-muenchen.de
+
+[redmine-frontends-staging]
+redminetest2.verwaltung.uni-muenchen.de
+
+
+[redmine-dbs:children]
+redmine-dbs-production
 redmine-dbs-staging
+
+[redmine-workers:children]
+redmine-workers-production
 redmine-workers-staging
 
+[redmine-frontends:children]
+redmine-frontends-production
+redmine-frontends-staging
+
+
+
 [redmine:children]
-redmine-production
-redmine-staging
+redmine-dbs
+redmine-workers
+redmine-frontends

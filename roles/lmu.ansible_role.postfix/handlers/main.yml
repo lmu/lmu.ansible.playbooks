@@ -1,0 +1,13 @@
+---
+
+- name: "Restart Postfix"
+  service:
+    name=postfix
+    state=restarted
+    sleep=5
+
+- name: "Reload Postfix"
+  service:
+    name=postfix
+    state=reloaded
+    sleep=5

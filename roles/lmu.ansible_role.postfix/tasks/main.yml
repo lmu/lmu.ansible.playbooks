@@ -1,0 +1,52 @@
+---
+
+- name: "Install Postfix Packages"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - postfix
+  when: ansible_os_family == "Debian"
+  tags:
+    - postfix_setup
+
+- name: "Ensure Postfix directories are present"
+  file:
+    path={{ item }}
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "/etc/postfix"
+  tags:
+    - postfix_setup
+
+- name: "Copy Postfix Config Files"
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/postfix/{{ item }}"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+    validate=""
+  with_items:
+    - "main.cf"
+    - "master.cf"
+    - "dynamicmaps.cf"
+  notify:
+    - "Reload Postfix"
+  tags:
+    - postfix_setup
+
+- name: "Start the Postfix service and enable on boot"
+  service:
+    name=postfix
+    state=started
+    enabled=yes
+  tags:
+    - postfix_setup
+
+...
