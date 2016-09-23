@@ -1,6 +1,5 @@
 ---
 
-memcached_memory_limit: "512"
 allow_reboot: false
 
 ...
