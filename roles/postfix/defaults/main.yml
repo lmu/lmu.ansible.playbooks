@@ -1,6 +1,0 @@
----
-
-postfix:
-  relayhost: "smtpout-lb.verwaltung.uni-muenchen.de"
-
-...
