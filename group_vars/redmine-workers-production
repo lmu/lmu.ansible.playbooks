@@ -1,0 +1,100 @@
+---
+
+redmine:
+  app_base_path: "/opt/redmine"
+  data_base_path: "/data/redmine"
+  log_base_path: "/var/log/redmine"
+  run_base_path: "/var/run/redmine"
+  git_version: "3.3-stable"
+  ruby_ppa: "ppa:brightbox/ruby-ng"
+  ruby_version: "ruby2.3"
+  rubygem_version: "gem2.3"
+  ruby_semversion: "2.3"
+
+redmine_instance:
+  ref_vi.3:
+    name: "ref_vi.3"
+    alias: ["sos", "anwendungsbetreuung"]
+    db_name: "ref_vi-3"
+    db_user: "{{ redmine_db.user }}"
+    db_passwd: "{{ redmine_db.passwd }}"
+    lang: "de"
+    plugins = "{{ redmine_plugins }}"
+    themes = "{{ redmine_themes }}"
+  ref_vi.4:
+    name: "ref_vi.4"
+    alias: ["it-sicherheit", "verz"]
+    db_name: "ref_vi.4"
+    db_user: "{{ redmine_db.user }}"
+    db_passwd: "{{ redmine_db.passwd }}"
+    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+    lang: "de"
+    plugins = "{{ redmine_plugins }}"
+    themes = "{{ redmine_themes }}"
+  ref_vi-5:
+    name: "ref_vi.5"
+    alias: ["internetdienste", "fiona"]
+    db_name: "ref_vi.5"
+    db_user: "{{ redmine_db.user }}"
+    db_passwd: "{{ redmine_db.passwd }}"
+    db_host: "127.0.0.1"
+    db_port: "5432"
+    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+    lang: "de"
+    mainlang: "german"
+    plugins = "{{ redmine_plugins }}"
+    themes = "{{ redmine_themes }}"
+  dez_vi:
+    name: "dez_vi"
+    alias: ["it", "it-projekte", "ref_vi.4", "ref_vi.3", "dez_vi", "anwendungsbetreuung", "it-sicherheit", "verz"]
+    db_name: "dez_vi"
+    db_user: "{{ redmine_db.user }}"
+    db_passwd: "{{ redmine_db.passwd }}"
+    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+    lang: "de"
+    mainlang: "german"
+    plugins = "{{ redmine_plugins }}"
+    themes = "{{ redmine_themes }}"
+  webprojekte:
+    name: "webprojekte"
+    alias: ["webprojekte", "fiona"]
+    db_name: "vi.5_webprojekte"
+    db_user: "{{ redmine_db.user }}"
+    db_passwd: "{{ redmine_db.passwd }}"
+    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+    lang: "de"
+    mainlang: "german"
+    plugins = "{{ redmine_plugins }}"
+    themes = "{{ redmine_themes }}"
+
+redmine_plugins: {
+  "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.1'},
+  "redmine_checklists": { 'url': "ssh://git@git.alphanodes.com/redmine_checklistspro.git"}, #, 'version': '3.1.5'},
+  "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts.git" }, #, 'version': '4.0.4'},
+  "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.4'},
+  "redmine_favorite_projects": { 'url': "https://github.com/alexandermeindl/redmine_favorite_projects.git", 'version': 'master'},
+  "redmine_tweaks": { 'url': "https://github.com/alexandermeindl/redmine_tweaks.git", 'version': 'master'},
+  "redmine_auto_watch": { 'url': "https://github.com/mephi-ut/redmine_auto_watch.git", 'version': 'master'},
+  "redmine_knowledgebase": { 'url': "https://github.com/alexbevi/redmine_knowledgebase.git", 'version': 'v3.2.1'},
+  "redmine_lmu_modifications": { 'url': "https://github.com/loechel/redmine_lmu_modifications.git", 'version': 'master'},
+  "redmine_wiki_lists": { 'url': "https://github.com/tkusukawa/redmine_wiki_lists.git", 'version': '0.0.6'},
+  "redmine_local_avatars": { 'url': "https://github.com/thorin/redmine_local_avatars.git", 'version': 'master'},
+  "sidebar_hide": { 'url': "https://github.com/bdemirkir/sidebar_hide.git", 'version': 'master'},
+  "redmine_postgresql_search": { 'url': "https://github.com/jkraemer/redmine_postgresql_search.git", 'version': 'master'},
+  "redmine_changeauthor": { 'url': 'https://github.com/thorin/redmine_changeauthor.git', 'version': 'master'},
+  "redmine_default_custom_query": { 'url': 'https://github.com/hidakatsuya/redmine_default_custom_query', 'version': 'master'},
+  "redmine_http_auth": { 'url': 'https://github.com/AdamLantos/redmine_http_auth.git', 'version': 'master'},
+  #"recurring_tasks": { 'url': "https://github.com/alexandermeindl/redmine-plugin-recurring-tasks.git", 'version': 'master'},
+  #"redmine-plugin-recurring-tasks": { 'url': "https://github.com/nutso/redmine-plugin-recurring-tasks.git", 'version': 'v1.6.0'},
+  #"redmine_issue_templates": { 'url': "https://pm.alphanodes.com/redmine_agilepro.git", 'version': '1.4.0'},
+  #"redmine_agile": { 'url': '' },
+  #"redmine_checklists": { 'url': '' },
+  #"redmine_contacts": { 'url': '' },
+  #"redmine_contacts_helpdesk": { 'url': '' },
+}
+redmine_themes: {
+  "redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
+  "redmine-theme-gitmike": { url: "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }
+}
+
+...
