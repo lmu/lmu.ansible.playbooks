@@ -1,6 +1,6 @@
 ---
 
 postfix:
-  relayhost: "smtp-lb.verwaltung.uni-muenchen.de"
+  relayhost: "smtpout-lb.verwaltung.uni-muenchen.de"
 
 ...
