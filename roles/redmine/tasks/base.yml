@@ -23,6 +23,7 @@
     - ruby-dev
     #- bundler
     - build-essential
+    - git-core
     - git
     - subversion
     - gawk
@@ -63,6 +64,13 @@
     force=true
     uid=980
     state=present
+
+- name: "Gobal Git Conf to use https.// instead of git:// for Github."
+  git_config:
+    name='url."https://github.com".insteadOf'
+    value="git://github.com"
+    scope=global
+  become_user: redmine
 
 - name: "Ensure Base directories exists"
   file:
