@@ -31,7 +31,7 @@ redmine_instance:
     lang: "de"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  ref_vi-5:
+  ref_vi.5:
     name: "ref_vi.5"
     alias: ["internetdienste", "fiona"]
     db_name: "ref_vi.5"
