@@ -7,11 +7,23 @@
     state=latest
     type=patch
   when: ansible_os_family == "Suse"
+  environment:
+    LC_ALL: C
+    LANG: en
+  notify:
+  - "Restart Server"
+  - "Wait for Server to come back"
 
 - name: "Update all Packages"
   zypper:
     name=*
     state=latest
   when: ansible_os_family == "Suse"
+  environment:
+    LC_ALL: C
+    LANG: en
+  notify:
+  - "Restart Server"
+  - "Wait for Server to come back"
 
 ...

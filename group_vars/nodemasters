@@ -1,6 +1,6 @@
 ---
 
 memcached_memory_limit: "512"
-allow_reboot: true
+allow_reboot: false
 
 ...

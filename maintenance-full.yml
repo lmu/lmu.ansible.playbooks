@@ -28,16 +28,16 @@
       async: 0
       poll: 0
       ignore_errors: true
-      when: reboot_required.stat.exists and ansible_os_family == "Debian"
+      when: reboot_required.stat.exists and allow_reboot == true
 
     - name: Wait for Server to come back
       local_action:
-        wait_for 
+        wait_for
         host={{ ansible_ssh_host | default(inventory_hostname) }}
         port=22
         search_regex=OpenSSH
         state=started
         delay=20
         timeout=300
-      when: reboot_required.stat.exists and ansible_os_family == "Debian"
+      when: reboot_required.stat.exists and allow_reboot == true
       become: false
