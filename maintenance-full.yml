@@ -42,4 +42,4 @@
             timeout=300
           when: reboot_required.stat.exists
           become: false
-      when: allow_reboot == true
+      when: allow_reboot == true and ansible_os_family == "Debian"
