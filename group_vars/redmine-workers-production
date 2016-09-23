@@ -19,8 +19,8 @@ redmine_instance:
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
     lang: "de"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
   ref_vi.4:
     name: "ref_vi.4"
     alias: ["it-sicherheit", "verz"]
@@ -29,8 +29,8 @@ redmine_instance:
     db_passwd: "{{ redmine_db.passwd }}"
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
   ref_vi-5:
     name: "ref_vi.5"
     alias: ["internetdienste", "fiona"]
@@ -42,8 +42,8 @@ redmine_instance:
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
     mainlang: "german"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
   dez_vi:
     name: "dez_vi"
     alias: ["it", "it-projekte", "ref_vi.4", "ref_vi.3", "dez_vi", "anwendungsbetreuung", "it-sicherheit", "verz"]
@@ -53,8 +53,8 @@ redmine_instance:
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
     mainlang: "german"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
   webprojekte:
     name: "webprojekte"
     alias: ["webprojekte", "fiona"]
@@ -64,8 +64,8 @@ redmine_instance:
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
     mainlang: "german"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
 
 redmine_plugins: {
   "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.1'},

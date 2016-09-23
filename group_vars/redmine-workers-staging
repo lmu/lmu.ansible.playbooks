@@ -24,8 +24,8 @@ redmine_instance:
     lang: "de"
     mainlang: "german"
     log_level: "debug"
-    plugins = "{{ redmine_plugins }}"
-    themes = "{{ redmine_themes }}"
+    plugins: "{{ redmine_plugins }}"
+    themes: "{{ redmine_themes }}"
 
 redmine_plugins: {
   "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.1'},
