@@ -29,6 +29,5 @@
 #    - jenkins
     - { role: dashing,
       }
-    - nginx
 
 ...
