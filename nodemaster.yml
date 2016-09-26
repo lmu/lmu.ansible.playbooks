@@ -9,10 +9,15 @@
   vars:
     maintenance:
       allow_reboot: false
-  #vars_files:
 
   roles:
     - base-preseed
+    - { role: psdash,
+      psdash: {
+        path: "/usr/local/venv-psdash",
+        mode: "master"
+      }
+    }
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",
@@ -20,15 +25,9 @@
         }
       }
     - ansible-master
-    - theforeman
+#    - theforeman
 #    - jenkins
     - { role: dashing,
-      }
-    - { role: psdash,
-        psdash: {
-          path: "/usr/local/venv-psdash",
-          mode: "master"
-        }
       }
     - nginx
 
