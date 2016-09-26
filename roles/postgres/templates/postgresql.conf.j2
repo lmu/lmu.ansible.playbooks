@@ -38,8 +38,8 @@
 # The default values of these variables are driven from the -D command-line
 # option or PGDATA environment variable, represented here as ConfigDir.
 
-#data_directory = '/var/lib/postgresql/9.3/main'		# use data in another directory
-data_directory = '{{ database.data_directory }}'					# (change requires restart)
+data_directory = '/var/lib/postgresql/9.3/main'		# use data in another directory
+#data_directory = '{{ database.data_directory }}'					# (change requires restart)
 
 
 hba_file = '/etc/postgresql/9.3/main/pg_hba.conf'	# host-based authentication file
@@ -114,7 +114,7 @@ ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key'		# (change requires rest
 
 # - Memory -
 
-shared_buffers = 128MB			# min 128kB
+shared_buffers = {{ database.shared_buffers }} 			# min 128kB
 					# (change requires restart)
 temp_buffers = {{ database.temp_buffers }}			# min 800kB
 #max_prepared_transactions = 0		# zero disables the feature
