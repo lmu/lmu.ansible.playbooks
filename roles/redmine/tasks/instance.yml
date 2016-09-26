@@ -6,7 +6,7 @@
     - always
 
 - name: "Debug Message for {{ instance.name }} Parameters"
-  debug: msg="outer item={{ instance }} "
+  debug: msg="outer item={{ instance.name }} "
   tags:
     - always
 

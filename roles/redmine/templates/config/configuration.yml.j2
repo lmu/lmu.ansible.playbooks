@@ -12,9 +12,9 @@ default:
   # Outgoing emails configuration
   # See the examples below and the Rails guide for more configuration options:
   # http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+
   email_delivery:
 
-    # Use local Postfix queue:
     delivery_method: :smtp
     smtp_settings:
       address: "localhost"
@@ -145,7 +145,8 @@ default:
   # The default is to log in the 'log' directory of your Redmine instance.
   # Example:
   # scm_stderr_log_file: /var/log/redmine_scm_stderr.log
-  scm_stderr_log_file: "{{ redmine.log_base_path }}/{{ instance.name }}"_stderr.log
+  #scm_stderr_log_file: "{{ redmine.log_base_path }}/{{ instance.name }}_stderr.log"
+  scm_stderr_log_file:
 
   # Key used to encrypt sensitive data in the database (SCM and LDAP passwords).
   # If you don't want to enable data encryption, just leave it blank.

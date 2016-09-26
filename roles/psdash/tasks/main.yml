@@ -24,11 +24,10 @@
 - name: "Install psdash"
   pip:
     name="psdash"
-    state="present"
+    state="latest"
     version="{{ psdash.version | default(omit)}}"
     virtualenv="{{ psdash.path }}"
     chdir="{{ psdash.path }}"
-    #virtualenv_python=""
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"

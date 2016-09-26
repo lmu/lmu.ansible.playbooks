@@ -12,7 +12,7 @@ redmine:
   ruby_semversion: "2.3"
 
 redmine_instance:
-  ref_vi-5:
+  ref_vi.5:
     name: "ref_vi.5"
     alias: ["internetdienste", "fiona"]
     db_name: "ref_vi.5"

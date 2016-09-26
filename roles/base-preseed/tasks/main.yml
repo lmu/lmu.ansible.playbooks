@@ -75,7 +75,15 @@
     - unzip
     - libffi-dev
     - libssl-dev
+    #
+    - git-core
   when: ansible_os_family == "Debian"
+
+- name: "Gobal Git Conf to use https.// instead of git:// for Github."
+  git_config:
+    name='url."https://github.com".insteadOf'
+    value="git://github.com"
+    scope=global
 
 - name: "Ensure Base-Packages (Analysis Tools / top's) are installed"
   apt:

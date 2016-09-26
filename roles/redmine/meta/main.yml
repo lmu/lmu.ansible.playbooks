@@ -8,8 +8,8 @@ dependencies:
   - { role: nginx,
     }
 
-  - { role: postfix,
-      
+  - { role: lmu.ansible_role.postfix,
+
     }
 
 #  - { role: apache_httpd,
