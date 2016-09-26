@@ -77,8 +77,10 @@
     group=root
     mode="u=rwx,g=rx,o=rx"
   with_items:
-    - { path: "/etc/ansible/inventory", src: "/opt/lmu.ansible.playbooks/inventory" }
-    - { path: "/etc/ansible/roles", src: "/opt/ansible/roles" }
+    - { path: "/etc/ansible/inventory",  src: "/opt/lmu.ansible.playbooks/inventory" }
+    - { path: "/etc/ansible/roles",      src: "/opt/ansible/roles" }
+    - { path: "/etc/ansible/group_vars", src: "/opt/lmu.ansible.playbooks/group_vars" }
+    - { path: "/etc/ansible/host_vars",  src: "/opt/lmu.ansible.playbooks/host_vars" }
   tags:
     - ansible_setup
 
