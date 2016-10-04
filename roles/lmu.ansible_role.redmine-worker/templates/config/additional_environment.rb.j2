@@ -1,0 +1,25 @@
+# Copy this file to additional_environment.rb and add any statements
+# that need to be passed to the Rails::Initializer.  `config` is
+# available in this context.
+#
+# Example:
+#
+#   config.log_level = :debug
+#   ...
+#
+config.log_level = :{{ instance.log_level }}
+config.paths['log'] = "{{ redmine.log_base_path }}/{{ instance.name }}/redmine_production.log"
+
+config.cache_store = :dalli_store, 'localhost', {
+  :namespace => 'redmine-{{ instance.name }}',
+  :expires_in => 1.hour,
+  :compress => true,
+  :pool_size => {{ ansible_processor_cores }}
+}
+
+{% if instance.alias is defined %}
+RedmineApp::Application.routes.default_scope = '/{{ instance.alias }}'
+config.after_initialize do
+  Redmine::Utils::relative_url_root = '/{{ instance.alias }}'
+end
+{% endif %}
