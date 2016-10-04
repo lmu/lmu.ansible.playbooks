@@ -1,0 +1,323 @@
+---
+
+- name: "Start Setup Instance"
+  debug:
+    msg="Start setup of instance {{ instance.name }}"
+
+- name: "Ensure Redmine Instance directories exists"
+  file:
+    path="{{ item }}/{{ instance.name }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  with_items:
+    - "{{ redmine.app_base_path }}"
+    - "{{ redmine.data_base_path }}"
+    - "{{ redmine.log_base_path }}"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Check if redmine instance directory exists as git directory"
+  stat:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}/.git"
+  register: git_path
+
+- name: "Ensure Redmine Instance only exists as git directory"
+  file:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}"
+    state=absent
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+  when: git_path.stat.isdir is not defined
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Download Redmine"
+  git:
+    repo="https://github.com/redmine/redmine.git"
+    version="{{ redmine.git_version }}"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}"
+    force=yes
+    update=yes
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine Instance plugin / themes directory are writeable (SSH-Agent Forwarding requirement)"
+  file:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}/{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rwx"
+    recurse=yes
+  with_items:
+    - "plugins"
+    - "public/themes/"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Get Redmine Plugins ({{ instance.name }})"
+  git:
+    repo="{{ item.value.url }}"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}/plugins/{{ item.key }}"
+    version="{{ item.value.version | default(omit) }}"
+    force=yes
+    update=yes
+    accept_hostkey=yes
+  with_dict: "{{ instance.plugins }}"
+  when: '"{{ item.value.url }}" != ""'
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  become: no
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Get Redmine Themes ({{ instance.name }})"
+  git:
+    repo="{{ item.value.url }}"
+    dest="{{ redmine.app_base_path }}/{{ instance.name }}/public/themes/{{ item.key }}"
+    version="{{ item.value.version | default(omit) }}"
+    force=yes
+    update=yes
+    accept_hostkey=yes
+  with_dict: "{{ instance.themes }}"
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  become: no
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Copy Dependency File and Config Files ({{ instance.name }})"
+  template:
+    src="{{ item }}.j2"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o=r"
+  with_items:
+    - "Gemfile.local"
+    - "config/database.yml"
+    - "config/additional_environment.rb"
+    - "config/configuration.yml"
+    - "config/puma.rb"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine Instance directory has correct user and file modes"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine can write gems directory"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Database Cleanup (RedmineCRM Agile)"
+  command: psql -c "{{ item }}" redmine-{{ instance.db_name }}
+  with_items:
+    - "ALTER INDEX IF EXISTS issue_status_orders_pkey RENAME TO agile_ranks_pkey;"
+    #- "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
+    #- "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
+  become_user: postgres
+  become: yes
+
+- name: "Patch Redmine / Plugins"
+  copy:
+    src="redmine/{{ item }}"
+    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+    force=yes
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=r,o=r"
+  with_items:
+    - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
+    - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
+    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
+    - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
+    - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- block:
+
+  - name: "Install Redmine ({{ instance.name }})"
+    bundler:
+      state=present
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
+      gem_path="vendor/bundle"
+      exclude_groups="test development"
+      executable=bundler
+      extra_args="--shebang={{ redmine.ruby_version }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Generate Session Store Secret ({{ instance.name }})"
+    command: bundle exec rake generate_secret_token
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Create Database Schema Objects ({{ instance.name }})"
+    command: bundle exec rake db:migrate
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Load Database default data ({{ instance.name }})"
+    command: bundle exec rake redmine:load_default_data
+      creates="default_data.exists"
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    register: default_data
+    tags:
+      - redmine_setup
+
+  - name: "Create default_data.exists file to prevent multiple Database creation ({{ instance.name }})"
+    file:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
+      state=touch
+      owner=redmine
+      group=redmine
+      mode="u=rx,g=rx,o=rx"
+    when: "default_data.rc == 0"
+    tags:
+      - redmine_setup
+
+  - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) explicite ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins NAME={{ item }}
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    with_items: "{{ instance.plugins }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins:migrate
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Cleanup ({{ instance.name }})"
+    command: bundle exec rake tmp:cache:clear tmp:sessions:clear
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  - name: "Rebuild Postgres Search Index ({{ instance.name }})"
+    command: bundle exec rake redmine_postgresql_search:rebuild_index
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    when: '"redmine_postgresql_search" in "{{ instance.plugins }}"'
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  become: yes
+  become_user: "redmine"
+  environment:
+    PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+    REDMINE_LANG: "{{ instance.lang | default('de') }}"
+    LANGUAGE: "{{ instance.mainlang | default('german')}}"
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    LC_ALL: C
+    LANG: en
+
+- name: "Database Cleanup (RedmineCRM Agile)"
+  command: psql -c "{{ item }}" redmine-{{ instance.db_name }}
+  with_items:
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_issue_id;"
+    - "DROP INDEX IF EXISTS index_issue_status_orders_on_position;"
+  become_user: postgres
+  become: yes
+
+
+- name: "Ensure Redmine Instance directory has correct user and file modes"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rx,g=rx,o=rx"
+    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine Instance Runtime directory exists"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rx"
+    recurse=yes
+  with_items:
+    - "{{ redmine.run_base_path}}"
+    - "{{ redmine.log_base_path}}/{{ instance.name }}"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Ensure Redmine Instance sub directories has correct user and file modes"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  with_items:
+    - files
+    - log
+    - tmp
+    - tmp/pdf
+    - public/plugin_assets
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+...

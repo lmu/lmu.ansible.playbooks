@@ -5,24 +5,28 @@ redmine:
   data_base_path: "/data/redmine"
   log_base_path: "/var/log/redmine"
   run_base_path: "/var/run/redmine"
+
   git_version: "3.3-stable"
+
   ruby_ppa: "ppa:brightbox/ruby-ng"
   ruby_version: "ruby2.3"
   rubygem_version: "gem2.3"
   ruby_semversion: "2.3"
+  use_ppa: "yes"
+
+  domain: "www.scm.verwaltung.uni-muenchen.de"
 
 redmine_instance:
-  ref_vi.3:
-    name: "ref_vi.3"
+  - name: "ref_vi.3"
     alias: ["sos", "anwendungsbetreuung"]
     db_name: "ref_vi-3"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
+    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  ref_vi.4:
-    name: "ref_vi.4"
+  - name: "ref_vi.4"
     alias: ["it-sicherheit", "verz"]
     db_name: "ref_vi.4"
     db_user: "{{ redmine_db.user }}"
@@ -31,21 +35,17 @@ redmine_instance:
     lang: "de"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  ref_vi.5:
-    name: "ref_vi.5"
+  - name: "ref_vi.5"
     alias: ["internetdienste", "fiona"]
     db_name: "ref_vi.5"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
-    db_host: "127.0.0.1"
-    db_port: "5432"
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
     lang: "de"
     mainlang: "german"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  dez_vi:
-    name: "dez_vi"
+  - name: "dez_vi"
     alias: ["it", "it-projekte", "ref_vi.4", "ref_vi.3", "dez_vi", "anwendungsbetreuung", "it-sicherheit", "verz"]
     db_name: "dez_vi"
     db_user: "{{ redmine_db.user }}"
@@ -55,8 +55,7 @@ redmine_instance:
     mainlang: "german"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  webprojekte:
-    name: "webprojekte"
+  - name: "webprojekte"
     alias: ["webprojekte", "fiona"]
     db_name: "vi.5_webprojekte"
     db_user: "{{ redmine_db.user }}"
@@ -92,6 +91,7 @@ redmine_plugins: {
   #"redmine_contacts": { 'url': '' },
   #"redmine_contacts_helpdesk": { 'url': '' },
 }
+
 redmine_themes: {
   "redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
   "redmine-theme-gitmike": { url: "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }

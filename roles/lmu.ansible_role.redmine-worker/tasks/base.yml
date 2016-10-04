@@ -1,0 +1,45 @@
+---
+
+- name: "Ensure Group redmine exists"
+  group:
+    name="redmine"
+    state=present
+    gid=980
+
+- name: "Ensure User redmine exists"
+  user:
+    name="redmine"
+    group="redmine"
+    force=true
+    uid=980
+    state=present
+
+- name: "Gobal Git Conf to use https.// instead of git:// for Github."
+  git_config:
+    name='url."https://github.com".insteadOf'
+    value="git://github.com"
+    scope=global
+  become_user: redmine
+
+- name: "Ensure Base directories exists"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner=redmine
+    group=redmine
+    mode="u=rwx,g=rwx,o=rx"
+  with_items:
+    - "{{ redmine.app_base_path }}"
+    - "{{ redmine.data_base_path }}"
+    - "{{ redmine.log_base_path }}"
+    - "{{ redmine.run_base_path }}"
+
+- name: "Ensure Run Directory exists (via CronTab)"
+  cron:
+    name="Create /var/run/redmine on Boot"
+    state=present
+    user=root
+    special_time=reboot
+    job="mkdir -p /var/run/redmine; chown -R redmine:redmine /var/run/redmine; chmod -R u=rwx,g=rwx,o=rx /var/run/redmine"
+
+...

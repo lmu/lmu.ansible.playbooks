@@ -1,0 +1,69 @@
+---
+
+- name: "Install additional Apache httpd packages"
+  apt: name={{ item }} state=present update_cache=no
+  with_items:
+    - libapache2-mod-passenger
+    - ruby-passenger
+  when: ansible_os_family == "Debian"
+
+- name: "Enable common used Apache httpd modules"
+  apache2_module:
+    name={{ item }}
+    state=present
+  with_items:
+    - passenger
+
+- name: "Ensure redmine vhosts.d folder exists"
+  file:
+    path=/etc/apache2/includes/redmine.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+
+- name: "Install redmine.conf"
+  template:
+    src="redmine.conf.j2"
+    dest="/etc/apache2/sites-available/redmine.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Generate include for Redmine instance"
+  template:
+    src="redmine_instance.conf.j2"
+    dest="/etc/apache2/includes/redmine.d/{{ instance.name }}.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items: "{{ redmine_instance }}"
+  loop_control:
+    loop_var: instance
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Activate redmine.conf"
+  file:
+    src="/etc/apache2/sites-available/redmine.conf"
+    dest="/etc/apache2/sites-enabled/redmine.conf"
+    state=link
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade

@@ -27,7 +27,7 @@
     - headers
 
 - name: "Ensure the directories (sites-available and sites-enabled) for site specific configurations are present"
-  file: 
+  file:
     path=/etc/apache2/{{ item }}
     state=directory
     owner=root
@@ -37,6 +37,11 @@
     - "sites-available"
     - "sites-enabled"
     - "includes"
+
+- name: "Ensure default site is not avaliable"
+  file:
+    path=/etc/apache2/sites-enabled/000-default.conf
+    state=absent
 
 - name: "Ensure the Apache httpd service is started and enable on boot"
   service:

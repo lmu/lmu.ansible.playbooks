@@ -1,0 +1,9 @@
+---
+
+dependencies:
+
+  - postgres
+
+  #- lmu.ansible_role.postgres-server
+
+...

@@ -10,10 +10,7 @@
     - secrets.yml
 
   roles:
-    - base-preseed
-    - maintenance
-    - psdash
-#    - lmu.ansible_role.redmine-db-postgres
+    - lmu.ansible_role.redmine-db-postgres
 
 - hosts: redmine-workers
   become: true
@@ -22,10 +19,7 @@
     - secrets.yml
 
   roles:
-    - base-preseed
-    - maintenance
-    - psdash
-#    - lmu.ansible_role.redmine-worker
+    - lmu.ansible_role.redmine-worker
 
 - hosts: redmine-frontends
   become: true
@@ -34,10 +28,7 @@
     - secrets.yml
 
   roles:
-    - base-preseed
-    - maintenance
-    - psdash
-#    - lmu.ansible_role.redmine-frontend-apache_httpd
+    - lmu.ansible_role.redmine-frontend-apache_httpd
     #- lmu.ansible_role.redmine-frontend-nginx
 
 ...
