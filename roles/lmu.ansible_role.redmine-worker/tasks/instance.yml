@@ -114,7 +114,6 @@
     - "config/database.yml"
     - "config/additional_environment.rb"
     - "config/configuration.yml"
-    - "config/puma.rb"
   tags:
     - redmine_setup
     - redmine_upgrade
