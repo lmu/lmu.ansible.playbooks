@@ -56,7 +56,7 @@ redmine_plugins: {
   "redmine_postgresql_search": { 'url': "https://github.com/jkraemer/redmine_postgresql_search.git", 'version': 'master'},
   "redmine_changeauthor": { 'url': 'https://github.com/thorin/redmine_changeauthor.git', 'version': 'master'},
   "redmine_default_custom_query": { 'url': 'https://github.com/hidakatsuya/redmine_default_custom_query', 'version': 'master'},
-  "redmine_http_auth": { 'url': 'https://github.com/AdamLantos/redmine_http_auth.git', 'version': 'master'},
+  #"redmine_http_auth": { 'url': 'https://github.com/AdamLantos/redmine_http_auth.git', 'version': 'master'},
   #"recurring_tasks": { 'url': "https://github.com/alexandermeindl/redmine-plugin-recurring-tasks.git", 'version': 'master'},
   #"redmine-plugin-recurring-tasks": { 'url': "https://github.com/nutso/redmine-plugin-recurring-tasks.git", 'version': 'v1.6.0'},
   #"redmine_issue_templates": { 'url': "https://pm.alphanodes.com/redmine_agilepro.git", 'version': '1.4.0'},
