@@ -39,6 +39,7 @@
       supervisorctl:
         name={{ item }}
         state=stopped
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
@@ -97,6 +98,7 @@
         state=present
         username={{ supervisor.username }}
         password={{ supervisor.password }}
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
@@ -113,6 +115,7 @@
         state=started
         username={{ supervisor.username }}
         password={{ supervisor.password }}
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
@@ -204,6 +207,7 @@
         state=stopped
         username={{ supervisor.username }}
         password={{ supervisor.password }}
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
@@ -262,6 +266,7 @@
         state=present
         username={{ supervisor.username }}
         password={{ supervisor.password }}
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
@@ -278,6 +283,7 @@
         state=started
         username={{ supervisor.username }}
         password={{ supervisor.password }}
+      ignore_errors: yes
       with_items:
         - "clients:client1"
         - "clients:client2"
