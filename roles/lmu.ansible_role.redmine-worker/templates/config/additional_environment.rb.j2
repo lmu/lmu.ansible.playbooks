@@ -17,9 +17,9 @@ config.cache_store = :dalli_store, 'localhost', {
   :pool_size => {{ ansible_processor_cores }}
 }
 
-{% if instance.alias is defined %}
-RedmineApp::Application.routes.default_scope = '/{{ instance.alias }}'
-config.after_initialize do
-  Redmine::Utils::relative_url_root = '/{{ instance.alias }}'
-end
-{% endif %}
+#{% if instance.alias is defined %}
+#RedmineApp::Application.routes.default_scope = '/{{ instance.alias }}'
+#config.after_initialize do
+#  Redmine::Utils::relative_url_root = '/{{ instance.alias }}'
+#end
+#{% endif %}

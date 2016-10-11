@@ -1,11 +1,11 @@
 
-    Alias /{{ instance.name }} /data/redmine.buildout/parts/redmine-{{ instance.name }}/public
+    Alias /{{ instance.name }} {{ redmine.app_base_path }}/{{ instance.name }}/public
     <Location "/{{ instance.name }}" >
         PassengerBaseURI /{{ instance.name }}
         PassengerRuby {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/ruby
         PassengerAppRoot {{ redmine.app_base_path }}/{{ instance.name }}
         SetEnv GEM_HOME  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0
-        SetEnv GEM_PATH  {{ redmine.app_base_path }}/{{ instance.name }}//vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems
+        SetEnv GEM_PATH  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems
     </Location>
     <Directory "{{ redmine.app_base_path }}/{{ instance.name }}/public" >
         Order allow,deny
