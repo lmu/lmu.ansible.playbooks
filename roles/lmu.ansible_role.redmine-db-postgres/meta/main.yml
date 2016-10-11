@@ -2,6 +2,8 @@
 
 dependencies:
 
+  - base-preseed
+
   - postgres
 
   #- lmu.ansible_role.postgres-server

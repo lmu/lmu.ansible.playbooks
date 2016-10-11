@@ -48,25 +48,15 @@
 
 - name: "Ensure PostgreSQL Data Directory exists"
   file:
-    path="{{ database.data_directory }}"
+    path="/var/lib/postgresql/{{ postgres_version.files[0].path | basename }}/main"
     state=directory
     owner=postgres
     group=postgres
     mode="u=rwx,g=,o="
 
-- name: "Check Data Directory"
-  stat:
-    path="{{ database.data_directory }}"
-  register: pg_data_dir
-
 - name: "Generate Locale"
   command: locale-gen 'de_DE.UTF-8'
   become: true
-
-- name: "Initialize PostgreSQL"
-  command: initdb -D {{ database.data_directory }}
-  become_user: postgres
-  when: "pg_data_dir.stat.path != '/var/lib/postgresql/{{ postgres_version.files[0].path | basename }}/main'"
 
 - name: "Ensure PostgreSQL is started and enabled on boot."
   service:

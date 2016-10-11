@@ -1,5 +1,14 @@
 ---
 
+- name: "Install additional passenger via gems"
+  gem:
+    name=passenger
+    state=latest
+    executable="{{ redmine.rubygem_version }}"
+    user_install=no
+  become: true
+    become_user: root
+
 - name: "Install additional Apache httpd packages"
   apt: name={{ item }} state=present update_cache=no
   with_items:
@@ -13,6 +22,20 @@
     state=present
   with_items:
     - passenger
+
+- name: "Replace System-Passanger Conf"
+  template:
+    src="passenger.conf.j2"
+    dest="/etc/apache2/mods-available/passenger.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
 - name: "Ensure redmine vhosts.d folder exists"
   file:
