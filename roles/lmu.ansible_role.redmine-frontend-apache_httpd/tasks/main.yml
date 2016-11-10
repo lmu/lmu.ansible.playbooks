@@ -1,7 +1,10 @@
 ---
 
-- name: "Install the Apache httpd packages"
-  apt: name={{ item }} state=present update_cache=no
+- name: "Ensure Passenger dependencies are present"
+  apt:
+    name={{ item }}
+    state=present
+    update_cache=no
   with_items:
     - ssl-cert
     - apache2
