@@ -1,5 +1,14 @@
 ---
 
+- name: "Install the Apache httpd packages"
+  apt: name={{ item }} state=present update_cache=no
+  with_items:
+    - ssl-cert
+    - apache2
+    - apache2-dev
+    - libcurl4-openssl-dev
+  when: ansible_os_family == "Debian"
+
 - name: "Install additional passenger via gems"
   gem:
     name=passenger
@@ -9,12 +18,10 @@
   become: true
   become_user: root
 
-- name: "Install additional Apache httpd packages"
-  apt: name={{ item }} state=present update_cache=no
-  with_items:
-    - libapache2-mod-passenger
-    - ruby-passenger
-  when: ansible_os_family == "Debian"
+- name: "Install passenger Apache2 Module"
+  command: passenger-install-apache2-module -a --languages='ruby'
+  become: true
+  become_user: root
 
 - name: "Enable common used Apache httpd modules"
   apache2_module:
@@ -22,20 +29,6 @@
     state=present
   with_items:
     - passenger
-
-- name: "Replace System-Passanger Conf"
-  template:
-    src="passenger.conf.j2"
-    dest="/etc/apache2/mods-available/passenger.conf"
-    force=yes
-    mode="u=rw,g=r,o=r"
-    owner=root
-    group=root
-  notify:
-    - "Reload Apache httpd"
-  tags:
-    - redmine_setup
-    - redmine_upgrade
 
 - name: "Ensure redmine vhosts.d folder exists"
   file:

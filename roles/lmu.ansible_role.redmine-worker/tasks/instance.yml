@@ -79,7 +79,10 @@
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    #SSH_AUTH_SOCK: "{{ lookup('env', 'SSH_AUTH_SOCK')}}"
+  #become: yes
   become: no
+  #become_user: redmine
   tags:
     - redmine_setup
     - redmine_upgrade
@@ -130,17 +133,59 @@
     - redmine_setup
     - redmine_upgrade
 
-- name: "Ensure Redmine can write gems directory"
+- name: "Ensure local Ruby Env exists and Redmine can write gems directory"
   file:
-    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
+    path="{{ item }}"
     state=directory
     owner=redmine
     group=redmine
     mode="u=rwx,g=rx,o=rx"
     recurse=yes
+  with_items:
+    - "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle"
+    - "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0"
+    - "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin"
+    - "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems"
   tags:
     - redmine_setup
     - redmine_upgrade
+
+- name: "Install local ruby link"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/ruby"
+    src="/usr/bin/ruby{{ redmine.ruby_semversion }}"
+    state=link
+    owner=redmine
+    group=redmine
+    mode="u=rx,g=rx,o=rx"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Install local gem link"
+  file:
+    path="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/gem"
+    src="/usr/bin/gem{{ redmine.ruby_semversion }}"
+    state=link
+    owner=redmine
+    group=redmine
+    mode="u=rx,g=rx,o=rx"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Install local bundler"
+  gem:
+    name=bundler
+    state=latest
+    executable="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/gem"
+    user_install=no
+  environment:
+    PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin:{{ ansible_env.PATH }}"
+    GEM_HOME: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/"
+    GEM_PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems"
+  become: true
+  become_user: redmine
 
 - name: "Database Cleanup (RedmineCRM Agile)"
   command: psql -c "{{ item }}" redmine-{{ instance.db_name }}
@@ -257,6 +302,8 @@
   become_user: "redmine"
   environment:
     PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin:{{ ansible_env.PATH }}"
+    GEM_HOME: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/"
+    GEM_PATH: "{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems"
     RAILS_ENV: production
     REDMINE_LANG: "{{ instance.lang | default('de') }}"
     LANGUAGE: "{{ instance.mainlang | default('german')}}"
