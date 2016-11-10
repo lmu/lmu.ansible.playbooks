@@ -26,12 +26,31 @@
   become: true
   become_user: root
 
+- name: "Generate include for apache passenger module"
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/apache2/mods-available/{{ item }}"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items:
+    - "passenger.conf"
+    - "passenger.load"
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
 - name: "Enable common used Apache httpd modules"
   apache2_module:
     name={{ item }}
     state=present
   with_items:
     - passenger
+  notify:
+    - "Reload Apache httpd"
 
 - name: "Ensure redmine vhosts.d folder exists"
   file:
