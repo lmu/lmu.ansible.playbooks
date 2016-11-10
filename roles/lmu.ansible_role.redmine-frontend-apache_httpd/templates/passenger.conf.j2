@@ -1,4 +1,4 @@
 <IfModule mod_passenger.c>
-    PassengerRoot /var/lib/gems/{{ redmine.ruby_semversion }}.0/gems/passenger-5.0.30
+    PassengerRoot /var/lib/gems/{{ redmine.ruby_semversion }}.0/gems/passenger-{{ gem_result.version }}
     PassengerDefaultRuby /usr/bin/ruby{{ redmine.ruby_semversion }}
 </IfModule>

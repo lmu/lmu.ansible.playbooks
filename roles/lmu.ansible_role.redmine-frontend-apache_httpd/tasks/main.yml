@@ -20,6 +20,7 @@
     user_install=no
   become: true
   become_user: root
+  register: gem_result
 
 - name: "Install passenger Apache2 Module"
   command: passenger-install-apache2-module -a --languages='ruby'
@@ -43,12 +44,10 @@
     - redmine_setup
     - redmine_upgrade
 
-- name: "Enable common used Apache httpd modules"
+- name: "Enable Apache httpd passenger module"
   apache2_module:
-    name={{ item }}
+    name=passenger
     state=present
-  with_items:
-    - passenger
   notify:
     - "Reload Apache httpd"
 
