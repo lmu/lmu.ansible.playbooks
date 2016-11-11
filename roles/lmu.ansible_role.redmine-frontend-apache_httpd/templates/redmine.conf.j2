@@ -88,8 +88,24 @@
 
      #RewriteCond %{HTTPS} !=on
      #RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
-     Redirect / https://%{SERVER_NAME}/
+     #Redirect / https://%{SERVER_NAME}/
 
+           ProxyRequests On
+           ProxyVia On
+
+           <Proxy *>
+               Order deny,allow
+               Allow from all
+           </Proxy>
+           ProxyPreserveHost on
+           RewriteEngine On
+
+           PassengerPoolIdleTime 10
+           PassengerPoolIdleTime 0
+           PassengerMaxPoolSize 16
+           PassengerDefaultRuby /usr/bin/ruby2.3
+
+           include /etc/apache2/includes/redmine.d/*.conf
 </VirtualHost>
 
 
@@ -239,6 +255,7 @@
       PassengerPoolIdleTime 10
       PassengerPoolIdleTime 0
       PassengerMaxPoolSize 16
+      PassengerDefaultRuby /usr/bin/ruby2.3
 
       include /etc/apache2/includes/redmine.d/*.conf
   </VirtualHost>
