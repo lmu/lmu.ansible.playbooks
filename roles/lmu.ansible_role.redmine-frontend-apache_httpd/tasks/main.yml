@@ -18,14 +18,28 @@
     state=latest
     executable="{{ redmine.rubygem_version }}"
     user_install=no
+  register: gem_result
   become: true
   become_user: root
-  register: gem_result
 
-- name: "Install passenger Apache2 Module"
+- name: "check if corresponding apache passenger module is already present"
+  stat:
+    path=/etc/apache2/mods-available/passenger.load
+  register: passenger_module_file
+
+- name: "check if corresponding passenger module is already compiled"
+  lineinfile:
+    dest=/etc/apache2/mods-available/passenger.load
+    line="LoadModule passenger_module /var/lib/gems/{{ redmine.ruby_semversion }}.0/gems/passenger-{{ gem_result.version }}/buildout/apache2/mod_passenger.so"
+  check_mode: yes
+  register: passenger_module_compiled
+  when: passenger_module_file.stat.exists
+
+- name: "Install/compile passenger Apache2 Module"
   command: passenger-install-apache2-module -a --languages='ruby'
   become: true
   become_user: root
+  when: passenger_module_compiled.changed
 
 - name: "Generate include for apache passenger module"
   template:
@@ -38,6 +52,7 @@
   with_items:
     - "passenger.conf"
     - "passenger.load"
+  when: passenger_module_compiled.changed
   notify:
     - "Reload Apache httpd"
   tags:
