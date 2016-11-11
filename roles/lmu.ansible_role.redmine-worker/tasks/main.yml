@@ -7,6 +7,10 @@
 - include: base.yml
 - include: ruby.yml
 
+- name: "Setup Redmine Instances"
+  debug:
+    msg="Start Setup of Redmine Instances"
+
 - include: instance.yml
   with_items: "{{ redmine_instance }}"
   loop_control:

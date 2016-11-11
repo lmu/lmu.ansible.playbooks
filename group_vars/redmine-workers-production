@@ -18,7 +18,8 @@ redmine:
 
 redmine_instance:
   - name: "ref_vi.3"
-    alias: ["sos", "anwendungsbetreuung"]
+    alias:
+      - "sos"
     db_name: "ref_vi-3"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
@@ -29,7 +30,7 @@ redmine_instance:
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
   - name: "ref_vi.4"
-    alias: ["it-sicherheit", "verz"]
+    alias: []
     db_name: "ref_vi.4"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
@@ -40,7 +41,8 @@ redmine_instance:
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
   - name: "ref_vi.5"
-    alias: ["internetdienste", "fiona"]
+    alias:
+      - "internetdienste"
     db_name: "ref_vi.5"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
@@ -51,7 +53,14 @@ redmine_instance:
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
   - name: "dez_vi"
-    alias: ["it", "it-projekte", "ref_vi.4", "ref_vi.3", "dez_vi", "anwendungsbetreuung", "it-sicherheit", "verz"]
+    alias:
+      - "it"
+      - "it-projekte"
+      #- "ref_vi.4"
+      #- "ref_vi.3"
+      - "anwendungsbetreuung"
+      - "it-sicherheit"
+      - "verz"
     db_name: "dez_vi"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
@@ -62,7 +71,8 @@ redmine_instance:
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
   - name: "webprojekte"
-    alias: ["webprojekte", "fiona"]
+    alias:
+      - "fiona"
     db_name: "vi.5_webprojekte"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
@@ -101,7 +111,7 @@ redmine_plugins: {
 
 redmine_themes: {
   "redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
-  "redmine-theme-gitmike": { url: "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }
+  #"redmine-theme-gitmike": { 'url': "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }
 }
 
 ...
