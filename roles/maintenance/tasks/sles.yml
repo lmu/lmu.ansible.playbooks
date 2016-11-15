@@ -2,28 +2,28 @@
 
 - block:
 
-    - name: "Update all Packages (Patch-Mode)"
-      zypper:
-        name=*
-        state=latest
-        type=patch
-      notify:
-      - "Restart Server"
-      - "Wait for Server to come back"
+  - name: "Update all Packages (Patch-Mode)"
+    zypper:
+      name=*
+      state=latest
+      type=patch
+    notify:
+    - "Restart Server"
+    - "Wait for Server to come back"
 
-    #- name: "Update all Packages"
-    #  zypper:
-    #    name=*
-    #    state=latest
-    #  notify:
-    #  - "Restart Server"
-    #  - "Wait for Server to come back"
+  #- name: "Update all Packages"
+  #  zypper:
+  #    name=*
+  #    state=latest
+  #  notify:
+  #  - "Restart Server"
+  #  - "Wait for Server to come back"
 
-    - name: "Update all Packages"
-      command: zypper up
-      notify:
-      - "Restart Server"
-      - "Wait for Server to come back"
+  - name: "Update all Packages"
+    command: zypper up
+    notify:
+    - "Restart Server"
+    - "Wait for Server to come back"
 
   when: ansible_os_family == "Suse"
   environment:

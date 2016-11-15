@@ -1,0 +1,24 @@
+---
+
+- block:
+
+  - name: "Update all Packages"
+    yum:
+      name=*
+      state=latest
+      update_cache=yes
+    register: yum_status
+    notify:
+    - "Restart Server"
+    - "Wait for Server to come back"
+
+  - name: "Debug-Info"
+    debug:
+      var=yum_status
+
+  when: ansible_os_family == "RedHat"
+  environment:
+    LC_ALL: C
+    LANG: en
+
+...

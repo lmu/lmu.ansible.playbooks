@@ -121,4 +121,11 @@
   become: true
   when: ansible_os_family == "Debian"
 
+- name: "Include Roles"
+  include_role:
+    name: "{{ item }}"
+  with_items:
+    - supervisor
+    - psdash
+
 ...

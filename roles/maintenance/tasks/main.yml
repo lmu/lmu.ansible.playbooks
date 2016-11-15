@@ -8,11 +8,14 @@
   include: sles.yml
   when: ansible_os_family == "Suse"
 
+- name: "Run CentOS / RedHat Update Process"
+  include: redhat.yml
+  when: ansible_os_family == "RedHat"
 # Check for Reboot
 
 - stat: path=/var/run/reboot-required
   register: reboot_required
-  always_run: True
+  check_mode: no
 
 - name: "Inform that Server needs restart and is disallowed"
   debug:
