@@ -13,7 +13,7 @@
 
 - block:
   # "Install Supervisor via Python Package Index"
-  - name: "Ensure Base-Packages (common) are installed"
+  - name: "Ensure Base-Packages (common) are installed (Debian/Ubuntu)"
     apt:
       pkg={{ item }}
       state=present
@@ -37,11 +37,35 @@
       - unzip
     when: ansible_os_family == "Debian"
 
+  - name: "Ensure Base-Packages (common) are installed (Debian/Ubuntu)"
+    yum:
+      pkg={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      - python
+      - python-devel
+      - python-setuptools
+      - python-pip
+      - python-virtualenv
+      - curl
+      - wget
+      - bzip2
+      - gzip
+      - unzip
+    when: ansible_os_family == "RedHat"
+
   - name: "Ensure Supervisor is not installed via System Repository"
     apt:
       pkg=supervisor
       state=absent
     when: ansible_os_family == "Debian"
+
+  - name: "Ensure Supervisor is not installed via System Repository"
+    yum:
+      pkg=supervisor
+      state=absent
+    when: ansible_os_family == "RedHat"
 
   - name: "Install Supervisor"
     pip:

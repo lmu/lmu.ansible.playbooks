@@ -1,6 +1,6 @@
 ---
 
-- name: "Ensure base dependencies for psdash are installed"
+- name: "Ensure base dependencies for psdash are installed (Debian/Ubuntu)"
   apt:
     pkg={{ item }}
     state=present
@@ -12,6 +12,19 @@
     - build-essential
     - libzmq-dev
   when: ansible_os_family == "Debian"
+
+- name: "Ensure base dependencies for psdash are installed (RedHat/CentOS)"
+  yum:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - python-devel
+    - python-virtualenv
+    - @Development tools
+    - zeromq-devel
+  when: ansible_os_family == "RedHat"
 
 - name: "Ensure psdash path: '{{ psdash.path }}' exists"
   file:
