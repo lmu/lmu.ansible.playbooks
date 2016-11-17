@@ -1,7 +1,6 @@
 # Inventory for Redmine
 
-
-redmine2.verwaltung.uni-muenchen.de
+redmine2.verwaltung.uni-muenchen.de      dtap=pre-production  comment="New Production Server for Redmine"
 redminetest2.verwaltung.uni-muenchen.de
 redminetest3.verwaltung.uni-muenchen.de
 redminetest4.verwaltung.uni-muenchen.de  dtap=test comment="CentOS/7 Test"
