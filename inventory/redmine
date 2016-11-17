@@ -1,10 +1,9 @@
 # Inventory for Redmine
 
-
-redmine2.verwaltung.uni-muenchen.de
-redminetest2.verwaltung.uni-muenchen.de
-redminetest3.verwaltung.uni-muenchen.de
-redminetest4.verwaltung.uni-muenchen.de  dtap=test comment="CentOS/7 Test"
+redmine2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine"
+redminetest2.verwaltung.uni-muenchen.de  dtap=test comment="Ubuntu 14.04. Test/Staging"
+redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Ubuntu 16.04. Test/Staging"
+redminetest4.verwaltung.uni-muenchen.de  dtap=test comment="CentOS/7 Test/Staging"
 
 [redmine-dbs-production]
 redmine2.verwaltung.uni-muenchen.de
@@ -42,7 +41,6 @@ redmine-workers-staging
 [redmine-frontends:children]
 redmine-frontends-production
 redmine-frontends-staging
-
 
 
 [redmine:children]

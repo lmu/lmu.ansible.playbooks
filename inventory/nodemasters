@@ -1,5 +1,11 @@
 # Inventory for Ansible / Management Node Masters
 
+ansiblem0.zuv.uni-muenchen.de  dtap=production comment="Linux Desktop (CZC52447XZ) Alexander Loechel - Room 404"
+ansiblem1.zuv.uni-muenchen.de  dtap=production comment="Additional Server for VI.5 and Web-Environment to Manage all Nodes"
+#ansiblem2.zuv.uni-muenchen.de
+#ansiblem3.zuv.uni-muenchen.de
+#ansiblem4.zuv.uni-muenchen.de
+
 [nodemasters]
 ansiblem0.zuv.uni-muenchen.de
 ansiblem1.zuv.uni-muenchen.de
