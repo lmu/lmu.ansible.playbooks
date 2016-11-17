@@ -7,10 +7,10 @@
     update_cache=yes
     install_recommends=yes
   with_items:
-    - python-dev
-    - python-virtualenv
-    - build-essential
-    - libzmq-dev
+    - "python-dev"
+    - "python-virtualenv"
+    - "build-essential"
+    - "libzmq-dev"
   when: ansible_os_family == "Debian"
 
 - name: "Ensure base dependencies for psdash are installed (RedHat/CentOS)"
@@ -20,10 +20,10 @@
     update_cache=yes
     install_recommends=yes
   with_items:
-    - python-devel
-    - python-virtualenv
-    - @Development tools
-    - zeromq-devel
+    - "python-devel"
+    - "python-virtualenv"
+    - "@Development tools"
+    - "zeromq-devel"
   when: ansible_os_family == "RedHat"
 
 - name: "Ensure psdash path: '{{ psdash.path }}' exists"
@@ -112,17 +112,6 @@
     - "psdash-agent"
   when: psdash.mode == "agent"
 
-- name: "Start psdash-agent via Supervisor"
-  supervisorctl:
-    name={{ item }}
-    state=started
-    username={{ supervisor.username }}
-    password={{ supervisor.password }}
-  with_items:
-    - "psdash-agent"
-  when: psdash.mode == "agent"
-
-
 - name: "Update Supervisorctl - Ensure psdash-master are present"
   supervisorctl:
     name={{ item }}
@@ -132,6 +121,16 @@
   with_items:
     - "psdash-master"
   when: psdash.mode == "master"
+
+- name: "Start psdash-agent via Supervisor"
+  supervisorctl:
+    name={{ item }}
+    state=started
+    username={{ supervisor.username }}
+    password={{ supervisor.password }}
+  with_items:
+    - "psdash-agent"
+  when: psdash.mode == "agent"
 
 - name: "Start psdash-master via Supervisor"
   supervisorctl:

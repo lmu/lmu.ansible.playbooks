@@ -85,7 +85,7 @@
     value="git://github.com"
     scope=global
 
-- name: "Ensure Base-Packages (Analysis Tools / top's) are installed"
+- name: "Ensure Base-Packages (Analysis Tools / top's) are installed (Debian/Ubuntu)"
   apt:
     pkg={{ item }}
     state=present
@@ -111,7 +111,7 @@
     group=root
     mode="u=rwx,g=rx,o=rx"
 
-- name: "Set Cron Tab for Auto Upgrade (safe)"
+- name: "Set Cron Tab for Auto Upgrade (safe) (Debian/Ubuntu)"
   cron:
     name="Hourly Safe Upgrades"
     job="aptitude safe-upgrade -y"
@@ -121,11 +121,12 @@
   become: true
   when: ansible_os_family == "Debian"
 
-- name: "Include Roles"
+- name: "Include supervisor Role"
   include_role:
-    name: "{{ item }}"
-  with_items:
-    - supervisor
-    - psdash
+    name: "supervisor"
+
+- name: "Include psdash Role"
+  include_role:
+    name: "psdash"
 
 ...
