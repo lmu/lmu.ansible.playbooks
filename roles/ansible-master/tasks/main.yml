@@ -98,6 +98,7 @@
     - ansible_setup
     - ansible_upgrade
 
-
+- name: "Include Ansible-CMDB"
+  include: cmdb.yml
 
 ...
