@@ -22,10 +22,13 @@
   become: true
   become_user: root
 
-- name: "check if corresponding apache passenger module is already present"
-  stat:
-    path=/etc/apache2/mods-available/passenger.load
-  register: passenger_module_file
+- name: "Ensure apache passenger module file is present"
+  file:
+    path="/etc/apache2/mods-available/passenger.load"
+    state=touch
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
 
 - name: "check if corresponding passenger module is already compiled"
   lineinfile:
@@ -33,7 +36,6 @@
     line="LoadModule passenger_module /var/lib/gems/{{ redmine.ruby_semversion }}.0/gems/passenger-{{ gem_result.version }}/buildout/apache2/mod_passenger.so"
   check_mode: yes
   register: passenger_module_compiled
-  when: passenger_module_file.stat.exists
 
 - name: "Install/compile passenger Apache2 Module"
   command: passenger-install-apache2-module -a --languages='ruby'
