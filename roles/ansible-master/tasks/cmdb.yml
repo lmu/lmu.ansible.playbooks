@@ -1,9 +1,22 @@
 ---
 
+- name: "determine latest version of ansible.cmdb"
+  uri:
+    url=https://github.com/fboender/ansible-cmdb/releases/latest
+    body=json
+    validate_certs=no
+  register: cmdb-version
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
 - name: "Install ansible-cmdb"
   apt:
-    deb: https://github.com/fboender/ansible-cmdb/releases/download/1.17/ansible-cmdb-1.17.deb
+    deb: https://github.com/fboender/ansible-cmdb/releases/download/{{ cmdb-version.tag_name }}/ansible-cmdb-{{ cmdb-version.tag_name }}.deb
     state: latest
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 - name: "Ensure inventory file modes"
   file:
