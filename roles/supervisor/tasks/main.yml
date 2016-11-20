@@ -90,7 +90,17 @@
       group=root
       mode="u=rwx,g=rx,o=rx"
       validate=""
-    when: ansible_os_family == "Debian"
+    when: ansible_service_mgr == "upstart"
+
+#  - name: "Install Supervisor SystemD-Script"
+#    template:
+#      src="supervisord.systemd.j2"
+#      dest="/etc/init.d/supervisor"
+#      owner=root
+#      group=root
+#      mode="u=rwx,g=rx,o=rx"
+#      validate=""
+#    when: ansible_service_mgr == "systemd"
 
   - name: "Install Supervisor Defaults"
     template:
@@ -100,7 +110,6 @@
       group=root
       mode="u=rw,g=r,o=r"
       validate=""
-    when: ansible_os_family == "Debian"
 
   when: '"{{ supervisor.use_system | default("no") }}" == "no"'
 

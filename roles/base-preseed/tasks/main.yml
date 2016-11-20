@@ -7,8 +7,11 @@
 
 - name: "Ensure Group 'sudo' exists"
   group:
-    name=sudo
+    name="{{ item }}"
     state=present
+  with_items:
+    - sudo
+    - wheel
 
 - name: "Ensure User 'ansible' exists"
   user:
@@ -16,7 +19,7 @@
     comment="Ansible User for Provisioning with Ansible"
     state=present
     shell="/bin/bash"
-    groups=sudo,
+    groups="sudo,wheel"
     system=yes
 
 - name: "Ensure that admin can login via SSH Public Key (Transfere Public Key)"
@@ -35,7 +38,7 @@
   notify:
     - "Reload sshd"
 
-- name: "Ensure that User 'ansible' can sudo with public key"
+- name: "Ensure that User 'ansible' can sudo with public key (sudoer-file)"
   template:
     dest="/etc/sudoers"
     src="sudoers.j2"
@@ -44,7 +47,7 @@
     mode="u=r,g=r,o="
     validate="visudo -cf %s"
 
-- name: "Ensure Base-Packages (common) are installed"
+- name: "Ensure Base-Packages (common) are installed (Debian/Ubuntu)"
   apt:
     pkg={{ item }}
     state=present
@@ -79,6 +82,54 @@
     - git-core
   when: ansible_os_family == "Debian"
 
+- name: "Add EPEL repository (RedHat/CentOS)"
+  yum_repository:
+    name=epel
+    description="EPEL YUM repo"
+    baseurl=http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+  when: ansible_os_family == "RedHat"
+
+- name: "Import EPEL GPG repository key"
+  rpm_key:
+   key="https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
+   state=present
+  when: ansible_os_family == "RedHat"
+
+- name: "Ensure Base-Packages (common) are installed (RedHat/CentOS)"
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
+    - yum-plugin-ps
+    - yum-plugin-security
+    - ca-certificates
+    #- update-notifier-common
+    #- software-properties-common
+    - facter
+    #- ohai
+    - python
+    - python-devel
+    - python-setuptools
+    - python-pip
+    - python-virtualenv
+    - python34
+    - python34-devel
+    - python34-setuptools
+    #- python34-pip
+    #- python34-virtualenv
+    - vim
+    - curl
+    - wget
+    - bzip2
+    - gzip
+    - unzip
+    - libffi-devel
+    - openssl-devel
+    #
+    - git-core
+  when: ansible_os_family == "RedHat"
+
 - name: "Gobal Git Conf to use https.// instead of git:// for Github."
   git_config:
     name='url."https://github.com".insteadOf'
@@ -103,6 +154,24 @@
     - kerneltop
   when: ansible_os_family == "Debian"
 
+- name: "Ensure Base-Packages (Analysis Tools / top's) are installed (RedHat/CentOS)"
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
+    - htop
+    - atop
+    - iftop
+    #- itop
+    - iotop
+    #- jnettop
+    - dnstop
+    #- logtop
+    - powertop
+    #- kerneltop
+  when: ansible_os_family == "RedHat"
+
 - name: "Ensure Data Directory exists"
   file:
     path="/data"
@@ -120,6 +189,16 @@
     special_time=hourly
   become: true
   when: ansible_os_family == "Debian"
+
+- name: "Set Cron Tab for Auto Upgrade (safe) (RedHat/CentOS)"
+  cron:
+    name="Hourly Safe Upgrades"
+    job="yum update -y --security"
+    user='root'
+    state=present
+    special_time=hourly
+  become: true
+  when: ansible_os_family == "RedHat"
 
 - name: "Include supervisor Role"
   include_role:
