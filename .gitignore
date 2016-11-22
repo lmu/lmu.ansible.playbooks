@@ -59,7 +59,7 @@ target/
 # Vagrant Environment
 .vagrant/
 
-# Ansible specials
+# LMU Ansible specials
 secrets/
 secrets.yml
 graphs/
@@ -70,6 +70,8 @@ tree/
 cmdb/
 copy/
 out/
+unchecked-out/
+checked-out/
 *.retry
 
 # Mac specifics
