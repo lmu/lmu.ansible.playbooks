@@ -1,5 +1,7 @@
 # Sentry - Live Log Aggregation
 
+sentry1.verwaltung.uni-muenchen.de   dtap=production comment="Prodction Server for Sentry Log/Error-Log-Aggregation and Monitoring Plattform"
+
 [sentry-dbs]
 sentry1.verwaltung.uni-muenchen.de
 
