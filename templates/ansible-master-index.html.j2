@@ -15,14 +15,15 @@
 		</ul>
 		<h2>HAProxy - Loadbalancer on Webproxies</h2>
 		<ul>
-			<li><a href="/haproxy/webproxy1/haproxy-status" >HAProxy on WebProxy1</a></li>
-			<li><a href="/haproxy/webproxy2/haproxy-status" >HAProxy on WebProxy2</a></li>
+{% for host in groups['all'] %}	
+			<li><a href="/haproxy/{{ host }}/haproxy-status" >HAProxy on {{ host }}</a></li>
+{% endfor %}
 		</ul>
 		<h2>Supervisors</h2>
 		<ul>
-			<li><a href="/supervisor/ansiblem0/" >Ansible-Master-Node 0</a></li>
-			<li><a href="/supervisor/webproxy1/" >WebProxy1</a></li>
-			<li><a href="/supervisor/webproxy2/" >WebProxy2</a></li>
+{% for host in groups['all'] %}		
+			<li><a href="/supervisor/{{ host }}/" >Supervisor on {{ host }}</a></li>
+{% endfor %}
 		</ul>
 
 	</body>
