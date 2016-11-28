@@ -19,6 +19,12 @@
 			<li><a href="/haproxy/{{ host }}/haproxy-status" >HAProxy on {{ host }}</a></li>
 {% endfor %}
 		</ul>
+		<h2>Solr - Search-Engines</h2>
+		<ul>
+{% for host in groups['all'] %}	
+			<li><a href="/solr/{{ host }}/" >Solr on {{ host }}</a></li>
+{% endfor %}
+		</ul>
 		<h2>Supervisors</h2>
 		<ul>
 {% for host in groups['all'] %}		
