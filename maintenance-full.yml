@@ -22,7 +22,7 @@
     - block:
         - stat: path=/var/run/reboot-required
           register: reboot_required
-          always_run: True
+          check_mode: no
 
         - name: Restart Server
           command: shutdown -r +1 "Reboot triggered by Ansible after system updates"
