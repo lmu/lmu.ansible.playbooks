@@ -12,9 +12,13 @@
 
   - name: "Ensure Ansible Repository is present"
     apt_repository:
-      repo="http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
+      repo="{{ item }}"
       state=present
       filename="ansible.list"
+      update_cache=yes
+    with_items:
+      - "deb http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
+      - "deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
     tags:
       - ansible_setup
 

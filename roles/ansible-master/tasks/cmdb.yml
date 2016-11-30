@@ -3,7 +3,7 @@
 - name: "Determine latest version of ansible.cmdb"
   uri:
     url=https://github.com/fboender/ansible-cmdb/releases/latest
-    body=json
+    body_format=json
     validate_certs=no
   register: cmdb-version
   environment:
@@ -12,7 +12,7 @@
 
 - name: "Debug cmdb_version"
   debug:
-    var="cmdb-version"
+    var=cmdb-version
 
 - name: "Install ansible-cmdb"
   apt:
