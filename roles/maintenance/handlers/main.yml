@@ -23,4 +23,5 @@
   file:
     path=/var/run/reboot-required
     state=absent
+
 ...

@@ -2,7 +2,7 @@
 
 - block:
 
-  - name: "Update all Packages"
+  - name: "Update all Packages (RedHat/CentOS)"
     yum:
       name=*
       state=latest
@@ -12,7 +12,7 @@
     - "Restart Server"
     - "Wait for Server to come back"
 
-  - name: "Debug-Info"
+  - name: "Debug-Info (RedHat/CentOS)"
     debug:
       var=yum_status
 

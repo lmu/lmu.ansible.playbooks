@@ -2,7 +2,7 @@
 
 - block:
 
-  - name: "Update all Packages (Patch-Mode)"
+  - name: "Update all Packages (Patch-Mode) (Suse/SLES)"
     zypper:
       name=*
       state=latest
@@ -19,7 +19,7 @@
   #  - "Restart Server"
   #  - "Wait for Server to come back"
 
-  - name: "Update all Packages"
+  - name: "Update all Packages (Suse/SLES)"
     command: zypper up
     notify:
     - "Restart Server"
