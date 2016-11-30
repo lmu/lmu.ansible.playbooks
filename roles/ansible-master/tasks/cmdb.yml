@@ -1,6 +1,6 @@
 ---
 
-- name: "determine latest version of ansible.cmdb"
+- name: "Determine latest version of ansible.cmdb"
   uri:
     url=https://github.com/fboender/ansible-cmdb/releases/latest
     body=json
@@ -10,9 +10,13 @@
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
+- name: "Debug cmdb_version"
+  debug:
+    var="cmdb-version"
+
 - name: "Install ansible-cmdb"
   apt:
-    deb: https://github.com/fboender/ansible-cmdb/releases/download/{{ cmdb-version.tag_name }}/ansible-cmdb-{{ cmdb-version.tag_name }}.deb
+    deb: "https://github.com/fboender/ansible-cmdb/releases/download/{{ cmdb-version.tag_name }}/ansible-cmdb-{{ cmdb-version.tag_name }}.deb"
     state: latest
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
@@ -51,8 +55,8 @@
         job: "ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/out/ > /opt/lmu.ansible.playbooks/cmdb/index.html"
       }
     - {
-        name: "",
-        job: ""
+        name: "ansible cmdb",
+        job: "/opt/lmu.ansible.playbooks/cmdb-scan.py --private-key=/home/fachadmin/.ssh/id_rsa"
       }
 
 ...

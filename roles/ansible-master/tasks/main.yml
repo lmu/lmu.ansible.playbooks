@@ -1,16 +1,27 @@
 ---
 
-- name: "Ensure Ansible Repository is present"
-  apt_repository:
-    repo="ppa:ansible/ansible"
-    state=present
-    #validate_certs=no
+- block:
+
+  - name: "Ensure Ansible Repository-Key is present"
+    apt_key:
+      keyserver="keyserver.ubuntu.com"
+      id="6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367"
+      state=present
+    tags:
+      - ansible_setup
+
+  - name: "Ensure Ansible Repository is present"
+    apt_repository:
+      repo="http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
+      state=present
+      filename="ansible.list"
+    tags:
+      - ansible_setup
+
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
-  when: ansible_distribution == "Ubuntu"
-  tags:
-    - ansible_setup
+  when: ansible_os_family == "Debian"
 
 - name: "Install Ansible Packages"
   apt:
