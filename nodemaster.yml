@@ -11,43 +11,10 @@
       allow_reboot: false
 
   roles:
-    - base-preseed
-    - { role: psdash,
-      psdash: {
-        path: "/usr/local/venv-psdash",
-        mode: "master"
-      }
-    }
-    - { role: maintenance,
-        maintenance: {
-          upgrade_type: "full",
-          allow_reboot: false
-        }
-      }
     - ansible-master
 #    - theforeman
 #    - jenkins
     - { role: dashing,
       }
-    - apache_httpd
-
-  tasks:
-    - name: "Ensure Apache Modules are activated"
-      apache2_module:
-        name="{{ item }}"
-        state=present
-      with_items:
-        - proxy_http
-
-    - name: "Install VHost for Node-Master"
-      template: 
-        dest="/etc/apache2/sites-available/master-node.conf"
-        src="master-node.conf.j2"
-        owner=root
-        group=root
-        mode="u=rw,g=r,o=r"
-
-    - name: "Ensure VHost for Node-Master is activated"
-      file: 
 
 ...

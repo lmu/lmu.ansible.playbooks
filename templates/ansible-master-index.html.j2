@@ -15,20 +15,20 @@
 		</ul>
 		<h2>HAProxy - Loadbalancer on Webproxies</h2>
 		<ul>
-{% for host in groups['all'] %}	
-			<li><a href="/haproxy/{{ host }}/haproxy-status" >HAProxy on {{ host }}</a></li>
+{% for host in groups['webproxies'] %}	
+			<li><a href="/haproxy/{{ hostvars[host]['inventory_hostname_short'] }}/haproxy-status" >HAProxy on {{ host }}</a></li>
 {% endfor %}
 		</ul>
 		<h2>Solr - Search-Engines</h2>
 		<ul>
-{% for host in groups['all'] %}	
-			<li><a href="/solr/{{ host }}/" >Solr on {{ host }}</a></li>
+{% for host in groups['solrs'] %}	
+			<li><a href="/solr/{{ hostvars[host]['inventory_hostname_short'] }}/" >Solr on {{ host }}</a></li>
 {% endfor %}
 		</ul>
 		<h2>Supervisors</h2>
 		<ul>
 {% for host in groups['all'] %}		
-			<li><a href="/supervisor/{{ host }}/" >Supervisor on {{ host }}</a></li>
+			<li><a href="/supervisor/{{ hostvars[host]['inventory_hostname_short'] }}/" >Supervisor on {{ host }}</a></li>
 {% endfor %}
 		</ul>
 

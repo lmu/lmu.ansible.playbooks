@@ -1,0 +1,77 @@
+---
+
+- name: "Ensure Apache Modules are activated"
+  apache2_module:
+    name="{{ item }}"
+    state=present
+  with_items:
+    - proxy_http
+  notify:
+    - "Restart Apache httpd"
+
+- name: "Copy SSL Private-Key"
+  copy:
+    src="files/server-ssl/key/{{ ansible_fqdn }}_key.pem"
+    dest="/etc/ssl/private/{{ ansible_fqdn }}_key.pem"
+    force=yes
+    owner=root
+    group=root
+    mode="u=r,g=r,o="
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Copy SSL Public Key"
+  copy:
+    src="files/server-ssl/crt/{{ ansible_fqdn }}_crt.pem"
+    dest="/etc/ssl/private/{{ ansible_fqdn }}_crt.pem"
+    force=yes
+    owner=root
+    group=root
+    mode="u=r,g=r,o="
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+#- name: "Generate Private-SSL-Key for Server"
+#  openssl_privatekey:
+#    path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+
+#- name: "Generate Public-SSL-Key for Server"
+#  openssl_privatekey:
+#    path: "/etc/ssl/certs/{{ ansible_fqdn }}.pem"
+#    privatekey_path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+
+- name: "Install VHost for Node-Master"
+  template: 
+    dest="/etc/apache2/sites-available/master-node.conf"
+    src="ansible-master-vhost.conf.j2"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+  notify: 
+    - "Restart Apache httpd"
+
+- name: "Ensure VHost for Node-Master is activated"
+  file: 
+    src="/etc/apache2/sites-available/master-node.conf"
+    dest="/etc/apache2/sites-enabled/master-node.conf"
+    state=link
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+
+- name: "Generate index.html for Node-Master"
+  template: 
+    dest="/var/www/html/index.html"
+    src="ansible-master-index.html.j2"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+  notify: 
+    - "Restart Apache httpd"
+
+...

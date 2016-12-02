@@ -41,7 +41,7 @@ listen haproxy-master
         {% if haproxy.monitor.enabled %}monitor-uri {{ haproxy.monitor.path }}{% endif %}
         
         stats enable
-        stats uri {{ haproxy.stats.path }}
+        stats uri /haproxy/{{ ansible_hostname }}{{ haproxy.stats.path }}
 
         stats show-desc HAProxy on {{ ansible_fqdn }}
         stats show-legends

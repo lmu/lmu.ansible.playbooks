@@ -2,13 +2,19 @@
 
 - name: "Determine latest version of ansible.cmdb"
   uri:
-    url=https://github.com/fboender/ansible-cmdb/releases/latest
-    body_format=json
-    validate_certs=no
+    url="https://github.com/fboender/ansible-cmdb/releases/latest"
+    method=GET
+    return_content=yes
+    headers="{{ header }}"
   register: cmdb-version
+  vars:
+    header:
+      Accept: application/json
+      Test: foo
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
-    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    #https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  ignore_errors: yes
 
 - name: "Debug cmdb_version"
   debug:
@@ -21,14 +27,17 @@
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  when: 'cmdb-version is defined'
 
 - name: "Ensure inventory file modes"
   file:
-    path=/opt/lmu.ansible.playbooks/inventory/*
+    path="{{ item }}"
     state=file
     owner=fachadmin
     group=ansible
     mode=u=rw,g=rw,o=r
+  with_fileglob:
+    - /opt/lmu.ansible.playbooks/inventory/*
 
 - name: "Ensure cmdb directories exists"
   file:
@@ -39,6 +48,8 @@
     mode=u=rwx,g=rwx,o=rx
   with_items:
     - out
+    - unchecked-out
+    - checked-out
     - cmdb
 
 - name: "Install Cron-Tab for auto-generating Ansible-CMDB files frequently"
@@ -48,12 +59,12 @@
     minute=*/5
     user=fachadmin
   with_items:
-    - { name: "generate-facts",
-        job: "ansible -u ansible -m setup --tree /opt/lmu.ansible.playbooks/out/ all"
-      }
-    - { name: "generate-cmdb-output",
-        job: "ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/out/ > /opt/lmu.ansible.playbooks/cmdb/index.html"
-      }
+    #- { name: "generate-facts",
+    #    job: "ansible -u ansible -m setup --tree /opt/lmu.ansible.playbooks/out/ all"
+    #  }
+    #- { name: "generate-cmdb-output",
+    #    job: "ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/out/ > /opt/lmu.ansible.playbooks/cmdb/index.html"
+    #  }
     - {
         name: "ansible cmdb",
         job: "/opt/lmu.ansible.playbooks/cmdb-scan.py --private-key=/home/fachadmin/.ssh/id_rsa"
