@@ -25,6 +25,7 @@
     - ssl
     - proxy_http
     - headers
+  ignore_errors: True
 
 - name: "Ensure the directories (sites-available and sites-enabled) for site specific configurations are present"
   file:

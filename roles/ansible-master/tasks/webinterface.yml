@@ -1,13 +1,19 @@
 ---
 
-- name: "Ensure Apache Modules are activated"
-  apache2_module:
-    name="{{ item }}"
-    state=present
-  with_items:
-    - proxy_http
-  notify:
-    - "Restart Apache httpd"
+
+- name: "Get LMU-CACERT-Chain"
+  get_url:
+    url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
+    dest="/etc/ssl/private/lmu-chain.pem"
+    owner=root
+    group=root
+    mode="u=rw,g=r,o="
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  tags:
+    - setup
+    - upgrade
 
 - name: "Copy SSL Private-Key"
   copy:
@@ -18,8 +24,8 @@
     group=root
     mode="u=r,g=r,o="
   tags:
-    - redmine_setup
-    - redmine_upgrade
+    - setup
+    - upgrade
 
 - name: "Copy SSL Public Key"
   copy:
@@ -30,8 +36,8 @@
     group=root
     mode="u=r,g=r,o="
   tags:
-    - redmine_setup
-    - redmine_upgrade
+    - setup
+    - upgrade
 
 #- name: "Generate Private-SSL-Key for Server"
 #  openssl_privatekey:
@@ -41,6 +47,15 @@
 #  openssl_privatekey:
 #    path: "/etc/ssl/certs/{{ ansible_fqdn }}.pem"
 #    privatekey_path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+
+- name: "Ensure Apache Modules are activated"
+  apache2_module:
+    name="{{ item }}"
+    state=present
+  with_items:
+    - proxy_http
+  notify:
+    - "Restart Apache httpd"
 
 - name: "Install VHost for Node-Master"
   template: 

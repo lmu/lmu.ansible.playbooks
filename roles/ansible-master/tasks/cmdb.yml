@@ -54,7 +54,8 @@
 
 - name: "Install Cron-Tab for auto-generating Ansible-CMDB files frequently"
   cron:
-    job="{{ item }}"
+    name="{{ item.name }}"
+    job="{{ item.job }}"
     state=present
     minute=*/5
     user=fachadmin
