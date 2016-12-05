@@ -166,7 +166,19 @@
 		# MSIE 7 and newer should be able to use keepalive
 		BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
-		# psDash 
+		<Location />
+			AuthType Basic
+			AuthName "{{ ansible_fqdn }} Interface for Infrastructure Management"
+			AuthBasicProvider file ldap
+			AuthBasicAuthoritative Off
+			AuthUserFile /etc/apache2/users
+			AuthGroupFile /etc/apache2/groups
+			AuthLDAPURL "ldaps://rodc1.zuv.uni-muenchen.de ldaps://rodc2.zuv.uni-muenchen.de"
+			Require group admins
+		</Location>
+
+
+		# psDash
 		ProxyPass /psdash/ "http://127.0.0.1:7000/psdash/"
 		ProxyPassReverse /psdash/ "http://127.0.0.1:7000/psdash/"
 
