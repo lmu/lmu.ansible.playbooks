@@ -5,8 +5,8 @@
   get_url:
     url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
     dest="/etc/ssl/private/lmu-chain.pem"
-    owner=root
-    group=root
+    owner="root"
+    group="ssl-cert"
     mode="u=rw,g=r,o="
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
