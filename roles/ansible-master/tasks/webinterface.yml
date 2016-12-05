@@ -1,6 +1,5 @@
 ---
 
-
 - name: "Get LMU-CACERT-Chain"
   get_url:
     url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
@@ -39,6 +38,28 @@
     - setup
     - upgrade
 
+- name: "Ensure htpasswd user file is present"
+  htpasswd:
+    path="/etc/apache2/users"
+    state=present
+    name="admin"
+    password="admin"
+    owner=root
+    group=www-data
+    mode="u=rw,g=r,o="
+    crypt_scheme=apr_md5_crypt
+
+- name: "Ensure htaccess group file is present"
+  lineinfile:
+    dest="/etc/apache2/groups"
+    line="admins: admin"
+    create=yes
+    state=present
+    owner=root
+    group=www-data
+    mode="u=rw,g=r,o="
+
+
 #- name: "Generate Private-SSL-Key for Server"
 #  openssl_privatekey:
 #    path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
@@ -59,17 +80,17 @@
     - "Restart Apache httpd"
 
 - name: "Install VHost for Node-Master"
-  template: 
+  template:
     dest="/etc/apache2/sites-available/master-node.conf"
     src="ansible-master-vhost.conf.j2"
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
-  notify: 
+  notify:
     - "Restart Apache httpd"
 
 - name: "Ensure VHost for Node-Master is activated"
-  file: 
+  file:
     src="/etc/apache2/sites-available/master-node.conf"
     dest="/etc/apache2/sites-enabled/master-node.conf"
     state=link
@@ -81,13 +102,13 @@
     - "Reload Apache httpd"
 
 - name: "Generate index.html for Node-Master"
-  template: 
+  template:
     dest="/var/www/html/index.html"
     src="ansible-master-index.html.j2"
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
-  notify: 
+  notify:
     - "Restart Apache httpd"
 
 ...
