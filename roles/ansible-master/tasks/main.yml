@@ -14,7 +14,7 @@
     apt_repository:
       repo="{{ item }}"
       state=present
-      filename="ansible.list"
+      filename="ansible"
       update_cache=yes
     with_items:
       - "deb http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
