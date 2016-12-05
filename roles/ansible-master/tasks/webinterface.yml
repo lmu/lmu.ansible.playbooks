@@ -1,5 +1,22 @@
 ---
 
+- name: "Ensure Python Passlib is present"
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+    install_recommends=yes
+  with_items:
+    - python-passlib
+    - ldap-utils
+  when: ansible_os_family == "Debian"
+  tags:
+    - setup
+- name: "Ensure VHost for Node-Master is absent"
+  file:
+    path="/etc/apache2/sites-enabled/master-node.conf"
+    state=absent
+
 - name: "Get LMU-CACERT-Chain"
   get_url:
     url="https://pki.pca.dfn.de/uni-muenchen-ca/pub/cacert/chain.txt"
@@ -52,7 +69,7 @@
 - name: "Ensure htaccess group file is present"
   lineinfile:
     dest="/etc/apache2/groups"
-    line="admins: admin"
+    line="admins admin"
     create=yes
     state=present
     owner=root
@@ -75,6 +92,14 @@
     state=present
   with_items:
     - proxy_http
+    - proxy_ajp
+    - auth_basic
+    - authn_file
+    - authz_user
+    - authz_groupfile
+    - authnz_ldap
+    - authz_host
+    - headers
   ignore_errors: yes
   notify:
     - "Restart Apache httpd"

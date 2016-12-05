@@ -173,8 +173,11 @@
 			AuthBasicAuthoritative Off
 			AuthUserFile /etc/apache2/users
 			AuthGroupFile /etc/apache2/groups
-			AuthLDAPURL "ldaps://rodc1.zuv.uni-muenchen.de ldaps://rodc2.zuv.uni-muenchen.de"
-			Require group admins
+			AuthLDAPUrl "ldaps://rodc1.zuv.uni-muenchen.de ldaps://rodc2.zuv.uni-muenchen.de"
+			<RequireAny>
+				Require group admins
+				Require ldap-group it-emergency
+			</RequireAny>
 		</Location>
 
 
@@ -193,6 +196,9 @@
 		ProxyPass /supervisor/{{ hostvars[host]['inventory_hostname_short'] }} "http://{{ host }}:9001"
 		ProxyPassReverse /supervisor/{{ hostvars[host]['inventory_hostname_short'] }} "http://{{ host }}:9001"
 {% endfor %}
+		<Location /supervisor >
+			RequestHeader set Authorization "Basic YWRtaW46YWRtaW4="
+		</Location>
 
 		# Solr
 {% for host in groups['solrs'] %}
