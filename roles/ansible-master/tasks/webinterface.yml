@@ -30,7 +30,7 @@
 - name: "Copy SSL Public Key"
   copy:
     src="files/server-ssl/crt/{{ ansible_fqdn }}_crt.pem"
-    dest="/etc/ssl/private/{{ ansible_fqdn }}_crt.pem"
+    dest="/etc/ssl/certs/{{ ansible_fqdn }}_crt.pem"
     force=yes
     owner=root
     group=root
