@@ -54,6 +54,7 @@
     state=present
   with_items:
     - proxy_http
+  ignore_errors: yes
   notify:
     - "Restart Apache httpd"
 

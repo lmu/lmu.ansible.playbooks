@@ -117,9 +117,7 @@
 - name: "Include Ansible-CMDB"
   include: cmdb.yml
 
-
 - name: "Include Web-Management-Interface"
   include: webinterface.yml
-
 
 ...
