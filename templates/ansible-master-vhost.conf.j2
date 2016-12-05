@@ -169,14 +169,15 @@
 		<Location />
 			AuthType Basic
 			AuthName "{{ ansible_fqdn }} Interface for Infrastructure Management"
-			AuthBasicProvider file ldap
+			#AuthBasicProvider file ldap
+			AuthBasicProvider file
 			AuthBasicAuthoritative Off
 			AuthUserFile /etc/apache2/users
 			AuthGroupFile /etc/apache2/groups
-			AuthLDAPUrl "ldaps://rodc1.zuv.uni-muenchen.de ldaps://rodc2.zuv.uni-muenchen.de"
+			#AuthLDAPUrl "ldaps://rodc1.zuv.uni-muenchen.de ldaps://rodc2.zuv.uni-muenchen.de"
 			<RequireAny>
 				Require group admins
-				Require ldap-group it-emergency
+				#Require ldap-group it-emergency
 			</RequireAny>
 		</Location>
 
