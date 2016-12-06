@@ -1,0 +1,29 @@
+---
+
+- name: "Update apt/sources.list"
+  template:
+    dest="/etc/apt/sources.list"
+    src="zuv_source.list.j2"
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+
+- name: "Update Apt-Keys"
+  apt_key:
+    url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
+    state=present
+  when: ansible_os_family == "Debian"
+
+- name: "Ensure Base-Packages (ZUV-common) are installed"
+  apt:
+    pkg="{{ item }}"
+    state=present
+    update_cache=yes
+  with_items:
+    - bginfo-ubuntu
+    - certs-zuv-ubuntu
+  when: ansible_os_family == "Debian" and ansible_distribution == "Ubuntu"
+  notify:
+    - Restart xinetd
+
+...
