@@ -2,14 +2,14 @@
 
 - name: "Change Password for 'fachadmin'"
   user:
-    name=fachadmin
-    password={{ fachadmin_password }}
+    name="fachadmin"
+    password="{{ fachadmin_password }}"
     update_password=always
 
 - name: "Make ZUV-Proxy Settings"
   template:
-    dest=/etc/profile.d/zuv_proxy.sh
-    src=zuv_proxy.sh.j2
+    dest="/etc/profile.d/zuv_proxy.sh"
+    src="zuv_proxy.sh.j2"
     force=yes
     mode="u=rw,g=r,o=r"
     owner=root
@@ -18,15 +18,16 @@
 - name: "Make APT respect ZUV-Proxy Settings"
   # Clerifiy if this is the best way.
   copy:
-    dest=/etc/apt/apt.conf.d/zuv_proxy.conf
+    dest="/etc/apt/apt.conf.d/zuv_proxy.conf"
     src=zuv_proxy_apt.conf
     mode="u=rw,g=r,o=r"
     owner=root
     group=root
+  when: ansible_os_family == "Debian"
 
 - name: "Ensure the SVN master Conf directory exists"
   file:
-    name=/etc/subversion/
+    name="/etc/subversion/"
     state=directory
     mode="u=rwx,g=rx,o=rx"
     owner=root
@@ -34,15 +35,15 @@
 
 - name: "Make SVN respect ZUV-Proxy Settings"
   copy:
-    dest=/etc/subversion/servers
-    src=subversion-server-settings.conf
+    dest="/etc/subversion/servers"
+    src="subversion-server-settings.conf"
     mode="u=rw,g=r,o=r"
     owner=root
     group=root
 
 - name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
   file:
-    name=/usr/local/share/ca-certificates/lmu/
+    name="/usr/local/share/ca-certificates/lmu/"
     state=directory
     mode="u=rwx,g=rx,o=rx"
     owner=root
@@ -50,8 +51,8 @@
 
 - name: "Copy ZUV-Proxy-CA and Chain"
   copy:
-    dest=/usr/local/share/ca-certificates/lmu/{{ item }}
-    src=certs/{{ item }}
+    dest="/usr/local/share/ca-certificates/lmu/{{ item }}"
+    src="certs/{{ item }}"
     mode="o=rw,g=r,u=r"
     owner=root
     group=root
@@ -65,229 +66,33 @@
   register: ca_update_result
   changed_when: '"Updating certificates in /etc/ssl/certs... 0 added" not in ca_update_result.stdout'
   #changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
+  when: ansible_os_family == "Debian"
 
 - name: "Add alias for 'pip' to always use ZUV-Proxy-CA"
   copy:
-    dest=/etc/profile.d/zuv_proxy_alias.sh
-    src=zuv_proxy_alias.sh
+    dest="/etc/profile.d/zuv_proxy_alias.sh"
+    src="zuv_proxy_alias.sh"
     mode="u=rw,g=r,o=r"
     owner=root
     group=root
-
-- name: "Update apt/sources.list"
-  template:
-    dest=/etc/apt/sources.list
-    src=zuv_source.list.j2
-    mode="u=rw,g=r,o=r"
-    owner=root
-    group=root
-
-- name: "Update Apt-Keys"
-  apt_key:
-    url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
-    state=present
 
 - name: "Ensure Base-Packages (ZUV-common) are installed"
-  apt:
-    pkg={{ item }}
+  yum:
+    pkg="{{ item }}"
     state=present
     update_cache=yes
   with_items:
-    - vim
-    - aptitude
-    - update-notifier-common
     - bginfo-ubuntu
     - certs-zuv-ubuntu
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
   notify:
     - Restart xinetd
 
 
-- name: "Ensure current Kernel-Packages (Hyper-V Support) are installed"
-  apt:
-    pkg={{ item }}
-    state=present
-    update_cache=yes
-  with_items:
-    # Kernelmodules for hyper-v support
-    - hv-kvp-daemon-init
-    - linux-firmware
-    # Kernel Pflege
-    - bikeshed
-    # New Kernel
-    - linux-generic-lts-xenial
-    #- linux-signed-generic-lts-xenial
-    #- linux-signed-image-generic-lts-xenial
-    - linux-image-generic-lts-xenial
-    - linux-headers-generic-lts-xenial
-    # Linux Tools (necessary for Hype-V)
-    #- linux-tools
-    #- linux-tools-common
-    #- linux-tools-generic
-    - linux-tools-generic-lts-xenial
-    # Linux Cloud Tools (necessary for Hype-V)
-    #- linux-cloud-tools
-    #- linux-cloud-tools-common
-    #- linux-cloud-tools-generic
-    - linux-cloud-tools-generic-lts-xenial
-  when: ansible_distribution == "Ubuntu"
+- name: "Include Distribution specific Tasks (Distribution related)"
+  include: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
 
+- name: "Include Plattform specific Tasks (Hyper-V and Distribution related)"
+  include: "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_release }}-fixes.yml"
 
-- name: "Ensure old Kernel-Packages (Hyper-V Support) are absent"
-  apt:
-    pkg={{ item }}
-    state=absent
-    purge=yes
-    update_cache=yes
-  with_items:
-    #- linux-tools-common
-    - linux-tools-generic
-    - linux-tools-virtual
-    #- linux-cloud-tools-common
-    - linux-cloud-tools-generic
-    - linux-cloud-tools-virtual
-
-    # Quantal
-    - linux-generic-lts-quantal
-    - linux-virtual-lts-quantal
-    - linux-signed-generic-lts-quantal
-    - linux-signed-image-generic-lts-quantal
-    - linux-image-generic-lts-quantal
-    - linux-image-virtual-lts-quantal
-    - linux-headers-generic-lts-quantal
-    - linux-lowlatency-lts-quantal
-    - linux-tools-generic-lts-quantal
-    - linux-tools-virtual-lts-quantal
-    - linux-cloud-tools-generic-lts-quantal
-    - linux-cloud-tools-virtual-lts-quantal
-    #- linux-lts-quantal-tools-*
-    #- linux-lts-quantal-cloud-tools-*
-
-    # Raring
-    - linux-generic-lts-raring
-    - linux-virtual-lts-raring
-    - linux-signed-generic-lts-raring
-    - linux-signed-image-generic-lts-raring
-    - linux-image-generic-lts-raring
-    - linux-image-virtual-lts-raring
-    - linux-headers-generic-lts-raring
-    - linux-lowlatency-lts-raring
-    - linux-tools-generic-lts-raring
-    - linux-tools-virtual-lts-raring
-    - linux-cloud-tools-generic-lts-raring
-    - linux-cloud-tools-virtual-lts-raring
-    #- linux-lts-raring-tools-*
-    #- linux-lts-raring-cloud-tools-*
-
-    # Saucy
-    - linux-generic-lts-saucy
-    - linux-virtual-lts-saucy
-    - linux-signed-generic-lts-saucy
-    - linux-signed-image-generic-lts-saucy
-    - linux-image-generic-lts-saucy
-    - linux-image-virtual-lts-saucy
-    - linux-headers-generic-lts-saucy
-    - linux-lowlatency-lts-saucy
-    - linux-tools-generic-lts-saucy
-    - linux-tools-virtual-lts-saucy
-    - linux-cloud-tools-generic-lts-saucy
-    - linux-cloud-tools-virtual-lts-saucy
-    #- linux-lts-saucy-tools-*
-    #- linux-lts-saucy-cloud-tools-*
-
-    # Trusty
-    - linux-generic-lts-trusty
-    - linux-virtual-lts-trusty
-    - linux-signed-generic-lts-trusty
-    - linux-signed-image-generic-lts-trusty
-    - linux-image-generic-lts-trusty
-    - linux-image-virtual-lts-trusty
-    - linux-headers-generic-lts-trusty
-    - linux-lowlatency-lts-trusty
-    - linux-tools-generic-lts-trusty
-    - linux-tools-virtual-lts-trusty
-    - linux-cloud-tools-generic-lts-trusty
-    - linux-cloud-tools-virtual-lts-trusty
-    #- linux-lts-trusty-tools-*
-    #- linux-lts-trusty-cloud-tools-*
-
-    # Utopic
-    - linux-generic-lts-utopic
-    - linux-virtual-lts-utopic
-    - linux-signed-generic-lts-utopic
-    - linux-signed-image-generic-lts-utopic
-    - linux-image-generic-lts-utopic
-    - linux-image-virtual-lts-utopic
-    - linux-headers-generic-lts-utopic
-    - linux-lowlatency-lts-utopic
-    - linux-tools-generic-lts-utopic
-    - linux-tools-virtual-lts-utopic
-    - linux-cloud-tools-generic-lts-utopic
-    - linux-cloud-tools-virtual-lts-utopic
-    #- linux-lts-utopic-tools-*
-    #- linux-lts-utopic-cloud-tools-*
-
-    # Vivid
-    - linux-generic-lts-vivid
-    - linux-virtual-lts-vivid
-    - linux-signed-generic-lts-vivid
-    - linux-signed-image-generic-lts-vivid
-    - linux-image-generic-lts-vivid
-    - linux-image-virtual-lts-vivid
-    - linux-headers-generic-lts-vivid
-    - linux-lowlatency-lts-vivid
-    - linux-tools-generic-lts-vivid
-    - linux-tools-virtual-lts-vivid
-    - linux-cloud-tools-generic-lts-vivid
-    - linux-cloud-tools-virtual-lts-vivid
-    #- linux-lts-vivid-tools-*
-    #- linux-lts-vivid-cloud-tools-*
-
-    # Wily
-    - linux-generic-lts-wily
-    - linux-virtual-lts-wily
-    - linux-signed-generic-lts-wily
-    - linux-signed-image-generic-lts-wily
-    - linux-image-generic-lts-wily
-    - linux-image-virtual-lts-wily
-    - linux-headers-generic-lts-wily
-    - linux-lowlatency-lts-wily
-    - linux-tools-generic-lts-wily
-    - linux-tools-virtual-lts-wily
-    - linux-cloud-tools-generic-lts-wily
-    - linux-cloud-tools-virtual-lts-wily
-    #- linux-lts-wily-tools-*
-    #- linux-lts-wily-cloud-tools-*
-
-    # Xenial
-    #- linux-generic-lts-xenial
-    - linux-virtual-lts-xenial
-    - linux-signed-generic-lts-xenial
-    - linux-signed-image-generic-lts-xenial
-    #- linux-image-generic-lts-xenial
-    - linux-image-virtual-lts-xenial
-    #- linux-headers-generic-lts-xenial
-    - linux-lowlatency-lts-xenial
-    #- linux-tools-generic-lts-xenial
-    - linux-tools-virtual-lts-xenial
-    #- linux-cloud-tools-generic-lts-xenial
-    - linux-cloud-tools-virtual-lts-xenial
-    #- linux-lts-xenial-tools-*
-    #- linux-lts-xenial-cloud-tools-*
-  when: ansible_distribution == "Ubuntu"
-
-- name: "Purge old Kernels"
-  command: purge-old-kernels -y
-  when: ansible_distribution == "Ubuntu"
-
-- name: "Autoremove old unnecessary packages"
-  command: apt-get autoremove -y
-  when: ansible_distribution == "Ubuntu"
-
-- name: "Autoclean old unnecessary packages"
-  command: apt-get autoclean -y
-  when: ansible_distribution == "Ubuntu"
-
-- name: "Clean Apt Cache"
-  command: apt-get clean -y
-  when: ansible_distribution == "Ubuntu"
+...

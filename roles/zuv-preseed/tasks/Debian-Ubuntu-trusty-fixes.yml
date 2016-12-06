@@ -1,0 +1,193 @@
+---
+
+# Additional Specific Settings for Ubuntu 14.04 LTS
+# 
+
+- block:
+
+  - name: "Ensure current Kernel-Packages (Hyper-V Support) are installed"
+    apt:
+      pkg={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      # Kernelmodules for hyper-v support
+      - hv-kvp-daemon-init
+      - linux-firmware
+      # Kernel Pflege
+      - bikeshed
+      # New Kernel
+      - linux-generic-lts-xenial
+      #- linux-signed-generic-lts-xenial
+      #- linux-signed-image-generic-lts-xenial
+      - linux-image-generic-lts-xenial
+      - linux-headers-generic-lts-xenial
+      # Linux Tools (necessary for Hype-V)
+      #- linux-tools
+      #- linux-tools-common
+      #- linux-tools-generic
+      - linux-tools-generic-lts-xenial
+      # Linux Cloud Tools (necessary for Hype-V)
+      #- linux-cloud-tools
+      #- linux-cloud-tools-common
+      #- linux-cloud-tools-generic
+      - linux-cloud-tools-generic-lts-xenialx
+
+  - name: "Ensure old Kernel-Packages (Hyper-V Support) are absent"
+    apt:
+      pkg={{ item }}
+      state=absent
+      purge=yes
+      update_cache=yes
+    with_items:
+      #- linux-tools-common
+      - linux-tools-generic
+      - linux-tools-virtual
+      #- linux-cloud-tools-common
+      - linux-cloud-tools-generic
+      - linux-cloud-tools-virtual
+
+      # Quantal
+      - linux-generic-lts-quantal
+      - linux-virtual-lts-quantal
+      - linux-signed-generic-lts-quantal
+      - linux-signed-image-generic-lts-quantal
+      - linux-image-generic-lts-quantal
+      - linux-image-virtual-lts-quantal
+      - linux-headers-generic-lts-quantal
+      - linux-lowlatency-lts-quantal
+      - linux-tools-generic-lts-quantal
+      - linux-tools-virtual-lts-quantal
+      - linux-cloud-tools-generic-lts-quantal
+      - linux-cloud-tools-virtual-lts-quantal
+      #- linux-lts-quantal-tools-*
+      #- linux-lts-quantal-cloud-tools-*
+
+      # Raring
+      - linux-generic-lts-raring
+      - linux-virtual-lts-raring
+      - linux-signed-generic-lts-raring
+      - linux-signed-image-generic-lts-raring
+      - linux-image-generic-lts-raring
+      - linux-image-virtual-lts-raring
+      - linux-headers-generic-lts-raring
+      - linux-lowlatency-lts-raring
+      - linux-tools-generic-lts-raring
+      - linux-tools-virtual-lts-raring
+      - linux-cloud-tools-generic-lts-raring
+      - linux-cloud-tools-virtual-lts-raring
+      #- linux-lts-raring-tools-*
+      #- linux-lts-raring-cloud-tools-*
+
+      # Saucy
+      - linux-generic-lts-saucy
+      - linux-virtual-lts-saucy
+      - linux-signed-generic-lts-saucy
+      - linux-signed-image-generic-lts-saucy
+      - linux-image-generic-lts-saucy
+      - linux-image-virtual-lts-saucy
+      - linux-headers-generic-lts-saucy
+      - linux-lowlatency-lts-saucy
+      - linux-tools-generic-lts-saucy
+      - linux-tools-virtual-lts-saucy
+      - linux-cloud-tools-generic-lts-saucy
+      - linux-cloud-tools-virtual-lts-saucy
+      #- linux-lts-saucy-tools-*
+      #- linux-lts-saucy-cloud-tools-*
+
+      # Trusty
+      - linux-generic-lts-trusty
+      - linux-virtual-lts-trusty
+      - linux-signed-generic-lts-trusty
+      - linux-signed-image-generic-lts-trusty
+      - linux-image-generic-lts-trusty
+      - linux-image-virtual-lts-trusty
+      - linux-headers-generic-lts-trusty
+      - linux-lowlatency-lts-trusty
+      - linux-tools-generic-lts-trusty
+      - linux-tools-virtual-lts-trusty
+      - linux-cloud-tools-generic-lts-trusty
+      - linux-cloud-tools-virtual-lts-trusty
+      #- linux-lts-trusty-tools-*
+      #- linux-lts-trusty-cloud-tools-*
+
+      # Utopic
+      - linux-generic-lts-utopic
+      - linux-virtual-lts-utopic
+      - linux-signed-generic-lts-utopic
+      - linux-signed-image-generic-lts-utopic
+      - linux-image-generic-lts-utopic
+      - linux-image-virtual-lts-utopic
+      - linux-headers-generic-lts-utopic
+      - linux-lowlatency-lts-utopic
+      - linux-tools-generic-lts-utopic
+      - linux-tools-virtual-lts-utopic
+      - linux-cloud-tools-generic-lts-utopic
+      - linux-cloud-tools-virtual-lts-utopic
+      #- linux-lts-utopic-tools-*
+      #- linux-lts-utopic-cloud-tools-*
+
+      # Vivid
+      - linux-generic-lts-vivid
+      - linux-virtual-lts-vivid
+      - linux-signed-generic-lts-vivid
+      - linux-signed-image-generic-lts-vivid
+      - linux-image-generic-lts-vivid
+      - linux-image-virtual-lts-vivid
+      - linux-headers-generic-lts-vivid
+      - linux-lowlatency-lts-vivid
+      - linux-tools-generic-lts-vivid
+      - linux-tools-virtual-lts-vivid
+      - linux-cloud-tools-generic-lts-vivid
+      - linux-cloud-tools-virtual-lts-vivid
+      #- linux-lts-vivid-tools-*
+      #- linux-lts-vivid-cloud-tools-*
+
+      # Wily
+      - linux-generic-lts-wily
+      - linux-virtual-lts-wily
+      - linux-signed-generic-lts-wily
+      - linux-signed-image-generic-lts-wily
+      - linux-image-generic-lts-wily
+      - linux-image-virtual-lts-wily
+      - linux-headers-generic-lts-wily
+      - linux-lowlatency-lts-wily
+      - linux-tools-generic-lts-wily
+      - linux-tools-virtual-lts-wily
+      - linux-cloud-tools-generic-lts-wily
+      - linux-cloud-tools-virtual-lts-wily
+      #- linux-lts-wily-tools-*
+      #- linux-lts-wily-cloud-tools-*
+
+      # Xenial
+      #- linux-generic-lts-xenial
+      - linux-virtual-lts-xenial
+      - linux-signed-generic-lts-xenial
+      - linux-signed-image-generic-lts-xenial
+      #- linux-image-generic-lts-xenial
+      - linux-image-virtual-lts-xenial
+      #- linux-headers-generic-lts-xenial
+      - linux-lowlatency-lts-xenial
+      #- linux-tools-generic-lts-xenial
+      - linux-tools-virtual-lts-xenial
+      #- linux-cloud-tools-generic-lts-xenial
+      - linux-cloud-tools-virtual-lts-xenial
+      #- linux-lts-xenial-tools-*
+      #- linux-lts-xenial-cloud-tools-*
+
+  - name: "Purge old Kernels"
+    command: purge-old-kernels -y
+
+  - name: "Autoremove old unnecessary packages"
+    command: apt-get autoremove -y
+
+  - name: "Autoclean old unnecessary packages"
+    command: apt-get autoclean -y
+
+  - name: "Clean Apt Cache"
+    command: apt-get clean -y
+
+  when: 'ansible_os_familiy == "Debian" and ansible_distribution == "Ubuntu" and ansible_distribution_release == "trusty"'
+
+
+...
