@@ -18,8 +18,9 @@ Install ansible & lmu.ansible.playbooks
 
 
 Install lmu.ansible_roles and external dependencies
---------------------------------------------------- 
+---------------------------------------------------
 
+Run ``ansible-galaxy -p roles -r requirements.yml install`` to install required roles;
 
 
 A Set of Ansible Playbooks used at LMU IT Department to setup several maschines for different Services.
@@ -50,6 +51,10 @@ At the moment this repository contains a set of roles, those should be moved int
 necessary roles should be installed by
 
 
+Documentation
+=============
+
+For a detailed documentation please refere to the docs folder.
 
 License
 =======
