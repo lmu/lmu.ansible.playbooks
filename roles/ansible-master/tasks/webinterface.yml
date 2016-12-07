@@ -59,23 +59,33 @@
   htpasswd:
     path="/etc/apache2/users"
     state=present
-    name="admin"
-    password="admin"
-    owner=root
-    group=www-data
+    name="{{ item.user }}"
+    password="{{ item.password }}"
+    owner="root"
+    group="www-data"
     mode="u=rw,g=r,o="
     crypt_scheme=apr_md5_crypt
+  with_items:
+    - user: "admin"
+      password: "admin"
+    - user: "alex"
+      password: "admin"
+    - user: "fachadmin"
+      password: "admin"
+
 
 - name: "Ensure htaccess group file is present"
-  lineinfile:
+  template:
     dest="/etc/apache2/groups"
-    line="admins admin"
-    create=yes
-    state=present
+    src="groups.j2"
     owner=root
     group=www-data
     mode="u=rw,g=r,o="
-
+  vars:
+    users:
+      - admin
+      - alex
+      - fachadmin
 
 #- name: "Generate Private-SSL-Key for Server"
 #  openssl_privatekey:
@@ -124,7 +134,7 @@
     owner=root
     group=root
   notify:
-    - "Reload Apache httpd"
+    - "Restart Apache httpd"
 
 - name: "Generate index.html for Node-Master"
   template:
@@ -133,7 +143,5 @@
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
-  notify:
-    - "Restart Apache httpd"
 
 ...
