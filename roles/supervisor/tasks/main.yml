@@ -74,10 +74,11 @@
       version="{{ supervisor.version | default(omit)}}"
       virtualenv="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       chdir="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
-      #virtualenv_python=""
+      virtualenv_python="python2.7"
     with_items:
       - supervisor
       - superlance
+    become_user: root
     environment:
       http_proxy: "{{ lookup('env', 'http_proxy') }}"
       https_proxy: "{{ lookup('env', 'https_proxy') }}"

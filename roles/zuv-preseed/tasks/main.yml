@@ -76,19 +76,6 @@
     owner=root
     group=root
 
-- name: "Ensure Base-Packages (ZUV-common) are installed"
-  yum:
-    pkg="{{ item }}"
-    state=present
-    update_cache=yes
-  with_items:
-    - bginfo-ubuntu
-    - certs-zuv-ubuntu
-  when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
-  notify:
-    - Restart xinetd
-
-
 - name: "Include Distribution specific Tasks (Distribution related)"
   include: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
 

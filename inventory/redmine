@@ -4,7 +4,7 @@ redmine2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming P
 redmine3.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (CentOS/7)"
 redminetest2.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (Ubuntu 14.04)"
 redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (CentOS/7)"
-redminetest4.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (Ubuntu 16.04)"
+#redminetest4.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (Ubuntu 16.04)"
 
 [redmine-dbs-production]
 redmine2.verwaltung.uni-muenchen.de
@@ -12,7 +12,7 @@ redmine2.verwaltung.uni-muenchen.de
 [redmine-dbs-staging]
 redminetest2.verwaltung.uni-muenchen.de
 redminetest3.verwaltung.uni-muenchen.de
-redminetest4.verwaltung.uni-muenchen.de
+#redminetest4.verwaltung.uni-muenchen.de
 
 [redmine-workers-production]
 redmine2.verwaltung.uni-muenchen.de
@@ -20,7 +20,7 @@ redmine2.verwaltung.uni-muenchen.de
 [redmine-workers-staging]
 redminetest2.verwaltung.uni-muenchen.de
 redminetest3.verwaltung.uni-muenchen.de
-redminetest4.verwaltung.uni-muenchen.de
+#redminetest4.verwaltung.uni-muenchen.de
 
 [redmine-frontends-production]
 redmine2.verwaltung.uni-muenchen.de
@@ -28,7 +28,7 @@ redmine2.verwaltung.uni-muenchen.de
 [redmine-frontends-staging]
 redminetest2.verwaltung.uni-muenchen.de
 redminetest3.verwaltung.uni-muenchen.de
-redminetest4.verwaltung.uni-muenchen.de
+#redminetest4.verwaltung.uni-muenchen.de
 
 
 [redmine-dbs:children]

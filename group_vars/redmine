@@ -3,4 +3,13 @@
 memcached_memory_limit: "512"
 allow_reboot: true
 
+proxy:
+  no_proxy:
+    - "www.scm.verwaltung.uni-muenchen.de"
+    - "pypi.verwaltung.uni-muenchen.de"
+    - "*.zuv.uni-munechen.de"
+    - "10.110.0.0/24"
+    - "10.153.0.0/24"
+    - "172.23.0.0/24"
+
 ...
