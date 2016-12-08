@@ -190,7 +190,7 @@
 {% for host in groups['webproxies'] %}
 		ProxyPass /haproxy/{{ hostvars[host]['inventory_hostname_short'] }} "http://{{ host }}:9000/haproxy/{{ hostvars[host]['inventory_hostname_short'] }}"
 		ProxyPassReverse /haproxy/{{ hostvars[host]['inventory_hostname_short'] }} "http://{{ host }}:9000/haproxy/{{ hostvars[host]['inventory_hostname_short'] }}"
-{% endfor -%}
+{% endfor %}
 
 		# Supervisor
 {% for host in groups['all'] %}

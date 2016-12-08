@@ -12,10 +12,14 @@
   when: ansible_os_family == "Debian"
   tags:
     - setup
+    - upgrade
+
 - name: "Ensure VHost for Node-Master is absent"
   file:
     path="/etc/apache2/sites-enabled/master-node.conf"
     state=absent
+  tags:
+    - setup
 
 - name: "Get LMU-CACERT-Chain"
   get_url:
@@ -72,7 +76,9 @@
       password: "admin"
     - user: "fachadmin"
       password: "admin"
-
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure htaccess group file is present"
   template:
@@ -82,10 +88,14 @@
     group=www-data
     mode="u=rw,g=r,o="
   vars:
-    users:
+    admin_users:
       - admin
       - alex
       - fachadmin
+    monitor_users: {}
+  tags:
+    - setup
+    - upgrade
 
 #- name: "Generate Private-SSL-Key for Server"
 #  openssl_privatekey:
@@ -113,16 +123,21 @@
   ignore_errors: yes
   notify:
     - "Restart Apache httpd"
+  tags:
+    - setup
 
 - name: "Install VHost for Node-Master"
   template:
     dest="/etc/apache2/sites-available/master-node.conf"
     src="ansible-master-vhost.conf.j2"
-    owner=root
-    group=root
+    owner="root"
+    group="root"
     mode="u=rw,g=r,o=r"
   notify:
     - "Restart Apache httpd"
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure VHost for Node-Master is activated"
   file:
@@ -131,17 +146,23 @@
     state=link
     force=yes
     mode="u=rw,g=r,o=r"
-    owner=root
-    group=root
+    owner="root"
+    group="root"
   notify:
     - "Restart Apache httpd"
+  tags:
+    - setup
 
 - name: "Generate index.html for Node-Master"
   template:
     dest="/var/www/html/index.html"
     src="ansible-master-index.html.j2"
-    owner=root
-    group=root
+    owner="root"
+    group="root"
     mode="u=rw,g=r,o=r"
+  tags:
+    - setup
+    - upgrade
+    - web-overview-update
 
 ...

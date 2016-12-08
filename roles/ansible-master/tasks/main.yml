@@ -8,7 +8,7 @@
       id="6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367"
       state=present
     tags:
-      - ansible_setup
+      - setup
 
   - name: "Ensure Ansible Repository is present"
     apt_repository:
@@ -20,25 +20,24 @@
       - "deb http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
       - "deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
     tags:
-      - ansible_setup
+      - setup
+
+  - name: "Install Ansible Packages"
+    apt:
+      pkg={{ item }}
+      state=present
+      update_cache=yes
+      install_recommends=yes
+    with_items:
+      - software-properties-common
+      - ansible
+    tags:
+      - setup
 
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   when: ansible_os_family == "Debian"
-
-- name: "Install Ansible Packages"
-  apt:
-    pkg={{ item }}
-    state=present
-    update_cache=yes
-    install_recommends=yes
-  with_items:
-    - software-properties-common
-    - ansible
-  when: ansible_os_family == "Debian"
-  tags:
-    - ansible_setup
 
 - name: "Ensure Ansible directories are present"
   file:
@@ -63,7 +62,7 @@
     - "/usr/share/ansible/modules/"
     - "/usr/share/ansible/roles"
   tags:
-    - ansible_setup
+    - setup
 
 - name: "Download lmu.ansible.playbooks"
   git:
@@ -74,20 +73,25 @@
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   ignore_errors: yes
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure playbook directories has correct owner and group"
   file:
     path="/opt/lmu.ansible.playbooks"
     state=directory
-    owner=fachadmin
-    group=ansible
+    owner="fachadmin"
+    group="ansible"
     mode="u=rwx,g=rwx,o=rx"
     recurse=yes
+  tags:
+    - setup
 
 - name: "Ensure Ansible directories links are present"
   file:
-    path={{ item.path }}
-    src={{ item.src }}
+    path="{{ item.path }}"
+    src="{{ item.src }}"
     state=link
     owner=root
     group=root
@@ -98,11 +102,11 @@
     - { path: "/etc/ansible/group_vars", src: "/opt/lmu.ansible.playbooks/group_vars" }
     - { path: "/etc/ansible/host_vars",  src: "/opt/lmu.ansible.playbooks/host_vars" }
   tags:
-    - ansible_setup
+    - setup
 
 - name: "Copy Ansible Config files"
   template:
-    src={{ item }}.j2
+    src="{{ item }}.j2"
     dest="/etc/ansible/{{ item }}"
     force=yes
     owner=root
@@ -111,8 +115,8 @@
   with_items:
     - ansible.cfg
   tags:
-    - ansible_setup
-    - ansible_upgrade
+    - setup
+    - upgrade
 
 - name: "Include Ansible-CMDB"
   include: cmdb.yml

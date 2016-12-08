@@ -15,21 +15,27 @@
     - apache2-utils
     - apachetop
   when: ansible_os_family == "Debian"
+  tags:
+    - setup
+    - upgrade
 
 - name: "Enable common used Apache httpd modules"
   apache2_module:
-    name={{ item }}
+    name="{{ item }}"
     state=present
   with_items:
-    - rewrite
-    - ssl
-    - proxy_http
-    - headers
+    - "rewrite"
+    - "ssl"
+    - "proxy_http"
+    - "headers"
   ignore_errors: True
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure the directories (sites-available and sites-enabled) for site specific configurations are present"
   file:
-    path=/etc/apache2/{{ item }}
+    path="/etc/apache2/{{ item }}"
     state=directory
     owner=root
     group=root
@@ -38,11 +44,16 @@
     - "sites-available"
     - "sites-enabled"
     - "includes"
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure default site is not avaliable"
   file:
-    path=/etc/apache2/sites-enabled/000-default.conf
+    path="/etc/apache2/sites-enabled/000-default.conf"
     state=absent
+  tags:
+    - setup
 
 - name: "Ensure the Apache httpd service is started and enable on boot"
   service:
@@ -50,3 +61,6 @@
     state=started
     enabled=yes
   ignore_errors: True
+  tags:
+    - setup
+  

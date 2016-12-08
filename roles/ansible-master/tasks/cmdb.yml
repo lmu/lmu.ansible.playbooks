@@ -10,11 +10,13 @@
   vars:
     header:
       Accept: application/json
-      Test: foo
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     #https_proxy: "{{ lookup('env', 'https_proxy') }}"
   ignore_errors: yes
+  tags:
+    - setup
+    - upgrade
 
 - name: "Debug cmdb_version"
   debug:
@@ -28,37 +30,46 @@
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   when: 'cmdb-version is defined'
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure inventory file modes"
   file:
     path="{{ item }}"
     state=file
-    owner=fachadmin
-    group=ansible
-    mode=u=rw,g=rw,o=r
+    owner="fachadmin"
+    group="ansible"
+    mode="u=rw,g=rw,o=r"
   with_fileglob:
     - /opt/lmu.ansible.playbooks/inventory/*
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure cmdb directories exists"
   file:
-    path=/opt/lmu.ansible.playbooks/{{ item }}
+    path="/opt/lmu.ansible.playbooks/{{ item }}"
     state=directory
-    owner=fachadmin
-    group=ansible
-    mode=u=rwx,g=rwx,o=rx
+    owner="fachadmin"
+    group="ansible"
+    mode="u=rwx,g=rwx,o=rx"
   with_items:
     - out
     - unchecked-out
     - checked-out
     - cmdb
+  tags:
+    - setup
+    - upgrade
 
 - name: "Install Cron-Tab for auto-generating Ansible-CMDB files frequently"
   cron:
     name="{{ item.name }}"
     job="{{ item.job }}"
     state=present
-    minute=*/5
-    user=fachadmin
+    minute="*/5"
+    user="fachadmin"
   with_items:
     #- { name: "generate-facts",
     #    job: "ansible -u ansible -m setup --tree /opt/lmu.ansible.playbooks/out/ all"
@@ -66,9 +77,11 @@
     #- { name: "generate-cmdb-output",
     #    job: "ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/out/ > /opt/lmu.ansible.playbooks/cmdb/index.html"
     #  }
-    - {
-        name: "ansible cmdb",
+    - { name: "ansible cmdb",
         job: "/opt/lmu.ansible.playbooks/cmdb-scan.py --private-key=/home/fachadmin/.ssh/id_rsa"
       }
+  tags:
+    - setup
+    - upgrade
 
 ...
