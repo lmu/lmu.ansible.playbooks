@@ -1,5 +1,3 @@
 [program:psdash-master]
 command={{ psdash.path }}/bin/psdash -p 7000 -l /var/log/*.log -l /var/log/**/*.log
-;command={{ psdash.path }}/bin/psdash -l /var/log/**/*.log -l /var/log/*.log
-;directory="{{ psdash.path }}"
 environment=PSDASH_CONFIG="/etc/psdash.py",PATH="{{ psdash.path }}/bin:{{ lookup('env', 'PATH') }}"

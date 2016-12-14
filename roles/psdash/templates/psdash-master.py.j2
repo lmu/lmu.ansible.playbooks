@@ -4,7 +4,7 @@
 
 PSDASH_NODES = [
 {% for node in groups['all'] %}
-    { 'name': '{{ node }}', 'host': '{{ node }}', 'port': 5000  },
+    {'name': '{{ node }}', 'host': '{{ node }}', 'port': 5000},
 {% endfor %}
 ]
-PSDASH_URL_PREFIX="/psdash"
+PSDASH_URL_PREFIX = "/psdash"
