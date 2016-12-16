@@ -1,0 +1,19 @@
+---
+
+- src: https://github.com/lmu/lmu.ansible_role.postfix.git
+  version: origin/master
+  name: lmu.ansible_role.postfix
+
+- src: https://github.com/lmu/lmu.ansible_role.sentry.git
+  version: origin/master
+  name: lmu.ansible_role.sentry
+
+- src: https://github.com/lmu/lmu.ansible_base_role.supervisor.git
+  version: origin/master
+  name: lmu.ansible_base_role.supervisor
+
+#- src: https://github.com/lmu/.git
+#  version: origin/master
+#  name:
+
+...
