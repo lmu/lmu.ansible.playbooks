@@ -10,6 +10,9 @@
     maintenance:
       allow_reboot: false
 
+  vars_files:
+    - secrets.yml
+
   roles:
     - ansible-master
 #    - theforeman

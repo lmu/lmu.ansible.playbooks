@@ -78,7 +78,7 @@
     #    job: "ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/out/ > /opt/lmu.ansible.playbooks/cmdb/index.html"
     #  }
     - { name: "ansible cmdb",
-        job: "/opt/lmu.ansible.playbooks/cmdb-scan.py --private-key=/home/fachadmin/.ssh/id_rsa"
+        job: "/opt/lmu.ansible.playbooks/helper_scripts/cmdb-scan.py --private-key=/home/fachadmin/.ssh/id_rsa"
       }
   tags:
     - setup

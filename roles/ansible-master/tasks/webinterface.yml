@@ -70,12 +70,7 @@
     mode="u=rw,g=r,o="
     crypt_scheme=apr_md5_crypt
   with_items:
-    - user: "admin"
-      password: "admin"
-    - user: "alex"
-      password: "admin"
-    - user: "fachadmin"
-      password: "admin"
+    - "{{ admin_users }}"
   tags:
     - setup
     - upgrade
@@ -87,12 +82,6 @@
     owner=root
     group=www-data
     mode="u=rw,g=r,o="
-  vars:
-    admin_users:
-      - admin
-      - alex
-      - fachadmin
-    monitor_users: {}
   tags:
     - setup
     - upgrade
