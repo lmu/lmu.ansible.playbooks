@@ -1,0 +1,11 @@
+[submodule "lmu.ansible_role.postfix"]
+	path = roles/lmu.ansible_role.postfix
+	url = https://github.com/lmu/lmu.ansible_role.postfix.git
+
+[submodule "lmu.ansible_role.sentry"]
+	path = roles/lmu.ansible_role.sentry
+	url = https://github.com/lmu/lmu.ansible_role.sentry.git
+
+[submodule "lmu.ansible_base_role.supervisor"]
+	path = roles/lmu.ansible_base_role.supervisor
+	url = https://github.com/lmu/lmu.ansible_base_role.supervisor.git
