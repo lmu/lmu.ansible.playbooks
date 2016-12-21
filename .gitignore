@@ -6,7 +6,6 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-.Python
 env/
 build/
 develop-eggs/
@@ -20,6 +19,7 @@ parts/
 sdist/
 var/
 *.egg-info/
+.Python
 .installed.cfg
 *.egg
 
@@ -59,13 +59,16 @@ target/
 # Vagrant Environment
 .vagrant/
 
+# Ansible
+*.retry
+
 # LMU Ansible specials
-secrets/
 secrets.yml
+!secrets.yml.tmpl
+secrets/
 graphs/
 files/server-ssl/
 downloads/
-downloads
 tree/
 cmdb/
 copy/
@@ -73,7 +76,6 @@ out/
 unchecked-out/
 checked-out/
 roles/*/
-*.retry
 
 # Mac specifics
 .DS_Store

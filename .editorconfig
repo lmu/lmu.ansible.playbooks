@@ -1,0 +1,29 @@
+# EditorConfig: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# For All Files
+[*]
+# Unix-style newlines with a newline ending every file
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,py,rb,yml,rst,html,j2,ini,cfg}]
+# Set default charset
+charset = utf-8
+indent_style = space
+
+[*.{py,rb,js,ini,cfg}]
+# 4 space indentation
+indent_size = 4
+
+[*.{yml,html}]
+# 2 space indentation
+indent_size = 2
+
+[{Makefile,.gitmodules}]
+# Tab indentation (no size specified, but view as 4 spaces)
+indent_style = tab
+tab_width = 4
