@@ -182,6 +182,14 @@
 			Require group admins
 		</Location>
 
+		ProxyRequests Off
+		<Proxy *>
+			Order deny,allow
+			Allow from all
+		</Proxy>
+		ProxyPreserveHost on
+		AllowEncodedSlashes NoDecode
+
 		# psDash
 		ProxyPass /psdash/ "http://127.0.0.1:7000/psdash/"
 		ProxyPassReverse /psdash/ "http://127.0.0.1:7000/psdash/"
@@ -207,6 +215,12 @@
 		ProxyPassReverse /solr/{{ hostvars[host]['inventory_hostname_short'] }} "http://{{ host }}:8983/solr"
 {% endfor %}
 
+		# Jenkins
+		ProxyPass /jenkins http://localhost:6080/jenkins nocanon
+		ProxyPassReverse /jenkins/ http://localhost:6080/jenkins
+		<Location /jenkins >
+			RequestHeader set Authorization "Basic YWRtaW46YWRtaW4="
+		</Location>
 
 	</VirtualHost>
 </IfModule>
