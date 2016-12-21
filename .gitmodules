@@ -16,72 +16,72 @@
 
 # [submodule "lmu.ansible_base_role.logwatch"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.logwatch.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.logwatch.git
 #
 # [submodule "lmu.ansible_base_role.apparmor"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.apparmor.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.apparmor.git
 #
 # [submodule "lmu.ansible_base_role.selinux"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.selinux.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.selinux.git
 #
 # [submodule "lmu.ansible_base_role.apache2_httpd"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role.nginx"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role.postgresql-server"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role.postgresql-client"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role.mysql-server"]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role.mysql-client"]
 # 	path = roles/lmu.ansible_base_role.mysql-client
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.mysql-client.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.mysql-client.git
 #
 # [submodule "lmu.ansible_base_role.varnish"]
 # 	path = roles/lmu.ansible_base_role.varnish
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.varnish.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.varnish.git
 #
 # [submodule "lmu.ansible_base_role.squid"]
 # 	path = roles/lmu.ansible_base_role.squid
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.squid.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.squid.git
 #
 # [submodule "lmu.ansible_base_role.motd"]
 # 	path = roles/lmu.ansible_base_role.motd
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role.motd.git
+# 	url = https://github.com/lmu/lmu.ansible_base_role.motd.git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
-# 	url = url = https://github.com/lmu/lmu.ansible_base_role..git
+# 	url = https://github.com/lmu/lmu.ansible_base_role..git
