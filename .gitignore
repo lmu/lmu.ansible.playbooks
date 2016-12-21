@@ -75,7 +75,7 @@ copy/
 out/
 unchecked-out/
 checked-out/
-roles/*/
+#roles/*/
 
 # Mac specifics
 .DS_Store

@@ -1,9 +1,9 @@
 # Git Submodules
 
 # Ansible Roles
-[submodule "lmu.ansible_role.postfix"]
-	path = roles/lmu.ansible_role.postfix
-	url = https://github.com/lmu/lmu.ansible_role.postfix.git
+# [submodule "lmu.ansible_role.postfix"]
+# 	path = roles/lmu.ansible_role.postfix
+# 	url = https://github.com/lmu/lmu.ansible_role.postfix.git
 
 [submodule "lmu.ansible_role.sentry"]
 	path = roles/lmu.ansible_role.sentry
