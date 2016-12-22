@@ -1,0 +1,15 @@
+---
+
+- name: "Ensure Base-Packages (ZUV-common) are installed"
+  yum:
+    pkg="{{ item }}"
+    state=present
+    update_cache=yes
+  with_items:
+    - bginfo-centos
+    - certs-zuv-centos
+  when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
+  notify:
+    - Restart xinetd
+
+...
