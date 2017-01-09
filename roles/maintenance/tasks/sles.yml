@@ -21,6 +21,8 @@
 
   - name: "Update all Packages (Suse/SLES)"
     command: zypper up
+    register: zypper_result
+    changed_when: "'Nothing to do.' not in zypper_result.stdout_lines"
     notify:
     - "Restart Server"
     - "Wait for Server to come back"

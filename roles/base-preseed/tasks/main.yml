@@ -57,7 +57,7 @@
   apt:
     pkg={{ item }}
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - aptitude
     - ssl-cert
@@ -106,7 +106,7 @@
   yum:
     name={{ item }}
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - yum-plugin-ps
     - yum-plugin-security
@@ -147,7 +147,7 @@
   apt:
     pkg={{ item }}
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - htop
     - atop
@@ -165,7 +165,7 @@
   yum:
     name={{ item }}
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - htop
     - atop
