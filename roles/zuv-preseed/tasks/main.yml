@@ -6,6 +6,13 @@
     password="{{ fachadmin_password }}"
     update_password=always
 
+- name: "Change Password for 'admin'"
+  user:
+    name="admin"
+    password="{{ admin_password }}"
+    update_password=always
+  when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
+
 - name: "Make ZUV-Proxy Settings"
   template:
     dest="/etc/profile.d/zuv_proxy.sh"

@@ -1,14 +1,15 @@
 ---
 
 - name: "Ensure Base-Packages (ZUV-common) are installed"
-  yum:
+  zypper:
     pkg="{{ item }}"
     state=present
     update_cache=yes
   with_items:
-    - zuv-bginfo-centos
-    - certs-zuv-centos
-  when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
+    - zuv-bginfo-sles
+    - zuv-bginfo-sles
+    - zuv-certs-sles
+  when: ansible_os_family == "Suse" and ansible_distribution == "SLES"
   notify:
     - Restart xinetd
 

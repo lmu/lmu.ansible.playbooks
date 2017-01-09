@@ -2,7 +2,10 @@
 
 - name: "Reload sshd"
   service:
-    name: ssh
+    name: "{{ item }}"
     state: reloaded
+  with_items:
+    - ssh
+    - sshd
 
 ...

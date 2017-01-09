@@ -7,4 +7,10 @@
   roles:
     - base-preseed
 
+- hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    #- psdash
 ...

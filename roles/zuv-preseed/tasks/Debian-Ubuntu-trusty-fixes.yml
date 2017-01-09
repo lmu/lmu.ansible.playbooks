@@ -31,7 +31,7 @@
       #- linux-cloud-tools
       #- linux-cloud-tools-common
       #- linux-cloud-tools-generic
-      - linux-cloud-tools-generic-lts-xenialx
+      - linux-cloud-tools-generic-lts-xenial
 
   - name: "Ensure old Kernel-Packages (Hyper-V Support) are absent"
     apt:
@@ -187,7 +187,7 @@
   - name: "Clean Apt Cache"
     command: apt-get clean -y
 
-  when: 'ansible_os_familiy == "Debian" and ansible_distribution == "Ubuntu" and ansible_distribution_release == "trusty"'
+  when: 'ansible_os_family == "Debian" and ansible_distribution == "Ubuntu" and ansible_distribution_release == "trusty"'
 
 
 ...

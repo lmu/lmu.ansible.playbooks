@@ -49,7 +49,7 @@ PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 
 # Change to no to disable tunnelled clear text passwords
-PasswordAuthentication yes
+PasswordAuthentication no
 
 # Kerberos options
 #KerberosAuthentication no
@@ -63,7 +63,7 @@ PasswordAuthentication yes
 
 X11Forwarding yes
 X11DisplayOffset 10
-PrintMotd no
+PrintMotd yes
 PrintLastLog yes
 TCPKeepAlive yes
 #UseLogin no
@@ -90,3 +90,9 @@ UsePAM yes
 # Disable Password Authetication for Ansible User who will come always over ssh_key
 Match User ansible
     PasswordAuthentication no
+# Re-enable Password Authetication for Admin Users who will come always over ssh_key
+Match User admin,fachadmin
+    PasswordAuthentication yes
+{% if ansible_fqdn in groups['sles'] %}
+    PermitRootLogin yes
+{% endif %}

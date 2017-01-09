@@ -1,37 +1,26 @@
 ---
 
-- hosts: all
+- hosts: sentry
   become: true
 
   vars:
+    admin_password: "$6$rounds=656000$7FWeGie/WDRfvfES$f3HA6STefV6JNgA668TFhyl2FR549VJkV7QW31/GHTWVELYT6YwWvx.C.2uIBxSp7eQvycS/b23AK7dH.QPNR/"
     fachadmin_password: "$6$rounds=656000$7FWeGie/WDRfvfES$f3HA6STefV6JNgA668TFhyl2FR549VJkV7QW31/GHTWVELYT6YwWvx.C.2uIBxSp7eQvycS/b23AK7dH.QPNR/"
+    proxy: {
+      no_proxy: [
+        "www.scm.verwaltung.uni-muenchen.de",
+        "pypi.verwaltung.uni-muenchen.de",
+        "*.zuv.uni-munechen.de",
+        "10.110.0.0/24",
+        "10.153.0.0/24",
+        "172.23.0.0/24"
+      ]
+    }
 
   roles:
     - base-preseed
-    - { role: zuv-preseed,
-        proxy: {
-          no_proxy: [
-            "www.scm.verwaltung.uni-muenchen.de",
-            "pypi.verwaltung.uni-muenchen.de",
-            "*.zuv.uni-munechen.de",
-            "10.110.0.0/24",
-            "10.153.0.0/24",
-            "172.23.0.0/24"
-          ]
-        }
-      }
-    - { role: infrastructure-preseed,
-        proxy: {
-          no_proxy: [
-            "www.scm.verwaltung.uni-muenchen.de",
-            "pypi.verwaltung.uni-muenchen.de",
-            "*.zuv.uni-munechen.de",
-            "10.110.0.0/24",
-            "10.153.0.0/24",
-            "172.23.0.0/24"
-          ]
-        }
-      }
+    - zuv-preseed
+    - infrastructure-preseed
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",

@@ -5,7 +5,7 @@
     name={{ inventory_hostname }}
   when: '"{{ inventory_hostname }}" != "localhost"'
 
-- name: "Ensure Group 'sudo' exists"
+- name: "Ensure sudo-Groups exists"
   group:
     name="{{ item }}"
     state=present
@@ -13,14 +13,18 @@
     - sudo
     - wheel
 
-- name: "Ensure User 'ansible' exists"
+- name: "Ensure Management Users exists"
   user:
-    name=ansible
-    comment="Ansible User for Provisioning with Ansible"
+    name="{{ item.name }}"
+    comment="{{ item.comment }}"
     state=present
     shell="/bin/bash"
     groups="sudo,wheel"
-    system=yes
+    system="{{ item.system }}"
+  with_items:
+    - { name: ansible, comment: "Ansible User for Provisioning with Ansible", system: yes }
+    - { name: admin, comment: "Management User", system: no }
+    - { name: fachadmin, comment: "Management User", system: no }
 
 - name: "Ensure that admin-users can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
@@ -40,7 +44,7 @@
   notify:
     - "Reload sshd"
 
-- name: "Ensure that User 'ansible' can sudo with public key (sudoer-file)"
+- name: "Ensure that Management Users can sudo without password (Configure sudoer-file)"
   template:
     dest="/etc/sudoers"
     src="sudoers.j2"
@@ -202,13 +206,5 @@
     special_time=hourly
   become: true
   when: ansible_os_family == "RedHat"
-
-- name: "Include supervisor Role"
-  include_role:
-    name: "supervisor"
-
-- name: "Include psdash Role"
-  include_role:
-    name: "psdash"
 
 ...
