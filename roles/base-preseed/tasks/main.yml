@@ -23,8 +23,8 @@
     system="{{ item.system }}"
   with_items:
     - { name: ansible, comment: "Ansible User for Provisioning with Ansible", system: yes }
-    - { name: admin, comment: "Management User", system: no }
-    - { name: fachadmin, comment: "Management User", system: no }
+    - { name: admin, comment: "Management User - admin", system: no }
+    - { name: fachadmin, comment: "Management User - fachadmin", system: no }
 
 - name: "Ensure that admin-users can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
