@@ -1,10 +1,3 @@
-# Git Submodules
-
-# Ansible Roles
-# [submodule "lmu.ansible_role.postfix"]
-# 	path = roles/lmu.ansible_role.postfix
-# 	url = https://github.com/lmu/lmu.ansible_role.postfix.git
-
 [submodule "lmu.ansible_role.sentry"]
 	path = roles/lmu.ansible_role.sentry
 	url = https://github.com/lmu/lmu.ansible_role.sentry.git
@@ -62,9 +55,9 @@
 # 	path = roles/lmu.ansible_base_role.motd
 # 	url = https://github.com/lmu/lmu.ansible_base_role.motd.git
 #
-# [submodule "lmu.ansible_base_role."]
-# 	path = roles/
-# 	url = https://github.com/lmu/lmu.ansible_base_role..git
+# [submodule "lmu.ansible_base_role.postfix"]
+# 	path = roles/lmu.ansible_base_role.postfix
+# 	url = https://github.com/lmu/lmu.ansible_base_role.postfix.git
 #
 # [submodule "lmu.ansible_base_role."]
 # 	path = roles/
