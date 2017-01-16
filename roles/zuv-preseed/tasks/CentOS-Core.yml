@@ -7,7 +7,7 @@
     update_cache=yes
   with_items:
     - zuv-bginfo-centos
-    - certs-zuv-centos
+    - zuv-certs-centos
   when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
   notify:
     - Restart xinetd

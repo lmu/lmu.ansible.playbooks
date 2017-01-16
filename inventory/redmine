@@ -8,6 +8,7 @@ redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Stagin
 
 [redmine-dbs-production]
 redmine2.verwaltung.uni-muenchen.de
+redmine3.verwaltung.uni-muenchen.de
 
 [redmine-dbs-staging]
 redminetest2.verwaltung.uni-muenchen.de
@@ -16,6 +17,7 @@ redminetest3.verwaltung.uni-muenchen.de
 
 [redmine-workers-production]
 redmine2.verwaltung.uni-muenchen.de
+redmine3.verwaltung.uni-muenchen.de
 
 [redmine-workers-staging]
 redminetest2.verwaltung.uni-muenchen.de
@@ -24,6 +26,7 @@ redminetest3.verwaltung.uni-muenchen.de
 
 [redmine-frontends-production]
 redmine2.verwaltung.uni-muenchen.de
+redmine3.verwaltung.uni-muenchen.de
 
 [redmine-frontends-staging]
 redminetest2.verwaltung.uni-muenchen.de
