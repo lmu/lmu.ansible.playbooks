@@ -3,6 +3,7 @@
 - hosts: all
   become: true
   gather_facts: true
+  serial: "{{ serial | default('100%') }}"
 
   tasks:
 
@@ -15,7 +16,7 @@
 
   - name: Wait for Server to come back
     local_action:
-      wait_for 
+      wait_for
       host={{ ansible_ssh_host | default(inventory_hostname) }}
       port=22
       search_regex=OpenSSH
