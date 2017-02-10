@@ -1,0 +1,50 @@
+---
+
+- block:
+
+  - name: "Ensure Ruby is installed"
+    yum:
+      pkg={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      - zlib-devel
+      - patch
+      - curl-devel
+      - ImageMagick-devel
+      - openssl-devel
+      - httpd-devel
+      - libtool
+      - apr-devel
+      - apr-util-devel
+      - bzip2
+      - ftp
+      - wget
+      - gcc-c++
+      - autoconf
+      - readline
+      - readline-devel
+      - zlib
+      - libyaml-devel
+      - libffi-devel
+      - make
+      - automake
+      - bison
+      - iconv-devel
+      - subversion
+    when: 'ansible_os_family == "RedHat"'
+
+#  - name: "Update bundler for Ruby"
+#    gem:
+#      name=bundler
+#      state=latest
+#      executable="{{ redmine.rubygem_version }}"
+#      user_install=no
+#    become: true
+#    become_user: root
+
+  environment:
+    http_proxy: "{{ lookup('env', 'https_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
+...

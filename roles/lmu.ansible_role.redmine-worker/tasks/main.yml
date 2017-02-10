@@ -5,7 +5,7 @@
     msg="Start Setup of Redmine Multi-Instance"
 
 - include: base.yml
-- include: ruby.yml
+- include: "ruby-{{ ansible_os_family }}.yml"
 
 - name: "Setup Redmine Instances"
   debug:

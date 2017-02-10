@@ -1,6 +1,6 @@
 ---
 
-- include: base.yml
+- include: "{{ ansible_os_family }}.yml"
 
 - name: "Create User"
   postgresql_user:

@@ -1,0 +1,75 @@
+---
+
+- name: "Install PostgreSQL Packages"
+  yum:
+    pkg={{ item }}
+    state=present
+  with_items:
+    - rh-postgresql95-postgresql-server
+    - rh-postgresql95-postgresql
+    - rh-postgresql95-postgresql-devel
+    #- postgresql-contrib
+    #- postgresql-client
+    #- python-psycopg2
+    #- libpq-dev
+    #- pgtop
+#    - postgres-xc
+  when: ansible_os_family == "RedHat" and use_sc
+
+
+
+#- name: "Copy the configuration files for PostgreSQL"
+#  template:
+#    src={{ item }}.j2
+#    dest="/etc/postgresql/{{ postgres_version.files[0].path | basename }}/main/{{ item }}"
+#    force=yes
+#    owner=postgres
+#    group=postgres
+#    mode="u=rw,g=r,o=r"
+#  with_items:
+#    - postgresql.conf
+#    - pg_ident.conf
+#    - pg_hba.conf
+#    - start.conf
+#  notify:
+#    - "Restart PostgreSQL"
+
+#- name: "Ensure PostgreSQL Data Directory exists"
+#  file:
+#    path="/var/lib/postgresql/{{ postgres_version.files[0].path | basename }}/main"
+#    state=directory
+#    owner=postgres
+#    group=postgres
+#    mode="u=rwx,g=,o="
+#
+#- name: "Generate Locale"
+#  command: locale-gen 'de_DE.UTF-8'
+#  become: true
+
+- name: "Ensure PostgreSQL Data Directory exists"
+  file:
+    path="{{ database.data_directory }}"
+    state=directory
+    owner=postgres
+    group=postgres
+    mode="u=rwx,g=,o="
+
+- name: "Ensure PostgreSQL Database is intialized"
+  command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup initdb
+  args:
+    creates="/data/db.exists"
+  notify:
+    - "Restart PostgreSQL"
+
+- name: "Ensure PostgreSQL is started and enabled on boot."
+  service:
+    name=rh-postgresql95-postgresql
+    state=restarted
+    enabled=yes
+
+- name: "Install PostgreSQL Python bindings"
+  pip:
+    name=psycopg2
+    virtualenv=/usr/local/venv-psycopg2
+
+...

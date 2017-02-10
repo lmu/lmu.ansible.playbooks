@@ -93,6 +93,6 @@ Match User ansible
 # Re-enable Password Authetication for Admin Users who will come always over ssh_key
 Match User admin,fachadmin
     PasswordAuthentication yes
-{% if ansible_fqdn in groups['sles'] %}
+{% if 'sles' in group_names and ansible_fqdn in groups['sles'] %}
     PermitRootLogin yes
 {% endif %}

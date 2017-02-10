@@ -95,8 +95,10 @@
     update_cache=yes
   with_items:
     #- https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    - https://centos7.iuscommunity.org/ius-release.rpm
-    - https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+    #- https://centos7.iuscommunity.org/ius-release.rpm
+    #- https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+    - epel-release
+    - centos-release-scl
   when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
 
 - name: "Ensure Base-Packages (common) are installed (RedHat/CentOS)"
