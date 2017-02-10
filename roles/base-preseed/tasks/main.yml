@@ -88,19 +88,16 @@
     - git-core
   when: ansible_os_family == "Debian"
 
-- name: "Add EPEL repository (RedHat/CentOS)"
-  yum_repository:
-    name=epel
-    description="EPEL YUM repo"
-    baseurl=http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-  when: ansible_os_family == "RedHat"
-
-- name: "Import EPEL GPG repository key"
-  rpm_key:
-   key="https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
-   state=present
-   validate_certs=no
-  when: ansible_os_family == "RedHat"
+- name: "Install Repositories (RetHat/CentOS)"
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
+    #- https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    - https://centos7.iuscommunity.org/ius-release.rpm
+    - https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+  when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
 
 - name: "Ensure Base-Packages (common) are installed (RedHat/CentOS)"
   yum:
