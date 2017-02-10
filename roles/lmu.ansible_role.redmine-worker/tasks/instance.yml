@@ -242,11 +242,19 @@
       - redmine_setup
       - redmine_upgrade
 
+  - name: "check if default_data.exists is present"
+    stat:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/default_data.exists"
+    register: default_data_exists
+    tags:
+      - redmine_setup
+
   - name: "Load Database default data ({{ instance.name }})"
     command: bundle exec rake redmine:load_default_data
       creates="default_data.exists"
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     register: default_data
+    when: "not default_data_exists.stat.exists"
     tags:
       - redmine_setup
 
@@ -257,7 +265,7 @@
       owner=redmine
       group=redmine
       mode="u=rx,g=rx,o=rx"
-    when: "default_data.rc == 0"
+    when: "not default_data_exists.stat.exists and default_data.rc == 0"
     tags:
       - redmine_setup
 
