@@ -26,8 +26,6 @@
     virtualenv="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
     chdir="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
     virtualenv_python="python2.7"
-  with_items:
-    - psycopg2
   become: yes
   become_user: root
   environment:

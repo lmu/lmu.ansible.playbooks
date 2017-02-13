@@ -94,9 +94,6 @@
       virtualenv="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       chdir="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       virtualenv_python="python2.7"
-    with_items:
-      - supervisor
-      - superlance
     become: yes
     become_user: root
     environment:
