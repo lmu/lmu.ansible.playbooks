@@ -86,6 +86,7 @@
     - libssl-dev
     #
     - git-core
+    - language-pack-de
   when: ansible_os_family == "Debian"
 
 - name: "Install Repositories (RetHat/CentOS)"
@@ -205,5 +206,11 @@
     special_time=hourly
   become: true
   when: ansible_os_family == "RedHat"
+
+- name: "Ensure Server knows own name in /etc/hosts"
+  lineinfile:
+    path="/etc/hosts"
+    line="127.0.0.1    localhost {{ ansible_hostname }} {{ ansible_fqdn }}"
+    regexp='^127\.0\.0\.1'
 
 ...

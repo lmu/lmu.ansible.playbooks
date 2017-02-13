@@ -1,0 +1,6 @@
+---
+
+ansible:
+  path: "/usr/local/venv-ansible"
+
+...

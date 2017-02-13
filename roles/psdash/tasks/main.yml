@@ -40,13 +40,14 @@
     owner: root
     group: root
     mode: "u=rwx,g=rx,o=rx"
-    vars:
-      req_items:
-        - psdash
+  vars:
+    req_items:
+      - psdash
 
 - name: "Install psdash"
   pip:
     requirements="{{ psdash.path }}/requirements.txt"
+    state=latest
     virtualenv="{{ psdash.path }}"
     chdir="{{ psdash.path }}"
   environment:

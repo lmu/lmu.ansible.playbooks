@@ -1,44 +1,5 @@
 ---
 
-- block:
-
-  - name: "Ensure Ansible Repository-Key is present"
-    apt_key:
-      keyserver="keyserver.ubuntu.com"
-      id="6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367"
-      state=present
-    tags:
-      - setup
-
-  - name: "Ensure Ansible Repository is present"
-    apt_repository:
-      repo="{{ item }}"
-      state=present
-      filename="ansible"
-      update_cache=yes
-    with_items:
-      - "deb http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
-      - "deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu {{ ansible_distribution_release }} main"
-    tags:
-      - setup
-
-  - name: "Install Ansible Packages"
-    apt:
-      pkg={{ item }}
-      state=present
-      update_cache=yes
-      install_recommends=yes
-    with_items:
-      - software-properties-common
-      - ansible
-    tags:
-      - setup
-
-  environment:
-    http_proxy: "{{ lookup('env', 'https_proxy') }}"
-    https_proxy: "{{ lookup('env', 'https_proxy') }}"
-  when: ansible_os_family == "Debian"
-
 - name: "Ensure Ansible directories are present"
   file:
     path={{ item }}
@@ -47,6 +8,7 @@
     group=root
     mode="u=rwx,g=rx,o=rx"
   with_items:
+    - "{{ ansible.path | default('/usr/local/venv-ansible') }}"
     - "/etc/ansible"
     - "/opt/ansible"
     - "/opt/ansible/roles"
@@ -63,6 +25,35 @@
     - "/usr/share/ansible/roles"
   tags:
     - setup
+
+- name: "Set ansible requirements.txt"
+  template:
+    src: requirements.txt.j2
+    dest: "{{ ansible.path | default('/usr/local/venv-ansible') }}/requirements.txt"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  vars:
+    req_items:
+      - ansible
+      - ansible-cmdb
+      - ansible-inventory-grapher
+      - ansible-roles-graph
+  tags:
+    - setup
+
+- name: "Install Ansible"
+  pip:
+    requirements="{{ ansible.path | default('/usr/local/venv-ansible') }}/requirements.txt"
+    state=latest
+    virtualenv="{{ ansible.path | default('/usr/local/venv-ansible') }}"
+    chdir="{{ ansible.path | default('/usr/local/venv-ansible') }}"
+    virtualenv_python="python2.7"
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  tags:
+  - setup
 
 - name: "Download lmu.ansible.playbooks"
   git:
