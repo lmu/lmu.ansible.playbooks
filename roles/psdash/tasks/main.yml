@@ -25,7 +25,7 @@
     - "zeromq-devel"
   when: ansible_os_family == "RedHat"
 
-- name: "Ensure psdash path: '{{ psdash.path }}' exists"
+- name: "Ensure psdash path: '{{ psdash.path | default('/usr/local/venv-psdash') }}' exists"
   file:
     path="{{ psdash.path | default('/usr/local/venv-psdash') }}"
     state=directory
@@ -46,10 +46,10 @@
 
 - name: "Install psdash"
   pip:
-    requirements="{{ psdash.path }}/requirements.txt"
+    requirements="{{ psdash.path | default('/usr/local/venv-psdash') }}/requirements.txt"
     state=latest
-    virtualenv="{{ psdash.path }}"
-    chdir="{{ psdash.path }}"
+    virtualenv="{{ psdash.path | default('/usr/local/venv-psdash') }}"
+    chdir="{{ psdash.path | default('/usr/local/venv-psdash') }}"
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"

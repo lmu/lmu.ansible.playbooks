@@ -13,3 +13,6 @@ database:
   max_stack_depth: "6MB"
 
   data_directory: "/data/postgresql"
+
+psycopg2:
+  path: "/usr/local/venv-psycopg2"

@@ -34,42 +34,45 @@
 #  notify:
 #    - "Restart PostgreSQL"
 
-#- name: "Ensure PostgreSQL Data Directory exists"
-#  file:
-#    path="/var/lib/postgresql/{{ postgres_version.files[0].path | basename }}/main"
-#    state=directory
-#    owner=postgres
-#    group=postgres
-#    mode="u=rwx,g=,o="
-#
-#- name: "Generate Locale"
-#  command: locale-gen 'de_DE.UTF-8'
-#  become: true
+- name: "Generate Locale"
+  command: locale-gen 'de_DE.UTF-8'
+  become: true
 
 - name: "Ensure PostgreSQL Data Directory exists"
   file:
-    path="{{ database.data_directory }}"
+    path="{{ database.data_directory | default('/data/postgresql') }}"
     state=directory
     owner=postgres
     group=postgres
     mode="u=rwx,g=,o="
 
+- name: "Manual precheck if '{{ database.data_directory | default('/data/postgresql')}}/db.exists' exists"
+  stat:
+    path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
+  register: db_exists
+
 - name: "Ensure PostgreSQL Database is intialized"
   command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup initdb
-  args:
-    creates="/data/db.exists"
+    creates="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
+    chdir
+  when: 'not db_exists.stat.exists'
+  register: db_created
   notify:
     - "Restart PostgreSQL"
+
+- name: "Manual create '{{ database.data_directory | default('/data/postgresql')}}/db.exists'"
+  file:
+    path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
+    state=file
+    owner=postgres
+    group=postgres
+    mode="u=rx,g=r,o=r"
+  when: 'db_created.rc == 0'
 
 - name: "Ensure PostgreSQL is started and enabled on boot."
   service:
     name=rh-postgresql95-postgresql
     state=restarted
     enabled=yes
-
-- name: "Install PostgreSQL Python bindings"
-  pip:
-    name=psycopg2
-    virtualenv=/usr/local/venv-psycopg2
 
 ...

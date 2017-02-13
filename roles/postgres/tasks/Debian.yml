@@ -15,10 +15,6 @@
 #    - postgres-xc
   when: ansible_os_family == "Debian"
 
-- name: "Install PostgreSQL Python bindings"
-  pip:
-    name=psycopg2
-
 - name: "gather postgres version"
   find:
     paths="/etc/postgresql/"

@@ -26,9 +26,17 @@
     - { name: admin, comment: "Management User - admin", system: no }
     - { name: fachadmin, comment: "Management User - fachadmin", system: no }
 
-- name: "Ensure that admin-users can login via SSH Public Key (Transfere Public Key)"
+- name: "Ensure that admin-users 'ansible' can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
     user="ansible"
+    key="{{ lookup('file', '{{ item }}' )}}"
+    state=present
+  with_fileglob:
+    - "files/ssh-keys/ansible/*.pub"
+
+- name: "Ensure that admin-users '{{ ansible_user_id }}' can login via SSH Public Key (Transfere Public Key)"
+  authorized_key:
+    user="{{ ansible_user_id }}"
     key="{{ lookup('file', '{{ item }}' )}}"
     state=present
   with_fileglob:

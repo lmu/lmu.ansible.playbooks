@@ -84,10 +84,10 @@ redmine_instance:
     themes: "{{ redmine_themes }}"
 
 redmine_plugins: {
-  "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.1'},
+  "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.2'},
   "redmine_checklists": { 'url': "ssh://git@git.alphanodes.com/redmine_checklistspro.git"}, #, 'version': '3.1.5'},
-  "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts.git" }, #, 'version': '4.0.4'},
-  "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.4'},
+  "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts.git" }, #, 'version': '4.0.6'},
+  "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.5'},
   "redmine_favorite_projects": { 'url': "https://github.com/alexandermeindl/redmine_favorite_projects.git", 'version': 'master'},
   "redmine_tweaks": { 'url': "https://github.com/alexandermeindl/redmine_tweaks.git", 'version': 'master'},
   "redmine_auto_watch": { 'url': "https://github.com/mephi-ut/redmine_auto_watch.git", 'version': 'master'},

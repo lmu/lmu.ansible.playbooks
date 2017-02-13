@@ -11,3 +11,9 @@
     name=supervisor
     state=reloaded
     sleep=5
+
+- name: "Reread Supervisor"
+  service:
+    name=supervisor
+    state=reread
+    sleep=5

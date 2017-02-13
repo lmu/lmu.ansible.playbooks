@@ -1,6 +1,7 @@
 ---
 
 - include: "{{ ansible_os_family }}.yml"
+- include: "psycopg2.yml"
 
 - name: "Create User"
   postgresql_user:
