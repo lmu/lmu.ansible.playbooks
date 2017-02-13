@@ -67,11 +67,29 @@
       state=absent
     when: ansible_os_family == "RedHat"
 
+  - name: "Ensure supervisor path: '{{ psdash.path }}' exists"
+    file:
+      path="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
+      state=directory
+      owner=root
+      group=root
+      mode="u=rwx,g=rwx,o=rx"
+
+  - name: "Set supervisor requirements.txt"
+    template:
+      src: requirements.txt.j2
+      dest: "{{ supervisor.path | default('/usr/local/venv-supervisor') }}/requirements.txt"
+      owner: root
+      group: root
+      mode: "u=rwx,g=rx,o=rx"
+    vars:
+      req_items:
+        - supervisor
+        - superlance
+
   - name: "Install Supervisor"
     pip:
-      name="{{ item }}"
-      state="present"
-      version="{{ supervisor.version | default(omit)}}"
+      requirements="{{ supervisor.path | default('/usr/local/venv-supervisor') }}/requirements.txt"
       virtualenv="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       chdir="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       virtualenv_python="python2.7"
@@ -93,15 +111,15 @@
       validate=""
     when: ansible_service_mgr == "upstart"
 
-#  - name: "Install Supervisor SystemD-Script"
-#    template:
-#      src="supervisord.systemd.j2"
-#      dest="/etc/init.d/supervisor"
-#      owner=root
-#      group=root
-#      mode="u=rwx,g=rx,o=rx"
-#      validate=""
-#    when: ansible_service_mgr == "systemd"
+  - name: "Install Supervisor SystemD-Script"
+    template:
+      src="supervisor.service.j2"
+      dest="/lib/systemd/system/supervisor.service"
+      owner=root
+      group=root
+      mode="u=rwx,g=rx,o=rx"
+      validate=""
+    when: ansible_service_mgr == "systemd"
 
   - name: "Install Supervisor Defaults"
     template:

@@ -1,0 +1,14 @@
+---
+
+- name: "Update all VirtualEnvs"
+  pip:
+    requirements="{{ item }}/requirements.txt"
+    state=latest
+    virtualenv="{{ item }}"
+    chdir="{{ item }}"
+  with_fileglob:
+    - /usr/local/venv-*
+
+
+
+...

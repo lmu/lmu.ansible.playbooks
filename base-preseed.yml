@@ -12,5 +12,5 @@
   gather_facts: true
 
   roles:
-    #- psdash
+    - psdash
 ...

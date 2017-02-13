@@ -11,8 +11,12 @@
 - name: "Run CentOS / RedHat Update Process"
   include: redhat.yml
   when: ansible_os_family == "RedHat"
-# Check for Reboot
 
+- name: "Run Virtualenv Update Process"
+  include: virtualenv.yml
+
+
+# Check for Reboot
 - stat: path=/var/run/reboot-required
   register: reboot_required
   check_mode: no

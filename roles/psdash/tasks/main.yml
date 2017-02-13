@@ -2,7 +2,7 @@
 
 - name: "Ensure base dependencies for psdash are installed (Debian/Ubuntu)"
   apt:
-    pkg={{ item }}
+    pkg="{{ item }}"
     state=present
     update_cache=yes
     install_recommends=yes
@@ -15,10 +15,9 @@
 
 - name: "Ensure base dependencies for psdash are installed (RedHat/CentOS)"
   yum:
-    pkg={{ item }}
+    pkg="{{ item }}"
     state=present
     update_cache=yes
-    install_recommends=yes
   with_items:
     - "python-devel"
     - "python-virtualenv"
@@ -28,17 +27,26 @@
 
 - name: "Ensure psdash path: '{{ psdash.path }}' exists"
   file:
-    path="{{ psdash.path }}"
+    path="{{ psdash.path | default('/usr/local/venv-psdash') }}"
     state=directory
     owner=root
     group=root
     mode="u=rwx,g=rwx,o=rx"
 
+- name: "Set psdash requirements.txt"
+  template:
+    src: requirements.txt.j2
+    dest: "{{ psdash.path | default('/usr/local/venv-psdash') }}/requirements.txt"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+    vars:
+      req_items:
+        - psdash
+
 - name: "Install psdash"
   pip:
-    name="psdash"
-    state="latest"
-    version="{{ psdash.version | default(omit)}}"
+    requirements="{{ psdash.path }}/requirements.txt"
     virtualenv="{{ psdash.path }}"
     chdir="{{ psdash.path }}"
   environment:
@@ -47,7 +55,7 @@
 
 - name: "Ensure psdash path: '{{ psdash.path }}' has right user settings and permissions"
   file:
-    path="{{ psdash.path }}"
+    path="{{ psdash.path | default('/usr/local/venv-psdash') }}"
     state=directory
     owner=root
     group=root
@@ -88,7 +96,7 @@
 
 - name: "Remove psdash"
   file:
-    path="{{ psdash.path }}"
+    path="{{ psdash.path | default('/usr/local/venv-psdash') }}"
     state=absent
     owner=root
     group=root
@@ -96,7 +104,7 @@
   with_items:
     - "/etc/supervisor/conf.d/psdash.conf"
     - "/etc/psdash.py"
-    - "{{ psdash.path }}"
+    - "{{ psdash.path | default('/usr/local/venv-psdash') }}"
   when: psdash.mode == "absent"
   notify:
     - "Reload Supervisor"
