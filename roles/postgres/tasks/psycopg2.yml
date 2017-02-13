@@ -1,44 +1,37 @@
 ---
 
-  - name: "Ensure psycopg2 path: '{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}' exists"
-    file:
-      path="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
-      state=directory
-      owner=root
-      group=root
-      mode="u=rwx,g=rwx,o=rx"
+- name: "Ensure psycopg2 path: '{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}' exists"
+  file:
+    path="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rwx,o=rx"
 
-  - name: "Set psycopg2 requirements.txt"
-    template:
-      src: requirements.txt.j2
-      dest: "{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/requirements.txt"
-      owner: root
-      group: root
-      mode: "u=rwx,g=rx,o=rx"
-    vars:
-      req_items:
-        - psycopg2
-
-  - name: "Install Supervisor"
-    pip:
-      requirements="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/requirements.txt"
-      state=latest
-      virtualenv="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
-      chdir="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
-      virtualenv_python="python2.7"
-    with_items:
+- name: "Set psycopg2 requirements.txt"
+  template:
+    src: requirements.txt.j2
+    dest: "{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/requirements.txt"
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  vars:
+    req_items:
       - psycopg2
-      - superlance
-    become_user: root
-    environment:
-      http_proxy: "{{ lookup('env', 'http_proxy') }}"
-      https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-
-
-- name: "Install PostgreSQL Python bindings"
+- name: "Install psycopg2 - postgres-bindings for ansible"
   pip:
-    name=psycopg2
-    virtualenv=/usr/local/venv-psycopg2
+    requirements="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/requirements.txt"
+    state=latest
+    virtualenv="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
+    chdir="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
+    virtualenv_python="python2.7"
+  with_items:
+    - psycopg2
+  become: yes
+  become_user: root
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
 ...

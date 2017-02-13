@@ -57,7 +57,7 @@
       state=latest
       executable="{{ redmine.rubygem_version }}"
       user_install=no
-    become: true
+    become: yes
     become_user: root
 
   environment:

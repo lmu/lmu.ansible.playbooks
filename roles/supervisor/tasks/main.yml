@@ -97,6 +97,7 @@
     with_items:
       - supervisor
       - superlance
+    become: yes
     become_user: root
     environment:
       http_proxy: "{{ lookup('env', 'http_proxy') }}"

@@ -19,7 +19,7 @@
     executable="{{ redmine.rubygem_version }}"
     user_install=no
   register: gem_result
-  become: true
+  become: yes
   become_user: root
 
 - name: "Ensure apache passenger module file is present"
@@ -39,7 +39,7 @@
 
 - name: "Install/compile passenger Apache2 Module"
   command: passenger-install-apache2-module -a --languages='ruby'
-  become: true
+  become: yes
   become_user: root
   when: passenger_module_compiled.changed
 

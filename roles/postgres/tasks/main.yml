@@ -8,8 +8,8 @@
     name="{{ database.db_user }}"
     password="{{ database.db_passwd }}"
     role_attr_flags="NOSUPERUSER,CREATEDB"
-  become_user: postgres
   become: yes
+  become_user: postgres
   when: "{{ database.db_user }} is defined and {{ database.db_passwd }} is defined"
 
 - name: "Create Database"

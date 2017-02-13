@@ -19,6 +19,7 @@
     name='url."https://github.com".insteadOf'
     value="git://github.com"
     scope=global
+  become: yes
   become_user: redmine
 
 - name: "Ensure Base directories exists"

@@ -70,6 +70,7 @@
     name='url."https://github.com".insteadOf'
     value="git://github.com"
     scope=global
+  become: yes
   become_user: redmine
 
 - name: "Ensure Base directories exists"
@@ -99,7 +100,7 @@
     state=latest
     executable="{{ redmine.rubygem_version }}"
     user_install=no
-  become: true
+  become: yes
   become_user: root
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
@@ -111,7 +112,7 @@
     password="{{ redmine_db.passwd }}"
     role_attr_flags="SUPERUSER"
     #role_attr_flags="NOSUPERUSER,CREATEDB,CREATEROLE,CREATEUSER"
-  become_user: "postgres"
   become: yes
+  become_user: "postgres"
 
 ...
