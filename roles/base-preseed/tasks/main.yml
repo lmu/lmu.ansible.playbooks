@@ -209,8 +209,12 @@
 
 - name: "Ensure Server knows own name in /etc/hosts"
   lineinfile:
-    path="/etc/hosts"
-    line="127.0.0.1    localhost {{ ansible_hostname }} {{ ansible_fqdn }}"
+    line="127.0.0.1\tlocalhost {{ ansible_hostname }} {{ ansible_fqdn }}"
     regexp='^127\.0\.0\.1'
+    dest="/etc/hosts"
+    state=present
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
 
 ...
