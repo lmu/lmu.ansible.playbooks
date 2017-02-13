@@ -90,10 +90,9 @@
   - name: "Install Supervisor"
     pip:
       requirements="{{ supervisor.path | default('/usr/local/venv-supervisor') }}/requirements.txt"
-      state=latest
+      state=present
       virtualenv="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
       chdir="{{ supervisor.path | default('/usr/local/venv-supervisor') }}"
-      virtualenv_python="python2.7"
     become: yes
     become_user: root
     environment:

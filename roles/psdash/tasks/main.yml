@@ -47,7 +47,7 @@
 - name: "Install psdash"
   pip:
     requirements="{{ psdash.path | default('/usr/local/venv-psdash') }}/requirements.txt"
-    state=latest
+    state=present
     virtualenv="{{ psdash.path | default('/usr/local/venv-psdash') }}"
     chdir="{{ psdash.path | default('/usr/local/venv-psdash') }}"
   environment:

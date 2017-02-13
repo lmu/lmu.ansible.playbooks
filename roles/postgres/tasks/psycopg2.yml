@@ -19,13 +19,12 @@
     req_items:
       - psycopg2
 
-- name: "Install psycopg2 - postgres-bindings for ansible"
+- name: "Install psycopg2 - postgres bindings for ansible"
   pip:
     requirements="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/requirements.txt"
-    state=latest
+    state=present
     virtualenv="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
     chdir="{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}"
-    virtualenv_python="python2.7"
   become: yes
   become_user: root
   environment:
