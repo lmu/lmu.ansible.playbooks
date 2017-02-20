@@ -1,6 +1,6 @@
 [sles]
-#pdb-live-pg1.verwaltung.uni-muenchen.de     dtap=production comment="DB Server for Redmine1"
-#redmine1.verwaltung.uni-muenchen.de         dtap=production comment="Active Production Server for Redmine"
+pdb-live-pg1.verwaltung.uni-muenchen.de     # Comment in inventory/redmine
+redmine1.verwaltung.uni-muenchen.de         # Comment in inventory/redmine
 piwiktest1.verwaltung.uni-muenchen.de       dtap=test/production comment="Activly used Piwik Web-Analytics"
 themeproxy1.verwaltung.uni-muenchen.de      dtap=production comment="Active Production Server for Diazo/Theme-Proxy on PrintService and EvaSys"
 themeproxytest1.verwaltung.uni-muenchen.de  dtap=test comment="Test Setup of different Softwares, Mainly Diazo-Setup, but also Redmine Test"
