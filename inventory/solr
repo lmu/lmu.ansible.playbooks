@@ -1,12 +1,13 @@
 # Search Servers with Solr
 
-search3.verwaltung.uni-muenchen.de   dtap=production comment="Prodction Server for solr-Search-Engine"
-search4.verwaltung.uni-muenchen.de   dtap=production/staging comment="Prodction Fallback/Staging Server for solr-Search-Engine"
+search3.verwaltung.uni-muenchen.de   dtap=production comment="Production Server for solr-Search-Engine"
+search4.verwaltung.uni-muenchen.de   dtap=production/staging comment="Production Fallback/Staging Server for solr-Search-Engine"
 
 [solr-masters-production]
 search3.verwaltung.uni-muenchen.de
 
 [solr-slaves-production]
+search4.verwaltung.uni-muenchen.de
 
 [solrs-production:children]
 solr-masters-production

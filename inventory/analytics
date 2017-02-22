@@ -1,6 +1,10 @@
 # Inventory for Piwik - Web-Analytics
 
-#piwik-db1.verwaltung.uni-muenchen.de   dtap=production comment="Upcoming production Database Server for Piwik"
+# active Servers
+piwiktest1.verwaltung.uni-muenchen.de       dtap=production comment="Activly used Piwik Web-Analytics"
+
+# requested Servers
+#piwik-db1.verwaltung.uni-muenchen.de       dtap=production comment="Upcoming production Database Server for Piwik"
 #piwik-master1.verwaltung.uni-muenchen.de   dtap=production comment="Upcoming production Master Server for Piwik (Not in Load-Balancing, Runner of Scripts, and Mail)"
 #piwik-worker1.verwaltung.uni-muenchen.de   dtap=production comment="Upcoming production Worker Instance for Piwik"
 #piwik-worker2.verwaltung.uni-muenchen.de   dtap=production comment="Upcoming production Worker Instance for Piwik"
