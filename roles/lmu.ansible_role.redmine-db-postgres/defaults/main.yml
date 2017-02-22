@@ -1,0 +1,33 @@
+---
+
+redmine:
+  app_base_path: "/opt/redmine"
+  data_base_path: "/data/redmine"
+  log_base_path: "/var/log/redmine"
+  run_base_path: "/var/run/redmine"
+
+  src_url: "http://www.redmine.org/releases/"
+  src_file: "redmine-3.3.0.tar.gz"
+  checksum: "0c0abb2d4efde455c3505d8caf01cb2d"
+  version: "3.3"
+
+  domain: "redmine.test"
+
+redmine_instance:
+  - name: "redmine"
+    alias: []
+    db_name: "redmine-production"
+    db_dev_name: "redmine-dev"
+    db_test_name: "redmine-test"
+    db_user: "redmine"
+    db_passwd: "redmine"
+    db_host: "127.0.0.1"
+    lang: "en"
+    log_level: "debug"
+
+nginx:
+  use_ppa: "no"
+  use_repo: "yes"
+  ppa: "ppa:nginx/stable"
+
+...

@@ -1,6 +1,7 @@
 ---
 
-use_sc: true
+#use_sc: true
+use_sc: false
 
 database:
   port: "5432"

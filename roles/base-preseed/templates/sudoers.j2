@@ -10,6 +10,8 @@ Defaults        env_reset
 Defaults        mail_badpass
 Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Defaults        env_keep += "ftp_proxy http_proxy https_proxy no_proxy SSH_AUTH_SOCK"
+Defaults:ansible  env_keep += "PATH LD_LIBRARY_PATH LIBRARY_PATH"
+Defaults:vagrant  env_keep += "PATH LD_LIBRARY_PATH LIBRARY_PATH"
 Defaults:ansible  !requiretty
 Defaults:vagrant  !requiretty
 

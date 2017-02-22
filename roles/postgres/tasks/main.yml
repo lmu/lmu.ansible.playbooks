@@ -8,6 +8,12 @@
     name="{{ database.db_user }}"
     password="{{ database.db_passwd }}"
     role_attr_flags="NOSUPERUSER,CREATEDB"
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    PATH: "{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/bin:/opt/rh/rh-postgresql95/root/usr/bin:{{ lookup('env', 'PATH')}}"
+    LD_LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
+    LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
   become: yes
   become_user: postgres
   when: "{{ database.db_user }} is defined and {{ database.db_passwd }} is defined"
@@ -15,13 +21,19 @@
 - name: "Create Database"
   postgresql_db:
     name="{{ database.db_name }}"
-    login_user="{{database.db_user}}"
+    login_user="{{ database.db_user }}"
     login_password="{{ database.db_passwd }}"
     login_host=127.0.0.1
     encoding='UTF-8'
     template='template0'
     state=present
-    owner="{{database.db_user}}"
+    owner="{{ database.db_user }}"
     lc_ctype='de_DE.UTF-8'
     lc_collate='de_DE.UTF-8'
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    PATH: "{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/bin:/opt/rh/rh-postgresql95/root/usr/bin:{{ lookup('env', 'PATH')}}"
+    LD_LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
+    LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
   when: "{{ database.db_name }} is defined and {{ database.db_user }} is defined and {{ database.db_passwd }} is defined"

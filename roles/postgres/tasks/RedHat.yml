@@ -1,21 +1,41 @@
 ---
 
-- name: "Install PostgreSQL Packages"
+- name: "Install PostgreSQL Packages (from Software Collections)"
   yum:
     pkg={{ item }}
     state=present
   with_items:
     - rh-postgresql95-postgresql-server
     - rh-postgresql95-postgresql
+    - rh-postgresql95
     - rh-postgresql95-postgresql-devel
-    #- postgresql-contrib
-    #- postgresql-client
+    - rh-postgresql95-postgresql-libs
+    - rh-postgresql95-postgresql-contrib
+    - rh-python35-python-psycopg2
+    - python-psycopg2
+    - libpqxx-devel
+    - libpqxx
     #- python-psycopg2
-    #- libpq-dev
-    #- pgtop
-#    - postgres-xc
+    - pg_top
+    #- postgres-xc
   when: ansible_os_family == "RedHat" and use_sc
 
+
+- name: "Install PostgreSQL Packages (from Base Repository)"
+  yum:
+    pkg={{ item }}
+    state=present
+  with_items:
+    - postgresql-server
+    - postgresql
+    - postgresql-devel
+    - postgresql-libs
+    - postgresql-contrib
+    - python-psycopg2
+    - libpqxx-devel
+    - libpqxx
+    - pg_top
+  when: ansible_os_family == "RedHat" and not use_sc
 
 
 #- name: "Copy the configuration files for PostgreSQL"
@@ -34,9 +54,9 @@
 #  notify:
 #    - "Restart PostgreSQL"
 
-- name: "Generate Locale"
-  command: locale-gen 'de_DE.UTF-8'
-  become: true
+#- name: "Generate Locale"
+#  command: locale-gen 'de_DE.UTF-8'
+#  become: true
 
 - name: "Ensure PostgreSQL Data Directory exists"
   file:
@@ -51,28 +71,56 @@
     path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
   register: db_exists
 
-- name: "Ensure PostgreSQL Database is intialized"
-  command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup initdb
+- name: "Ensure PostgreSQL Database is intialized (Use Software Collections)"
+  command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup --initdb
     creates="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
-    chdir
-  when: 'not db_exists.stat.exists'
+    chdir="{{ database.data_directory | default('/data/postgresql')}}"
+  when: 'not db_exists.stat.exists and use_sc'
   register: db_created
+  notify:
+    - "Restart PostgreSQL"
+
+- name: "Ensure PostgreSQL Database is intialized (Use Base Repository)"
+  command: initdb -D "{{ database.data_directory | default('/data/postgresql')}}"
+    creates="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
+    chdir="{{ database.data_directory | default('/data/postgresql')}}"
+  when: 'not db_exists.stat.exists and not use_sc'
+  register: db_created
+  become: yes
+  become_user: postgres
   notify:
     - "Restart PostgreSQL"
 
 - name: "Manual create '{{ database.data_directory | default('/data/postgresql')}}/db.exists'"
   file:
     path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
-    state=file
+    state=touch
     owner=postgres
     group=postgres
     mode="u=rx,g=r,o=r"
-  when: 'db_created.rc == 0'
+  when: 'not db_exists.stat.exists and db_created.rc == 0'
 
-- name: "Ensure PostgreSQL is started and enabled on boot."
+- name: "Set specific systemd service file for postgres"
+  template:
+    src=postgresql.service.centos.j2
+    dest="/etc/systemd/system/postgresql.service"
+    force=yes
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+
+- name: "Ensure PostgreSQL is started and enabled on boot (Use PostgreSQL from Software Collections)."
   service:
     name=rh-postgresql95-postgresql
     state=restarted
     enabled=yes
+  when: 'use_sc'
+
+- name: "Ensure PostgreSQL is started and enabled on boot (Use PostgreSQL from Base Repository)."
+  service:
+    name=postgresql
+    state=restarted
+    enabled=yes
+  when: 'not use_sc'
 
 ...
