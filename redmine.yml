@@ -55,6 +55,10 @@
   vars_files:
     - secrets.yml
 
+  pre_tasks:
+
+    - meta: end_play
+
   roles:
     - lmu.ansible_role.redmine-db-postgres
 
@@ -72,6 +76,10 @@
 
   vars_files:
     - secrets.yml
+
+  pre_tasks:
+
+    - meta: end_play
 
   roles:
     - lmu.ansible_role.redmine-frontend-apache_httpd

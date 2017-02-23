@@ -4,7 +4,7 @@
 
 production:
   adapter: postgresql
-  database: "redmine-{{ instance.db_name}}"
+  database: "redmine_{{ instance.db_name}}"
 {% if instance.db_socket is defined %}
   socket: "{{ instance.db_socket }}"
 {% elif instance.db_host is defined and instance.db_port is defined %}
@@ -20,7 +20,7 @@ production:
 {% if instance.db_dev_name | default(false) %}
 development:
   adapter: postgresql
-  database: "{{ instance.db_dev_name}}"
+  database: "redmine_{{ instance.db_dev_name}}"
   host: "{{ instance.db_host }}"
   username: "{{ instance.db_user }}"
   password: "{{ instance.db_passwd }}"
@@ -33,7 +33,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   adapter: postgresql
-  database: "{{ instance.db_test_name}}"
+  database: "redmine_{{ instance.db_test_name}}"
   host: "{{ instance.db_host }}"
   username: "{{ instance.db_user }}"
   password: "{{ instance.db_passwd }}"

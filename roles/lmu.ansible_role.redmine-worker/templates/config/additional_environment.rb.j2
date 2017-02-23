@@ -11,7 +11,7 @@ config.log_level = :{{ instance.log_level }}
 config.paths['log'] = "{{ redmine.log_base_path }}/{{ instance.name }}/redmine_production.log"
 
 config.cache_store = :dalli_store, 'localhost', {
-  :namespace => 'redmine-{{ instance.name }}',
+  :namespace => 'redmine_{{ instance.name }}',
   :expires_in => 1.hour,
   :compress => true,
   :pool_size => {{ ansible_processor_cores }}
