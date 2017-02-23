@@ -59,10 +59,8 @@
     mode="u=rwx,g=,o="
 
 - name: "Ensure PostgreSQL Database is intialized"
-  command: postgresql-setup --initdb
-    creates="{{ database.data_directory | default('/data/postgresql')}}/postgresql.conf"
-    chdir="{{ database.data_directory | default('/data/postgresql')}}"
-  when: 'not use_sc'
+  command: postgresql-setup initdb
+    creates="{{ database.data_directory | default('/data/postgresql')}}/PG_VERSION"
   notify:
     - "Restart PostgreSQL"
 
