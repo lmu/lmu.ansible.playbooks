@@ -1,6 +1,6 @@
 ---
 
-- name: "Install memcached"
+- name: "Install memcached (Debian/Ubuntu)"
   apt:
     pkg={{ item }}
     state=present
@@ -9,6 +9,15 @@
   with_items:
     - memcached
   when: ansible_os_family == "Debian"
+
+- name: "Install memcached (RedHat/CentOS)"
+  yum:
+    pkg={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
+    - memcached
+  when: ansible_os_family == "RedHat"
 
 - name: "Copy configuration files for memcached"
   template:
