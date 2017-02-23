@@ -9,29 +9,29 @@
   become_user: "postgres"
   become: yes
 
-- name: "Create Redmine Database for {{ instance.name }}"
-  postgresql_db:
-    name="\"redmine-{{ instance.db_name }}\""
-    login_user="{{ instance.db_user}}"
-    login_password="{{ instance.db_passwd }}"
-    login_host="127.0.0.1"
-    login_unix_socket="{{ instance.db_socket }}"
-    encoding='UTF-8'
-    template='template0'
-    state=present
-    owner="{{ instance.db_user}}"
-    lc_ctype='de_DE.UTF-8'
-    lc_collate='de_DE.UTF-8'
-  with_items: "{{ redmine_instance }}"
-  loop_control:
-    loop_var: instance
-  tags:
-    - redmine_setup
-  ignore_errors: true
+#- name: "Create Redmine Database for {{ instance.name }}"
+#  postgresql_db:
+#    name="\"redmine-{{ instance.db_name }}\""
+#    login_user="{{ instance.db_user}}"
+#    login_password="{{ instance.db_passwd }}"
+#    login_host="127.0.0.1"
+#    login_unix_socket="{{ instance.db_socket }}"
+#    encoding='UTF-8'
+#    template='template0'
+#    state=present
+#    owner="{{ instance.db_user}}"
+#    lc_ctype='de_DE.UTF-8'
+#    lc_collate='de_DE.UTF-8'
+#  with_items: "{{ redmine_instance }}"
+#  loop_control:
+#    loop_var: instance
+#  tags:
+#    - redmine_setup
+#  ignore_errors: true
 
 - name: "Ensure Redmine Database for {{ instance.name }} is present"
   postgresql_db:
-    name="redmine-{{ instance.db_name }}"
+    name="redmine_{{ instance.db_name }}"
     login_user="{{ instance.db_user}}"
     login_password="{{ instance.db_passwd }}"
     login_host="127.0.0.1"

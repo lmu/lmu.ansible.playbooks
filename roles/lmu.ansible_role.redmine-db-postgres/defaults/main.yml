@@ -16,9 +16,9 @@ redmine:
 redmine_instance:
   - name: "redmine"
     alias: []
-    db_name: "redmine-production"
-    db_dev_name: "redmine-dev"
-    db_test_name: "redmine-test"
+    db_name: "redmine_production"
+    db_dev_name: "redmine_dev"
+    db_test_name: "redmine_test"
     db_user: "redmine"
     db_passwd: "redmine"
     db_host: "127.0.0.1"

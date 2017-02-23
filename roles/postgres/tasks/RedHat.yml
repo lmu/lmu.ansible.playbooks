@@ -1,5 +1,22 @@
 ---
 
+- name: "Ensure base dependencies for managing PostgreSQL are installed."
+  yum:
+    pkg={{ item }}
+    state=present
+  with_items:
+    - libselinux-python
+    - policycoreutils-python
+    - python-psycopg2
+  # Psycopy2 is a dependency for Ansible itself to handle PostgreSQL Commands
+  # libselinux-python and policycoreutils-python are dependencies for Managing
+  #   SELinux settings.
+
+- name: "Set SELinux in Permissive mode"
+  selinux:
+    policy: targeted
+    state: permissive
+
 - name: "Install PostgreSQL Packages (from Software Collections)"
   yum:
     pkg={{ item }}
@@ -11,15 +28,10 @@
     - rh-postgresql95-postgresql-devel
     - rh-postgresql95-postgresql-libs
     - rh-postgresql95-postgresql-contrib
-    - rh-python35-python-psycopg2
-    - python-psycopg2
     - libpqxx-devel
     - libpqxx
-    #- python-psycopg2
     - pg_top
-    #- postgres-xc
   when: ansible_os_family == "RedHat" and use_sc
-
 
 - name: "Install PostgreSQL Packages (from Base Repository)"
   yum:
@@ -31,32 +43,10 @@
     - postgresql-devel
     - postgresql-libs
     - postgresql-contrib
-    - python-psycopg2
     - libpqxx-devel
     - libpqxx
     - pg_top
   when: ansible_os_family == "RedHat" and not use_sc
-
-
-#- name: "Copy the configuration files for PostgreSQL"
-#  template:
-#    src={{ item }}.j2
-#    dest="/etc/postgresql/{{ postgres_version.files[0].path | basename }}/main/{{ item }}"
-#    force=yes
-#    owner=postgres
-#    group=postgres
-#    mode="u=rw,g=r,o=r"
-#  with_items:
-#    - postgresql.conf
-#    - pg_ident.conf
-#    - pg_hba.conf
-#    - start.conf
-#  notify:
-#    - "Restart PostgreSQL"
-
-#- name: "Generate Locale"
-#  command: locale-gen 'de_DE.UTF-8'
-#  become: true
 
 - name: "Ensure PostgreSQL Data Directory exists"
   file:
@@ -64,57 +54,77 @@
     state=directory
     owner=postgres
     group=postgres
+    setype=postgresql_db_t
+    seuser=system_u
     mode="u=rwx,g=,o="
 
-- name: "Manual precheck if '{{ database.data_directory | default('/data/postgresql')}}/db.exists' exists"
-  stat:
-    path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
-  register: db_exists
-
-- name: "Ensure PostgreSQL Database is intialized (Use Software Collections)"
-  command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup --initdb
-    creates="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
+- name: "Ensure PostgreSQL Database is intialized"
+  command: postgresql-setup --initdb
+    creates="{{ database.data_directory | default('/data/postgresql')}}/postgresql.conf"
     chdir="{{ database.data_directory | default('/data/postgresql')}}"
-  when: 'not db_exists.stat.exists and use_sc'
-  register: db_created
+  when: 'not use_sc'
   notify:
     - "Restart PostgreSQL"
 
-- name: "Ensure PostgreSQL Database is intialized (Use Base Repository)"
-  command: initdb -D "{{ database.data_directory | default('/data/postgresql')}}"
-    creates="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
-    chdir="{{ database.data_directory | default('/data/postgresql')}}"
-  when: 'not db_exists.stat.exists and not use_sc'
-  register: db_created
-  become: yes
-  become_user: postgres
-  notify:
-    - "Restart PostgreSQL"
+#- name: "Ensure PostgreSQL Database is intialized (Use Software Collections)"
+#  command: /opt/rh/rh-postgresql95/root/usr/bin/postgresql-setup --initdb
+#    creates="{{ database.data_directory | default('/data/postgresql')}}/postgresql.conf"
+#    chdir="{{ database.data_directory | default('/data/postgresql')}}"
+##  when: 'not db_exists.stat.exists and use_sc'
+#  when: use_sc
+#  register: db_created
+#  notify:
+#    - "Restart PostgreSQL"
 
-- name: "Manual create '{{ database.data_directory | default('/data/postgresql')}}/db.exists'"
-  file:
-    path="{{ database.data_directory | default('/data/postgresql')}}/db.exists"
-    state=touch
+#- name: "Ensure PostgreSQL Database is intialized (Use Base Repository)"
+#  command: initdb -D "{{ database.data_directory | default('/data/postgresql')}}"
+#    creates="{{ database.data_directory | default('/data/postgresql')}}/postgresql.conf"
+#    chdir="{{ database.data_directory | default('/data/postgresql')}}"
+##  when: 'not db_exists.stat.exists and not use_sc'
+#  when: 'not use_sc'
+#  register: db_created
+#  become: yes
+#  become_user: postgres
+#  notify:
+#    - "Restart PostgreSQL"
+
+#- name: "Set specific systemd service file for postgres"
+#  template:
+#    src=postgresql.service.centos.j2
+#    dest="/etc/systemd/system/postgresql.service"
+#    owner=root
+#    group=root
+#    mode="u=rw,g=r,o=r"
+
+- name: "Grant SELinux permissions to Postgres user on "
+  sefcontext:
+    target="{{ database.data_directory | default('/data/postgresql')}}"
+    setype=postgresql_db_t
+    seuser=system_u
+    state=present
+
+- name: "Copy the configuration files for PostgreSQL"
+  template:
+    src={{ item }}.CentOS7.j2
+    dest="{{ database.data_directory | default('/data/postgresql')}}/{{ item }}"
+    force=yes
     owner=postgres
     group=postgres
-    mode="u=rx,g=r,o=r"
-  when: 'not db_exists.stat.exists and db_created.rc == 0'
+    mode="u=rw,g=,o="
+  with_items:
+#    - postgresql.conf
+#    - pg_ident.conf
+    - pg_hba.conf
+#    - start.conf
+  notify:
+    - "Restart PostgreSQL"
 
-- name: "Set specific systemd service file for postgres"
-  template:
-    src=postgresql.service.centos.j2
-    dest="/etc/systemd/system/postgresql.service"
-    force=yes
-    owner=root
-    group=root
-    mode="u=rw,g=r,o=r"
-
-- name: "Ensure PostgreSQL is started and enabled on boot (Use PostgreSQL from Software Collections)."
-  service:
-    name=rh-postgresql95-postgresql
-    state=restarted
-    enabled=yes
-  when: 'use_sc'
+#- name: "Ensure PostgreSQL is started and enabled on boot (Use PostgreSQL from Software Collections)."
+#  service:
+#    name=rh-postgresql95-postgresql
+#    state=restarted
+#    enabled=yes
+#  when: 'use_sc'
 
 - name: "Ensure PostgreSQL is started and enabled on boot (Use PostgreSQL from Base Repository)."
   service:

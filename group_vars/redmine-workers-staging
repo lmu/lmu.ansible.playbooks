@@ -19,7 +19,7 @@ redmine:
 redmine_instance:
   - name: "ref_vi.5"
     alias: ["internetdienste", "fiona"]
-    db_name: "ref_vi.5"
+    db_name: "ref_vi5"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
@@ -30,7 +30,7 @@ redmine_instance:
     themes: "{{ redmine_themes }}"
   - name: "webprojekte"
     alias: ["webprojekte", "fiona"]
-    db_name: "vi.5_webprojekte"
+    db_name: "vi5_webprojekte"
     db_user: "{{ redmine_db.user }}"
     db_passwd: "{{ redmine_db.passwd }}"
     db_socket: "/var/run/postgresql/.s.PGSQL.5432"
