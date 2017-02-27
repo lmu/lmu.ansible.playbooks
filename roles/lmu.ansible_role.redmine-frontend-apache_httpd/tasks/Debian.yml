@@ -1,0 +1,123 @@
+---
+
+- name: "Ensure Passenger dependencies are present"
+  apt:
+    name={{ item }}
+    state=present
+    update_cache=no
+  with_items:
+    - ssl-cert
+    - apache2
+    - apache2-dev
+    - libcurl4-openssl-dev
+  when: ansible_os_family == "Debian"
+
+- name: "Install additional passenger via gems"
+  gem:
+    name=passenger
+    state=latest
+    executable="{{ redmine.rubygem_version }}"
+    user_install=no
+  register: gem_result
+  become: yes
+  become_user: root
+
+- name: "Ensure apache passenger module file is present"
+  file:
+    path="/etc/apache2/mods-available/passenger.load"
+    state=touch
+    owner=root
+    group=root
+    mode="u=rw,g=r,o=r"
+
+- name: "check if corresponding passenger module is already compiled"
+  lineinfile:
+    dest=/etc/apache2/mods-available/passenger.load
+    line="LoadModule passenger_module /var/lib/gems/{{ redmine.ruby_semversion }}.0/gems/passenger-{{ gem_result.version }}/buildout/apache2/mod_passenger.so"
+  check_mode: yes
+  register: passenger_module_compiled
+
+- name: "Install/compile passenger Apache2 Module"
+  command: passenger-install-apache2-module -a --languages='ruby'
+  become: yes
+  become_user: root
+  when: passenger_module_compiled.changed
+
+- name: "Generate include for apache passenger module"
+  template:
+    src="{{ item }}.j2"
+    dest="/etc/apache2/mods-available/{{ item }}"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items:
+    - "passenger.conf"
+    - "passenger.load"
+  when: passenger_module_compiled.changed
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Enable Apache httpd passenger module"
+  apache2_module:
+    name=passenger
+    state=present
+  notify:
+    - "Reload Apache httpd"
+
+- name: "Ensure redmine vhosts.d folder exists"
+  file:
+    path=/etc/apache2/includes/redmine.d
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+
+- name: "Install redmine.conf"
+  template:
+    src="redmine.conf.j2"
+    dest="/etc/apache2/sites-available/redmine.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Generate include for Redmine instance"
+  template:
+    src="redmine_instance.conf.j2"
+    dest="/etc/apache2/includes/redmine.d/{{ instance.name }}.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items: "{{ redmine_instance }}"
+  loop_control:
+    loop_var: instance
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
+- name: "Activate redmine.conf"
+  file:
+    src="/etc/apache2/sites-available/redmine.conf"
+    dest="/etc/apache2/sites-enabled/redmine.conf"
+    state=link
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade

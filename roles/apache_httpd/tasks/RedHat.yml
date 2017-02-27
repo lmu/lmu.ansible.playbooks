@@ -1,0 +1,94 @@
+---
+
+- name: "Install the Apache httpd packages"
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=no
+  with_items:
+    - httpd
+    - httpd-devel
+    - httpd-tools
+    - mod_ssl
+    # Some additional tools for debuging and maintenance
+  when: ansible_os_family == "RedHat"
+  tags:
+    - setup
+    - upgrade
+
+- name: "Enable common used Apache httpd modules"
+  apache2_module:
+    name="{{ item }}"
+    state=present
+  with_items:
+    - "rewrite"
+    - "ssl"
+    - "proxy_http"
+    - "headers"
+  ignore_errors: True
+  tags:
+    - setup
+    - upgrade
+
+- name: "Ensure the directories (sites-available and sites-enabled) for site specific configurations are present"
+  file:
+    path="/etc/httpd/{{ item }}"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
+  with_items:
+    - "sites-available"
+    - "sites-enabled"
+    - "includes"
+  tags:
+    - setup
+    - upgrade
+
+- name: "ports.conf"
+  template:
+    src="ports.conf.j2"
+    dest="/etc/httpd/conf/ports.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - setup
+    - upgrade
+
+#- name: "httpd.conf"
+#  template:
+#    src="httpd.conf.RedHat.j2"
+#    dest="/etc/httpd/conf/httpd.conf"
+#    force=yes
+#    mode="u=rw,g=r,o=r"
+#    owner=root
+#    group=root
+#  notify:
+#    - "Reload Apache httpd"
+#  tags:
+#    - setup
+#    - upgrade
+
+- name: "Ensure default site is not avaliable"
+  file:
+    path="/etc/httpd/sites-enabled/000-default.conf"
+    state=absent
+  tags:
+    - setup
+
+- name: "Ensure the Apache httpd service is started and enable on boot"
+  service:
+    name=httpd
+    state=started
+    enabled=yes
+  ignore_errors: True
+  tags:
+    - setup
+
+- meta: end_play
+
+...
