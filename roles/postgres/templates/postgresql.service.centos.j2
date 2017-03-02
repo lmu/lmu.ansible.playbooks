@@ -1,0 +1,6 @@
+.include /lib/systemd/system/postgresql.service
+# ...make your changes here...
+
+[Service]
+# Location of database directory
+Environment=PGDATA={{ database.data_directory | default('/data/postgresql')}}

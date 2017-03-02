@@ -8,15 +8,8 @@ dependencies:
         allow_reboot: false
       }
     }
-  - { role: psdash,
-      psdash: {
-        path: "/usr/local/venv-psdash",
-        mode: "agent"
-      }
-    }
-  - { role: supervisor,
-    }
 
   - { role: apache_httpd,
     }
+
 ...

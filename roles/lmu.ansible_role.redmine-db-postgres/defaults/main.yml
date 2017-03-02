@@ -10,13 +10,6 @@ redmine:
   src_file: "redmine-3.3.0.tar.gz"
   checksum: "0c0abb2d4efde455c3505d8caf01cb2d"
   version: "3.3"
-  git_version: "3.3-stable"
-
-  ruby_ppa: "ppa:brightbox/ruby-ng"
-  ruby_version: "ruby2.3"
-  rubygem_version: "gem2.3"
-  ruby_semversion: "2.3"
-  use_ppa: true
 
   domain: "redmine.test"
 
@@ -31,5 +24,10 @@ redmine_instance:
     db_host: "127.0.0.1"
     lang: "en"
     log_level: "debug"
+
+nginx:
+  use_ppa: "no"
+  use_repo: "yes"
+  ppa: "ppa:nginx/stable"
 
 ...

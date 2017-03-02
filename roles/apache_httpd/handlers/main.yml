@@ -4,8 +4,25 @@
   service:
     name=apache2
     state=restarted
+  when: ansible_os_family == "Debian"
 
 - name: "Reload Apache httpd"
   service:
     name=apache2
     state=reloaded
+  when: ansible_os_family == "Debian"
+
+
+- name: "Restart Apache httpd"
+  service:
+    name=httpd
+    state=restarted
+  when: ansible_os_family == "RedHat"
+
+- name: "Reload Apache httpd"
+  service:
+    name=httpd
+    state=reloaded
+  when: ansible_os_family == "RedHat"
+
+...

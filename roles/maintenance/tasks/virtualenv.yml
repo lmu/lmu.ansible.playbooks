@@ -7,7 +7,7 @@
     virtualenv="{{ item }}"
     chdir="{{ item }}"
   with_fileglob:
-    - /usr/local/venv-*
+    - /usr/local/venv-
 
 
 

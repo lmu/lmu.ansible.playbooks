@@ -1,6 +1,7 @@
 ---
 
-use_sc: true
+#use_sc: true
+use_sc: false
 
 database:
   port: "5432"
@@ -12,7 +13,8 @@ database:
   maintenance_work_mem: "256MB"
   max_stack_depth: "6MB"
 
-  data_directory: "/data/postgresql"
+  #data_directory: "/data/postgresql"
+  data_directory: "/var/lib/pgsql/data"
 
 psycopg2:
   path: "/usr/local/venv-psycopg2"

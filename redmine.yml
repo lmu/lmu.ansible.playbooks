@@ -3,7 +3,22 @@
 
 ---
 
-- hosts: redmine-dbs
+- hosts: redmine-dbs-production
+  become: true
+
+  # Make a backup
+
+  # Transfer Backup to Host
+
+- hosts: redmine-dbs-staging
+  become: true
+
+  # Transfer Backup from Host
+
+  # Restore Backup
+
+
+- hosts: redmine-dbs-staging
   become: true
 
   vars_files:
@@ -12,7 +27,7 @@
   roles:
     - lmu.ansible_role.redmine-db-postgres
 
-- hosts: redmine-workers
+- hosts: redmine-workers-staging
   become: true
 
   vars_files:
@@ -21,11 +36,51 @@
   roles:
     - lmu.ansible_role.redmine-worker
 
-- hosts: redmine-frontends
+- hosts: redmine-frontends-staging
   become: true
 
   vars_files:
     - secrets.yml
+
+  roles:
+    - lmu.ansible_role.redmine-frontend-apache_httpd
+    #- lmu.ansible_role.redmine-frontend-nginx
+
+
+# If Redmine Staging Servers succeed to install that apply to production
+
+- hosts: redmine-dbs-production
+  become: true
+
+  vars_files:
+    - secrets.yml
+
+  pre_tasks:
+
+    - meta: end_play
+
+  roles:
+    - lmu.ansible_role.redmine-db-postgres
+
+- hosts: redmine-workers-production
+  become: true
+
+  vars_files:
+    - secrets.yml
+
+  pre_tasks:
+
+    - meta: end_play
+
+  roles:
+    - lmu.ansible_role.redmine-worker
+
+- hosts: redmine-frontends-production
+  become: true
+
+  vars_files:
+    - secrets.yml
+
 
   roles:
     - lmu.ansible_role.redmine-frontend-apache_httpd

@@ -136,6 +136,8 @@
     - vim
     - curl
     - wget
+    - zlib
+    - zlib-devel
     - bzip2
     - gzip
     - unzip

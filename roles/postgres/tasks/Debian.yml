@@ -28,7 +28,7 @@
 
 - name: "Copy the configuration files for PostgreSQL"
   template:
-    src={{ item }}.j2
+    src={{ item }}.Debian.j2
     dest="/etc/postgresql/{{ postgres_version.files[0].path | basename }}/main/{{ item }}"
     force=yes
     owner=postgres

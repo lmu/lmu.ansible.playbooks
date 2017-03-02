@@ -2,37 +2,43 @@
 
 - block:
 
+  - name: "Ensure Ruby dependencies are installed"
+    yum:
+      pkg={{ item }}
+      state=present
+      update_cache=yes
+    with_items:
+      - patch
+      - curl-devel
+      - ImageMagick-devel
+      - httpd-devel
+      - libtool
+      - apr-devel
+      - apr-util-devel
+      - ftp
+      - gcc-c++
+      - autoconf
+      - readline
+      - readline-devel
+      - libyaml-devel
+      - make
+      - automake
+      - bison
+      - subversion
+      - sqlite-devel
+
   - name: "Ensure Ruby is installed"
     yum:
       pkg={{ item }}
       state=present
       update_cache=yes
     with_items:
-      - zlib-devel
-      - patch
-      - curl-devel
-      - ImageMagick-devel
-      - openssl-devel
-      - httpd-devel
-      - libtool
-      - apr-devel
-      - apr-util-devel
-      - bzip2
-      - ftp
-      - wget
-      - gcc-c++
-      - autoconf
-      - readline
-      - readline-devel
-      - zlib
-      - libyaml-devel
-      - libffi-devel
-      - make
-      - automake
-      - bison
-      - iconv-devel
-      - subversion
-    when: 'ansible_os_family == "RedHat"'
+      - rh-ruby23
+      - rh-ruby23-ruby-devel
+      - rh-ruby23-ruby-libs
+      - rh-ruby23-rubygems
+      - rh-ruby23-rubygems-devel
+      - rh-ruby23-rubygem-bundler
 
 #  - name: "Update bundler for Ruby"
 #    gem:
@@ -46,5 +52,6 @@
   environment:
     http_proxy: "{{ lookup('env', 'https_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+  when: 'ansible_os_family == "RedHat"'
 
 ...
