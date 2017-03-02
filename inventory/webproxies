@@ -1,7 +1,7 @@
 # Inventory for Webproxies (DMZ: Webproxies (Apache/Varnish/HAProxy)
 
-webproxy1.verwaltung.uni-muenchen.de     dtap=production comment="Production Instance of Webproxy (Apache/Varnish/HAProxy)"
-webproxy2.verwaltung.uni-muenchen.de     dtap=production comment="Production Instance of Webproxy (Apache/Varnish/HAProxy)"
+webproxy1.verwaltung.uni-muenchen.de     dtap=production comment="Production Instance of Webproxy (Apache/Varnish/HAProxy) Standort: LU27"
+webproxy2.verwaltung.uni-muenchen.de     dtap=production comment="Production Instance of Webproxy (Apache/Varnish/HAProxy) Standort: MA4"
 
 [webproxies-production]
 webproxy1.verwaltung.uni-muenchen.de
