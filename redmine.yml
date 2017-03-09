@@ -3,6 +3,12 @@
 
 ---
 
+- hosts: redmine
+  become: true
+
+  roles:
+    - base-preseed
+
 - hosts: redmine-dbs-production
   become: true
 
@@ -57,7 +63,7 @@
 
   pre_tasks:
 
-    - meta: end_play
+    #- meta: end_play
 
   roles:
     - lmu.ansible_role.redmine-db-postgres
@@ -70,7 +76,7 @@
 
   pre_tasks:
 
-    - meta: end_play
+    #- meta: end_play
 
   roles:
     - lmu.ansible_role.redmine-worker

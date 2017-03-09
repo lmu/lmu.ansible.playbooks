@@ -213,6 +213,9 @@
     - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
     - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
     - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+    - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
+    - "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
+    - "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
   tags:
     - redmine_setup
     - redmine_upgrade

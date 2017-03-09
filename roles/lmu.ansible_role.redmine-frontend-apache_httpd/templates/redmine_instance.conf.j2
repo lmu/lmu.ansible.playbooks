@@ -4,8 +4,13 @@
         PassengerBaseURI /{{ instance.name }}
         PassengerRuby {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/ruby
         PassengerAppRoot {{ redmine.app_base_path }}/{{ instance.name }}
+        PassengerUser redmine
+        PassengerGroup redmine
         SetEnv GEM_HOME  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0
         SetEnv GEM_PATH  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems
+        SetEnv LD_LIBRARY_PATH "/opt/rh/rh-ruby23/root/usr/local/lib64:/opt/rh/rh-ruby23/root/usr/lib64:{{ lookup('env', 'LD_LIBRARY_PATH') }}"
+        SetEnv XDG_DATA_DIRS "/opt/rh/rh-ruby23/root/usr/local/share:/opt/rh/rh-ruby23/root/usr/share:{{ lookup('env', 'XDG_DATA_DIRS') }}"
+        SetEnv PKG_CONFIG_PATH "/opt/rh/rh-ruby23/root/usr/local/lib64/pkgconfig:/opt/rh/rh-ruby23/root/usr/lib64/pkgconfig:{{ lookup('env', 'PKG_CONFIG_PATH') }}"
     </Location>
     <Directory "{{ redmine.app_base_path }}/{{ instance.name }}/public" >
         Order allow,deny
@@ -23,7 +28,12 @@
         PassengerBaseURI /{{ alias }}
         PassengerRuby {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/ruby
         PassengerAppRoot {{ redmine.app_base_path }}/{{ instance.name }}
+        PassengerUser redmine
+        PassengerGroup redmine
         SetEnv GEM_HOME  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0
         SetEnv GEM_PATH  {{ redmine.app_base_path }}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/gems
+        SetEnv LD_LIBRARY_PATH "/opt/rh/rh-ruby23/root/usr/local/lib64:/opt/rh/rh-ruby23/root/usr/lib64:{{ lookup('env', 'LD_LIBRARY_PATH') }}"
+        SetEnv XDG_DATA_DIRS "/opt/rh/rh-ruby23/root/usr/local/share:/opt/rh/rh-ruby23/root/usr/share:{{ lookup('env', 'XDG_DATA_DIRS') }}"
+        SetEnv PKG_CONFIG_PATH "/opt/rh/rh-ruby23/root/usr/local/lib64/pkgconfig:/opt/rh/rh-ruby23/root/usr/lib64/pkgconfig:{{ lookup('env', 'PKG_CONFIG_PATH') }}"
     </Location>
 {% endfor %}

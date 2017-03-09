@@ -7,6 +7,7 @@
     update_cache=no
   with_items:
     - mod_passenger
+    - mod_info
     # Some additional tools for debuging and maintenance
   when: ansible_os_family == "RedHat"
   tags:

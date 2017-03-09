@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost _default_:80>
     ServerAdmin Alexander.Loechel@verwaltung.uni-muenchen.de
     ServerName {{ redmine.domain }}
 
@@ -8,10 +8,10 @@
     DocumentRoot /var/www/html
 
     # if not specified, the global error log is used
-    #ErrorLog ${APACHE_LOG_DIR}/redmine-error_log
-    #CustomLog ${APACHE_LOG_DIR}/redmine-access_log combined
-    ErrorLog logs/redmine-error_log
-    CustomLog logs/redmine-access_log combined
+    #ErrorLog ${APACHE_LOG_DIR}/redmine-error.log
+    #CustomLog ${APACHE_LOG_DIR}/redmine-access.log combined
+    ErrorLog logs/redmine-error.log
+    CustomLog logs/redmine-access.log combined
 
     # don't loose time with IP address lookups
     HostnameLookups Off
@@ -126,8 +126,8 @@
 
       #ErrorLog ${APACHE_LOG_DIR}/error.log
       #CustomLog ${APACHE_LOG_DIR}/access.log combined
-      ErrorLog logs/error.log
-      CustomLog logs/access.log combined
+      ErrorLog logs/redmine-error.log
+      CustomLog logs/redmine-access.log combined
 
       # For most configuration files from conf-available/, which are
       # enabled or disabled at a global level, it is possible to
@@ -145,8 +145,8 @@
       #   /usr/share/doc/apache2/README.Debian.gz for more info.
       #   If both key and certificate are stored in the same file, only the
       #   SSLCertificateFile directive is needed.
-      #SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
-      #SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+      SSLCertificateFile      /etc/ssl/certs/{{ redmine.domain }}_crt.pem
+      SSLCertificateKeyFile   /etc/ssl/private/{{ redmine.domain }}_key.pem
 
       #   Server Certificate Chain:
       #   Point SSLCertificateChainFile at a file containing the
@@ -156,6 +156,7 @@
       #   when the CA certificates are directly appended to the server
       #   certificate for convinience.
       #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+      SSLCertificateChainFile /etc/ssl/private/lmu-chain.pem
 
       #   Certificate Authority (CA):
       #   Set the CA certificate verification path where to find CA
