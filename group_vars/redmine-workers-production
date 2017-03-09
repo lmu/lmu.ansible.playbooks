@@ -94,7 +94,7 @@ redmine_plugins: {
   "redmine_favorite_projects": { 'url': "https://github.com/alphanodes/redmine_favorite_projects.git", 'version': 'master'},
   "redmine_issue_templates": { 'url': "https://github.com/akiko-pusu/redmine_issue_templates.git", 'version': '0.1.4'},
   "redmine_knowledgebase": { 'url': "https://github.com/alexbevi/redmine_knowledgebase.git", 'version': 'v3.2.1'},
-  #"redmine_lmu_modifications": { 'url': "https://github.com/lmu/redmine_lmu_modifications.git", 'version': 'master'},
+  "redmine_lmu_modifications": { 'url': "https://github.com/lmu/redmine_lmu_modifications.git", 'version': 'master'},
   "redmine_local_avatars": { 'url': "https://github.com/thorin/redmine_local_avatars.git", 'version': 'master'},
   "redmine_postgresql_search": { 'url': "https://github.com/jkraemer/redmine_postgresql_search.git", 'version': 'master'},
   "redmine_tweaks": { 'url': "https://github.com/alphanodes/redmine_tweaks.git", 'version': 'master'},
@@ -107,8 +107,8 @@ redmine_plugins: {
 }
 
 redmine_themes: {
-  #"redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
-  #"redmine-theme-gitmike": { 'url': "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }
+  "redmine-theme-lmu": { 'url': "ssh://git@git.alphanodes.com/redmine-theme-lmu.git", version: "master" },
+  "redmine-theme-gitmike": { 'url': "https://github.com/makotokw/redmine-theme-gitmike.git", version: "v1.0.9" }
 }
 
 ...
