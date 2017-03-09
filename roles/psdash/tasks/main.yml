@@ -4,7 +4,7 @@
   apt:
     pkg="{{ item }}"
     state=present
-    update_cache=yes
+    update_cache=no
     install_recommends=yes
   with_items:
     - "python-dev"
@@ -17,7 +17,7 @@
   yum:
     pkg="{{ item }}"
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - "python-devel"
     - "python-virtualenv"

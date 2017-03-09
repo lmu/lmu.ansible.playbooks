@@ -71,7 +71,10 @@
     state=present
 
 - name: "Ensure Base-Packages (common) are installed"
-  apt: pkg={{ item }} state=present update_cache=yes
+  apt:
+    pkg={{ item }}
+    state=present
+    update_cache=no
   with_items:
     - vim
     - aptitude

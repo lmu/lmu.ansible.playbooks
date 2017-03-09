@@ -4,7 +4,7 @@
   apt:
     name="{{ item }}"
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - php5-fpm
     - php5-curl

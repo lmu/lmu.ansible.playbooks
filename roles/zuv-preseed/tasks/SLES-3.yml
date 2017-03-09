@@ -4,7 +4,7 @@
   zypper:
     pkg="{{ item }}"
     state=present
-    update_cache=yes
+    update_cache=no
   with_items:
     - zuv-bginfo-sles
     - zuv-bginfo-sles

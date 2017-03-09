@@ -1,0 +1,13 @@
+<DOCTYPE html>
+<html>
+<head>
+  <title>Redmine / SCM</title>
+</head>
+</body>
+<h1>Redmine Instanzen</h1>
+<ul>
+{% for elem in redmine_instance %}
+    <li><a href="https://{{ redmine.domain }}/{{ elem.name }}">{{ elem.name }}</a></li>
+{% endfor %}
+</body>
+</html>

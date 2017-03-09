@@ -6,7 +6,7 @@
     yum:
       pkg={{ item }}
       state=present
-      update_cache=yes
+      update_cache=no
     with_items:
       - patch
       - curl-devel
@@ -31,7 +31,7 @@
     yum:
       pkg={{ item }}
       state=present
-      update_cache=yes
+      update_cache=no
     with_items:
       - rh-ruby23
       - rh-ruby23-ruby-devel

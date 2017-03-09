@@ -1,7 +1,7 @@
 ---
 
 # Additional Specific Settings for Ubuntu 14.04 LTS
-# 
+#
 
 - block:
 
@@ -9,7 +9,7 @@
     apt:
       pkg={{ item }}
       state=present
-      update_cache=yes
+      update_cache=no
     with_items:
       # Kernelmodules for hyper-v support
       - hv-kvp-daemon-init
@@ -38,7 +38,7 @@
       pkg={{ item }}
       state=absent
       purge=yes
-      update_cache=yes
+      update_cache=no
     with_items:
       #- linux-tools-common
       - linux-tools-generic
