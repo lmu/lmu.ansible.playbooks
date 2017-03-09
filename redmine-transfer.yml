@@ -1,7 +1,0 @@
-#!/usr/bin/env ansible-playbook
-# vim:set nu:ft=ansible:
-
----
-
-- hosts: redmine
-  become: true

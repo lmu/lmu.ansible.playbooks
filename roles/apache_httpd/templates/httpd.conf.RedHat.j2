@@ -1,22 +1,15 @@
 # {{ ansible_managed }}
 
-# This is the main Apache server configuration file.  It contains the
+# This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
-# See http://httpd.apache.org/docs/2.4/ for detailed information about
-# the directives and /usr/share/doc/apache2/README.Debian about Debian specific
-# hints.
+# See <URL:http://httpd.apache.org/docs/2.4/> for detailed information.
+# In particular, see
+# <URL:http://httpd.apache.org/docs/2.4/mod/directives.html>
+# for a discussion of each configuration directive.
 #
-#
-# Summary of how the Apache 2 configuration works in Debian:
-# The Apache 2 web server configuration in Debian is quite different to
-# upstream's suggested way to configure the web server. This is because Debian's
-# default Apache2 installation attempts to make adding and removing modules,
-# virtual hosts, and extra configuration directives as flexible as possible, in
-# order to make automating the changes and administering the server as easy as
-# possible.
-
-# It is split into several files forming the configuration hierarchy outlined
-# below, all located in the /etc/apache2/ directory:
+# Do NOT simply read the instructions in here without understanding
+# what they do.  They're here only as hints or reminders.  If you are unsure
+# consult the online docs. You have been warned.
 #
 #	/etc/httpd/
 #	|-- conf/httpd.conf
@@ -28,120 +21,39 @@
 #	|	`-- *.conf
 # |-- sites-enabled
 #	 	`-- *.conf
-#
-#
-# * conf/httpd.conf is the main configuration file (this file). It puts the pieces
-#   together by including all remaining configuration files when starting up the
-#   web server.
-#
-# * conf/ports.conf is always included from the main configuration file. It is
-#   supposed to determine listening ports for incoming connections which can be
-#   customized anytime.
-#
-# * Configuration files in the mods-enabled/, conf-enabled/ and sites-enabled/
-#   directories contain particular configuration snippets which manage modules,
-#   global configuration fragments, or virtual host configurations,
-#   respectively.
-#
-#   They are activated by symlinking available configuration files from their
-#   respective *-available/ counterparts. These should be managed by using our
-#   helpers a2enmod/a2dismod, a2ensite/a2dissite and a2enconf/a2disconf. See
-#   their respective man pages for detailed information.
-#
-# * The binary is called apache2. Due to the use of environment variables, in
-#   the default configuration, apache2 needs to be started/stopped with
-#   /etc/init.d/apache2 or apache2ctl. Calling /usr/bin/apache2 directly will not
-#   work with the default configuration.
 
 
-# Global configuration
-#
+# Configuration and logfile names: If the filenames you specify for many
+# of the server's control files begin with "/" (or "drive:/" for Win32), the
+# server will use that explicit path.  If the filenames do *not* begin
+# with "/", the value of ServerRoot is prepended -- so 'log/access_log'
+# with ServerRoot set to '/www' will be interpreted by the
+# server as '/www/log/access_log', where as '/log/access_log' will be
+# interpreted as '/log/access_log'.
 
 #
 # ServerRoot: The top of the directory tree under which the server's
 # configuration, error, and log files are kept.
 #
-# NOTE!  If you intend to place this on an NFS (or otherwise network)
-# mounted filesystem then please read the Mutex documentation (available
-# at <URL:http://httpd.apache.org/docs/2.4/mod/core.html#mutex>);
-# you will save yourself a lot of trouble.
+# Do not add a slash at the end of the directory path.  If you point
+# ServerRoot at a non-local disk, be sure to specify a local disk on the
+# Mutex directive, if file-based mutexes are used.  If you wish to share the
+# same ServerRoot for multiple httpd daemons, you will need to change at
+# least PidFile.
 #
-# Do NOT add a slash at the end of the directory path.
-#
-#ServerRoot "/etc/httpd"
 ServerRoot "/etc/httpd"
-ServerName "redmine.verwaltung.uni-muenchen.de"
 
 #
-# The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
+# Listen: Allows you to bind Apache to specific IP addresses and/or
+# ports, instead of the default. See also the <VirtualHost>
+# directive.
 #
-#Mutex file:${APACHE_LOCK_DIR} default
-
+# Change this to Listen on specific IP addresses as shown below to
+# prevent Apache from glomming onto all bound IP addresses.
 #
-# PidFile: The file in which the server should record its process
-# identification number when it starts.
-# This needs to be set in /etc/apache2/envvars
-#
-#PidFile ${APACHE_PID_FILE}
-#PidFile run/httpd.pid
-
-#
-# Timeout: The number of seconds before receives and sends time out.
-#
-Timeout 300
-
-#
-# KeepAlive: Whether or not to allow persistent connections (more than
-# one request per connection). Set to "Off" to deactivate.
-#
-KeepAlive On
-
-#
-# MaxKeepAliveRequests: The maximum number of requests to allow
-# during a persistent connection. Set to 0 to allow an unlimited amount.
-# We recommend you leave this number high, for maximum performance.
-#
-MaxKeepAliveRequests 100
-
-#
-# KeepAliveTimeout: Number of seconds to wait for the next request from the
-# same client on the same connection.
-#
-KeepAliveTimeout 5
-
-
-# These need to be set in /etc/apache2/envvars
-#User ${APACHE_RUN_USER}
-#Group ${APACHE_RUN_GROUP}
-User apache
-Group apache
-
-#
-# HostnameLookups: Log the names of clients or just their IP addresses
-# e.g., www.apache.org (on) or 204.62.129.132 (off).
-# The default is off because it'd be overall better for the net if people
-# had to knowingly turn this feature on, since enabling it means that
-# each client request will result in AT LEAST one lookup request to the
-# nameserver.
-#
-HostnameLookups Off
-
-# ErrorLog: The location of the error log file.
-# If you do not specify an ErrorLog directive within a <VirtualHost>
-# container, error messages relating to that virtual host will be
-# logged here.  If you *do* define an error logfile for a <VirtualHost>
-# container, that host's errors will be logged there and not here.
-#
-ErrorLog logs/error.log
-
-#
-# LogLevel: Control the severity of messages logged to the error_log.
-# Available values: trace8, ..., trace1, debug, info, notice, warn,
-# error, crit, alert, emerg.
-# It is also possible to configure the log level for particular modules, e.g.
-# "LogLevel info ssl:warn"
-#
-LogLevel warn
+#Listen 12.34.56.78:80
+#Listen 80
+Include conf/ports.conf
 
 #
 # Dynamic Shared Object (DSO) Support
@@ -155,39 +67,78 @@ LogLevel warn
 # Example:
 # LoadModule foo_module modules/mod_foo.so
 #
-# Include module configuration:
-#IncludeOptional mods-enabled/*.load
-#IncludeOptional mods-enabled/*.conf
 Include conf.modules.d/*.conf
 
-# Include list of ports to listen on
-Include conf/ports.conf
+#
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.
+#
+# User/Group: The name (or #number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+User apache
+Group apache
 
+# 'Main' server configuration
+#
+# The directives in this section set up the values used by the 'main'
+# server, which responds to any requests that aren't handled by a
+# <VirtualHost> definition.  These values also provide defaults for
+# any <VirtualHost> containers you may define later in the file.
+#
+# All of these directives may appear inside <VirtualHost> containers,
+# in which case these default settings will be overridden for the
+# virtual host being defined.
+#
 
-# Sets the default security model of the Apache2 HTTPD server. It does
-# not allow access to the root filesystem outside of /usr/share and /var/www.
-# The former is used by web applications packaged in Debian,
-# the latter may be used for local directories served by the web server. If
-# your system is serving content from a sub-directory in /srv you must allow
-# access here, or in any related virtual host.
+#
+# ServerAdmin: Your address, where problems with the server should be
+# e-mailed.  This address appears on some server-generated pages, such
+# as error documents.  e.g. admin@your-domain.com
+#
+ServerAdmin root@localhost
+
+#
+# ServerName gives the name and port that the server uses to identify itself.
+# This can often be determined automatically, but we recommend you specify
+# it explicitly to prevent problems during startup.
+#
+# If your host doesn't have a registered DNS name, enter its IP address here.
+#
+#ServerName www.example.com:80
+
+#
+# Deny access to the entirety of your server's filesystem. You must
+# explicitly permit access to web content directories in other
+# <Directory> blocks below.
+#
 <Directory />
-	Options FollowSymLinks
-	AllowOverride None
-	Require all denied
+    AllowOverride none
+    Require all denied
 </Directory>
 
-<Directory /usr/share>
-	AllowOverride None
-	Require all granted
-</Directory>
+#
+# Note that from this point forward you must specifically allow
+# particular features to be enabled - so if something's not working as
+# you might expect, make sure that you have specifically enabled it
+# below.
+#
+
+#
+# DocumentRoot: The directory out of which you will serve your
+# documents. By default, all requests are taken from this directory, but
+# symbolic links and aliases may be used to point to other locations.
+#
+DocumentRoot "/var/www/html"
 
 #
 # Relax access to content within /var/www.
 #
-<Directory /var/www/>
-	Options Indexes FollowSymLinks
-	AllowOverride None
-	Require all granted
+<Directory "/var/www">
+    AllowOverride None
+    # Allow open access:
+    Require all granted
 </Directory>
 
 # Further relax access to the default document root:
@@ -219,55 +170,203 @@ Include conf/ports.conf
     Require all granted
 </Directory>
 
-#<Directory /srv/>
-#	Options Indexes FollowSymLinks
-#	AllowOverride None
-#	Require all granted
-#</Directory>
-
-
-
-
-# AccessFileName: The name of the file to look for in each directory
-# for additional configuration directives.  See also the AllowOverride
-# directive.
 #
-AccessFileName .htaccess
+# DirectoryIndex: sets the file that Apache will serve if a directory
+# is requested.
+#
+<IfModule dir_module>
+    DirectoryIndex index.html
+</IfModule>
 
 #
 # The following lines prevent .htaccess and .htpasswd files from being
 # viewed by Web clients.
 #
-<FilesMatch "^\.ht">
-	Require all denied
-</FilesMatch>
-
+<Files ".ht*">
+    Require all denied
+</Files>
 
 #
-# The following directives define some format nicknames for use with
-# a CustomLog directive.
+# ErrorLog: The location of the error log file.
+# If you do not specify an ErrorLog directive within a <VirtualHost>
+# container, error messages relating to that virtual host will be
+# logged here.  If you *do* define an error logfile for a <VirtualHost>
+# container, that host's errors will be logged there and not here.
 #
-# These deviate from the Common Log Format definitions in that they use %O
-# (the actual bytes sent including headers) instead of %b (the size of the
-# requested file), because the latter makes it impossible to detect partial
-# requests.
-#
-# Note that the use of %{X-Forwarded-For}i instead of %h is not recommended.
-# Use mod_remoteip instead.
-#
-LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
-LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
-LogFormat "%h %l %u %t \"%r\" %>s %O" common
-LogFormat "%{Referer}i -> %U" referer
-LogFormat "%{User-agent}i" agent
+ErrorLog "logs/error_log"
 
-# Include of directories ignores editors' and dpkg's backup files,
-# see README.Debian for details.
+#
+# LogLevel: Control the number of messages logged to the error_log.
+# Possible values include: debug, info, notice, warn, error, crit,
+# alert, emerg.
+#
+LogLevel warn
 
-# Include generic snippets of statements
+<IfModule log_config_module>
+    #
+    # The following directives define some format nicknames for use with
+    # a CustomLog directive (see below).
+    #
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+
+    <IfModule logio_module>
+      # You need to enable mod_logio.c to use %I and %O
+      LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+    </IfModule>
+
+    #
+    # The location and format of the access logfile (Common Logfile Format).
+    # If you do not define any access logfiles within a <VirtualHost>
+    # container, they will be logged here.  Contrariwise, if you *do*
+    # define per-<VirtualHost> access logfiles, transactions will be
+    # logged therein and *not* in this file.
+    #
+    #CustomLog "logs/access_log" common
+
+    #
+    # If you prefer a logfile with access, agent, and referer information
+    # (Combined Logfile Format) you can use the following directive.
+    #
+    CustomLog "logs/access_log" combined
+</IfModule>
+
+<IfModule alias_module>
+    #
+    # Redirect: Allows you to tell clients about documents that used to
+    # exist in your server's namespace, but do not anymore. The client
+    # will make a new request for the document at its new location.
+    # Example:
+    # Redirect permanent /foo http://www.example.com/bar
+
+    #
+    # Alias: Maps web paths into filesystem paths and is used to
+    # access content that does not live under the DocumentRoot.
+    # Example:
+    # Alias /webpath /full/filesystem/path
+    #
+    # If you include a trailing / on /webpath then the server will
+    # require it to be present in the URL.  You will also likely
+    # need to provide a <Directory> section to allow access to
+    # the filesystem path.
+
+    #
+    # ScriptAlias: This controls which directories contain server scripts.
+    # ScriptAliases are essentially the same as Aliases, except that
+    # documents in the target directory are treated as applications and
+    # run by the server when requested rather than as documents sent to the
+    # client.  The same rules about trailing "/" apply to ScriptAlias
+    # directives as to Alias.
+    #
+    ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"
+
+</IfModule>
+
+#
+# "/var/www/cgi-bin" should be changed to whatever your ScriptAliased
+# CGI directory exists, if you have that configured.
+#
+<Directory "/var/www/cgi-bin">
+    AllowOverride None
+    Options None
+    Require all granted
+</Directory>
+
+<IfModule mime_module>
+    #
+    # TypesConfig points to the file containing the list of mappings from
+    # filename extension to MIME-type.
+    #
+    TypesConfig /etc/mime.types
+
+    #
+    # AddType allows you to add to or override the MIME configuration
+    # file specified in TypesConfig for specific file types.
+    #
+    #AddType application/x-gzip .tgz
+    #
+    # AddEncoding allows you to have certain browsers uncompress
+    # information on the fly. Note: Not all browsers support this.
+    #
+    #AddEncoding x-compress .Z
+    #AddEncoding x-gzip .gz .tgz
+    #
+    # If the AddEncoding directives above are commented-out, then you
+    # probably should define those extensions to indicate media types:
+    #
+    AddType application/x-compress .Z
+    AddType application/x-gzip .gz .tgz
+
+    #
+    # AddHandler allows you to map certain file extensions to "handlers":
+    # actions unrelated to filetype. These can be either built into the server
+    # or added with the Action directive (see below)
+    #
+    # To use CGI scripts outside of ScriptAliased directories:
+    # (You will also need to add "ExecCGI" to the "Options" directive.)
+    #
+    #AddHandler cgi-script .cgi
+
+    # For type maps (negotiated resources):
+    #AddHandler type-map var
+
+    #
+    # Filters allow you to process content before it is sent to the client.
+    #
+    # To parse .shtml files for server-side includes (SSI):
+    # (You will also need to add "Includes" to the "Options" directive.)
+    #
+    AddType text/html .shtml
+    AddOutputFilter INCLUDES .shtml
+</IfModule>
+
+#
+# Specify a default charset for all content served; this enables
+# interpretation of all content as UTF-8 by default.  To use the
+# default browser choice (ISO-8859-1), or to allow the META tags
+# in HTML content to override this choice, comment out this
+# directive:
+#
+AddDefaultCharset UTF-8
+
+<IfModule mime_magic_module>
+    #
+    # The mod_mime_magic module allows the server to use various hints from the
+    # contents of the file itself to determine its type.  The MIMEMagicFile
+    # directive tells the module where the hint definitions are located.
+    #
+    MIMEMagicFile conf/magic
+</IfModule>
+
+#
+# Customizable error responses come in three flavors:
+# 1) plain text 2) local redirects 3) external redirects
+#
+# Some examples:
+#ErrorDocument 500 "The server made a boo boo."
+#ErrorDocument 404 /missing.html
+#ErrorDocument 404 "/cgi-bin/missing_handler.pl"
+#ErrorDocument 402 http://www.example.com/subscription_info.html
+#
+
+#
+# EnableMMAP and EnableSendfile: On systems that support it,
+# memory-mapping or the sendfile syscall may be used to deliver
+# files.  This usually improves server performance, but must
+# be turned off when serving from networked-mounted
+# filesystems or if support for these functions is otherwise
+# broken on your system.
+# Defaults if commented: EnableMMAP On, EnableSendfile Off
+#
+#EnableMMAP off
+EnableSendfile on
+
+# Supplemental configuration
+#
+# Load config files in the "/etc/httpd/conf.d" directory, if any.
 IncludeOptional conf.d/*.conf
 
-# Include the virtual host configurations:
+# Supplemental vhosts configuration
+#
+# Load vhost config files in the "/etc/httpd/sites-enabled" directory, if any.
 IncludeOptional sites-enabled/*.conf
-
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet

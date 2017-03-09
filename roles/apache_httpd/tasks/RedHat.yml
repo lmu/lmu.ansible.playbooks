@@ -45,6 +45,18 @@
     - setup
     - upgrade
 
+- name: "Ensure Apache Environments Variables are defined"
+  lineinfile:
+    dest: "/etc/sysconfig/httpd"
+    insertafter: "#OPTIONS="
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "#APACHE_PID_FILE=run/"
+    - "APACHE_LOG_DIR=logs"
+    - "APACHE_RUN_GROUP=apache"
+    - "APACHE_RUN_USER=apache"
+
 - name: "ports.conf"
   template:
     src="ports.conf.j2"
@@ -59,19 +71,19 @@
     - setup
     - upgrade
 
-#- name: "httpd.conf"
-#  template:
-#    src="httpd.conf.RedHat.j2"
-#    dest="/etc/httpd/conf/httpd.conf"
-#    force=yes
-#    mode="u=rw,g=r,o=r"
-#    owner=root
-#    group=root
-#  notify:
-#    - "Reload Apache httpd"
-#  tags:
-#    - setup
-#    - upgrade
+- name: "httpd.conf"
+  template:
+    src="httpd.conf.RedHat.j2"
+    dest="/etc/httpd/conf/httpd.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - setup
+    - upgrade
 
 - name: "Ensure default site is not avaliable"
   file:
@@ -88,7 +100,5 @@
   ignore_errors: True
   tags:
     - setup
-
-- meta: end_play
 
 ...

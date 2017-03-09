@@ -17,7 +17,7 @@
     mode: "u=rwx,g=rx,o=rx"
   vars:
     req_items:
-      - psycopg2
+      - "psycopg2<2.7"
 
 - name: "Install psycopg2 - postgres bindings for ansible"
   pip:
