@@ -1,7 +1,7 @@
 # Inventory for Redmine
 
-pdb-live-pg1.verwaltung.uni-muenchen.de  dtap=production comment="Current Production Database Server for Redmine (SLES 11 SP 3)"
-redmine1.verwaltung.uni-muenchen.de      dtap=production comment="Current Production Worker Server for Redmine (SLES 11 SP 3)"
+pdb-live-pg1.verwaltung.uni-muenchen.de  dtap=production comment="Current Production Database Server for Redmine (SLES 11 SP 3) Standort: MA4"
+redmine1.verwaltung.uni-muenchen.de      dtap=production comment="Current Production Worker Server for Redmine (SLES 11 SP 3) Standort: MA4"
 redmine2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (Ubuntu 14.04)"
 redmine3.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (CentOS/7)"
 #redmine4.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (Ubuntu 16.04)"

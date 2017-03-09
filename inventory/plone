@@ -1,11 +1,11 @@
 # Inventory for all CMS-Plone related Servers
 
 
-cms-live-appdb1.verwaltung.uni-muenchen.de   dtap=production comment="Production Database Server for Plone 4.3 IuK-Setup. Replication-Master"
-cms-live-appdb2.verwaltung.uni-muenchen.de   dtap=production comment="Production Database Server for Plone 4.3 IuK-Setup. Replication-Slave"
-cms-live-app2.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-Clients"
-cms-live-app3.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-Clients"
-cms-live-app4.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-Clients"
+cms-live-appdb1.verwaltung.uni-muenchen.de   dtap=production comment="Production Database Server for Plone 4.3 IuK-Setup. Replication-Master Standort: LU27"
+cms-live-appdb2.verwaltung.uni-muenchen.de   dtap=production comment="Production Database Server for Plone 4.3 IuK-Setup. Replication-SlaveStandort: MA4"
+cms-live-app2.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-ClientsStandort: LU27"
+cms-live-app3.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-ClientsStandort: LU27"
+cms-live-app4.verwaltung.uni-muenchen.de     dtap=production comment="Production Worker Instance for Plone 4.3 IuK-Setup. ZEO-ClientsStandort: MA4"
 
 [zope-dbs-production]
 cms-live-appdb1.verwaltung.uni-muenchen.de
