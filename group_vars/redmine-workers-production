@@ -103,6 +103,7 @@ redmine_plugins: {
   "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts.git" }, #, 'version': '4.0.6'},
   "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.5'},
   "redmine_default_custom_query": { 'url': 'https://github.com/hidakatsuya/redmine_default_custom_query', 'version': 'master'},
+  "redmine_dmsf": { 'url': 'https://github.com/danmunn/redmine_dmsf.git', 'version': 'v1.5.9'},
   "redmine_favorite_projects": { 'url': "https://github.com/alphanodes/redmine_favorite_projects.git", 'version': 'master'},
   "redmine_issue_templates": { 'url': "https://github.com/akiko-pusu/redmine_issue_templates.git", 'version': '0.1.4'},
   "redmine_knowledgebase": { 'url': "https://github.com/alexbevi/redmine_knowledgebase.git", 'version': 'v3.2.1'},

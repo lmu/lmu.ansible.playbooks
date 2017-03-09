@@ -104,6 +104,14 @@
     - redmine_setup
     - redmine_upgrade
 
+- name: "Ensure git config settings"
+  command: git config core.fileMode false
+    chdir="{{ item }}"
+  with_fileglob:
+    - {{ redmine.app_base_path }}/{{ instance.name }}/
+    - {{ redmine.app_base_path }}/{{ instance.name }}/plugins/*/
+    - {{ redmine.app_base_path }}/{{ instance.name }}/themes/*/
+
 - name: "Copy Dependency File and Config Files ({{ instance.name }})"
   template:
     src="{{ item }}.j2"
@@ -213,6 +221,7 @@
     - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
     - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
     - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+    - "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
     - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
@@ -296,6 +305,22 @@
     tags:
       - redmine_setup
       - redmine_upgrade
+
+  - name: "Remove Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
+    command: bundle exec rake redmine:plugins:migrate NAME={{ item }} VERSION=0
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+    with_items: "{{ remove_redmine_plugins }}"
+
+  - name: "Remove Plugins from Plugin Folder"
+    file:
+      path="{{ redmine.app_base_path}}/{{ instance.name }}/plugins/{{ item }}"
+      state=absent
+    with_items: "{{ remove_redmine_plugins }}"
+    tags:
+      - redmine_setup
 
   - name: "Cleanup ({{ instance.name }})"
     command: bundle exec rake tmp:cache:clear tmp:sessions:clear

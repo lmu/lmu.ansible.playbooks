@@ -2,7 +2,7 @@
 
 dependencies:
 
-  - base-preseed
+#  - base-preseed
 
   - postgres
 

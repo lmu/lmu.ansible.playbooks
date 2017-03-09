@@ -8,6 +8,12 @@
 
   roles:
     - base-preseed
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
+      }
 
 - hosts: redmine-dbs-production
   become: true
@@ -30,6 +36,10 @@
   vars_files:
     - secrets.yml
 
+  pre_tasks:
+
+    #- meta: end_play
+
   roles:
     - lmu.ansible_role.redmine-db-postgres
 
@@ -38,6 +48,10 @@
 
   vars_files:
     - secrets.yml
+
+  pre_tasks:
+
+    #- meta: end_play
 
   roles:
     - lmu.ansible_role.redmine-worker

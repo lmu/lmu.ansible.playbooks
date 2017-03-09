@@ -2,11 +2,4 @@
 
 dependencies:
 
-  - { role: maintenance,
-      maintenance: {
-        upgrade_type: "full",
-        allow_reboot: false
-      }
-    }
-
 ...

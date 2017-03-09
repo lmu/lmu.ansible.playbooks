@@ -114,3 +114,15 @@
   tags:
     - redmine_setup
     - redmine_upgrade
+
+- name: "Generate index.html for Redmine instance"
+  template:
+    src="index.html.j2"
+    dest="/var/www/html/index.html"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  tags:
+    - redmine_setup
+    - redmine_upgrade

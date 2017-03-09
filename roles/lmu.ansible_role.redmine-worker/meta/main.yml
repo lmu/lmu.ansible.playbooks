@@ -2,8 +2,8 @@
 
 dependencies:
 
-  - { role: base-preseed,
-    }
+#  - { role: base-preseed,
+#    }
 
   - { role: memcached,
     }
