@@ -1,5 +1,17 @@
 ---
 
+- hosts: plone
+  become: true
+
+  roles:
+  - base-preseed
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
+      }
+    }
+
 - hosts: zope-clients-martius4-production
   become: true
   serial: 1
