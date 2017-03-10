@@ -17,18 +17,18 @@ redmine:
   domain: "www.scm.verwaltung.uni-muenchen.de"
 
 redmine_instance:
-  - name: "ref_vi.3"
-    alias:
-      - "sos"
-    db_name: "ref_vi3"
-    db_user: "{{ redmine_db.user }}"
-    db_passwd: "{{ redmine_db.passwd }}"
-    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
-    lang: "de"
-    mainlang: "german"
-    log_level: "debug"
-    plugins: "{{ redmine_plugins }}"
-    themes: "{{ redmine_themes }}"
+#  - name: "ref_vi.3"
+#    alias:
+#      - "sos"
+#    db_name: "ref_vi3"
+#    db_user: "{{ redmine_db.user }}"
+#    db_passwd: "{{ redmine_db.passwd }}"
+#    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+#    lang: "de"
+#    mainlang: "german"
+#    log_level: "debug"
+#    plugins: "{{ redmine_plugins }}"
+#    themes: "{{ redmine_themes }}"
   - name: "ref_vi.4"
     alias: []
     db_name: "ref_vi4"

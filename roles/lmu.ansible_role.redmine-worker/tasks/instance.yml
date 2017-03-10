@@ -221,7 +221,7 @@
     - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
     - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
     - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
-    - "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
+    #- "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
     - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
@@ -246,12 +246,16 @@
   - name: "Generate Session Store Secret ({{ instance.name }})"
     command: bundle exec rake generate_secret_token
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
       - redmine_upgrade
 
   - name: "Create Database Schema Objects ({{ instance.name }})"
     command: bundle exec rake db:migrate
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
@@ -266,6 +270,9 @@
 
   - name: "Load Database default data ({{ instance.name }})"
     command: bundle exec rake redmine:load_default_data
+      creates="default_data.exists"
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
       creates="default_data.exists"
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     register: default_data
@@ -287,6 +294,8 @@
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) explicite ({{ instance.name }})"
     command: bundle exec rake redmine:plugins NAME={{ item }}
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     with_items: "{{ instance.plugins }}"
     tags:
       - redmine_setup
@@ -295,6 +304,8 @@
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins) ({{ instance.name }})"
     command: bundle exec rake redmine:plugins
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
       - redmine_upgrade
@@ -302,12 +313,16 @@
   - name: "Create/Update Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
     command: bundle exec rake redmine:plugins:migrate
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
       - redmine_upgrade
 
   - name: "Remove Database Schema Objects for Plugins (redmine:plugins:migrate) ({{ instance.name }})"
     command: bundle exec rake redmine:plugins:migrate NAME={{ item }} VERSION=0
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
@@ -325,12 +340,16 @@
   - name: "Cleanup ({{ instance.name }})"
     command: bundle exec rake tmp:cache:clear tmp:sessions:clear
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     tags:
       - redmine_setup
       - redmine_upgrade
 
   - name: "Rebuild Postgres Search Index ({{ instance.name }})"
     command: bundle exec rake redmine_postgresql_search:rebuild_index
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
+    args:
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     when: '"redmine_postgresql_search" in "{{ instance.plugins }}"'
     tags:
