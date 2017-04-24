@@ -76,6 +76,7 @@ out/
 unchecked-out/
 checked-out/
 #roles/*/
+/inventory/
 
 # Mac specifics
 .DS_Store
