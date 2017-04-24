@@ -8,9 +8,12 @@
       state=latest
       update_cache=yes
     register: yum_status
+    async: 300
+    poll: 300
     notify:
     - "Restart Server"
     - "Wait for Server to come back"
+    ignore_errors: yes
 
   - name: "Debug-Info (RedHat/CentOS)"
     debug:
@@ -20,5 +23,11 @@
   environment:
     LC_ALL: C
     LANG: en
+
+  rescue:
+
+    - debug: msg="Error on yum (deadlock)"
+
+    - command: pkill yum
 
 ...
