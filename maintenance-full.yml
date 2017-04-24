@@ -3,6 +3,8 @@
 - hosts: all
   become: true
   gather_facts: true
+  serial: "{{ serial | default('100%') }}"
+  #serial: "25%"
 
   roles:
     - { role: maintenance,
