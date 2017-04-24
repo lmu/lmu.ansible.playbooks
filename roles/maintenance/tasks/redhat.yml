@@ -2,18 +2,23 @@
 
 - block:
 
+  - name: "Kill all running instances of yum"
+    command: pkill yum
+    become: yes
+    register: pkill
+    ignore_errors: yes
+    failed_when: 'pkill.rc > 1'
+    changed_when: 'pkill.rc == 0'
+
   - name: "Update all Packages (RedHat/CentOS)"
     yum:
       name=*
       state=latest
       update_cache=yes
     register: yum_status
-    async: 300
-    poll: 300
     notify:
     - "Restart Server"
     - "Wait for Server to come back"
-    ignore_errors: yes
 
   - name: "Debug-Info (RedHat/CentOS)"
     debug:
@@ -25,9 +30,10 @@
     LANG: en
 
   rescue:
+    - name: "Clear Errors after CentOS failure"
+      meta: clear_host_errors
 
-    - debug: msg="Error on yum (deadlock)"
-
-    - command: pkill yum
+    - name: "Refresh inventory after CentOS failure"
+      meta: refresh_inventory
 
 ...
