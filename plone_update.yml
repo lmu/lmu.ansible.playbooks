@@ -79,7 +79,7 @@
             src: {
                 type: git,
                 src: "https://github.com/loechel/lmu-iuk.buildout.git",
-                rev: buildout-cleanup,
+                rev: master,
             },
             config: zope-clients-production.cfg,
             python: python2.7,
@@ -247,7 +247,7 @@
             src: {
                 type: git,
                 src: "https://github.com/loechel/lmu-iuk.buildout.git",
-                rev: buildout-cleanup,
+                rev: master,
             },
             config: zope-clients-production.cfg,
             python: python2.7,
