@@ -13,7 +13,7 @@ from os.path import isfile
 
 
 def execute_ansible_setup(
-        inventory='/opt/lmu.ansible.playbooks/inventory',
+        inventory='/opt/lmu.ansible.playbooks/inventory-avaliable',
         scope='all',
         limit=[],
         user='ansible',
@@ -53,7 +53,7 @@ def check_and_copy_ansible_setup_output(
 
 
 def execute_ansible_cmdb(
-        inventory='/opt/lmu.ansible.playbooks/inventory',
+        inventory='/opt/lmu.ansible.playbooks/inventory-avaliable',
         fact_directory='/opt/lmu.ansible.playbooks/checked-out/',
         output_file='/opt/lmu.ansible.playbooks/cmdb/index.html'):
     """
