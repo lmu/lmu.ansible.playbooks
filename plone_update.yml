@@ -12,6 +12,59 @@
       }
     }
 
+- hosts: zope-dbs-production
+  become: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    -  { role: zc.buildout,
+         buildout: {
+            path: /usr/local/,
+            directory: buildout.zeoserver-production,
+            src: {
+                type: git,
+                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                rev: master,
+            },
+            config: zeoserver-production.cfg,
+            python: python2.7,
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: 'templates/secrets.cfg.j2',
+            login: 'admin',
+            password: 'admin',
+            mode: '',
+         }}
+
+
+- hosts: zope-dbs-failover-production
+  become: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+    - { role: zc.buildout,
+        buildout: {
+           path: /usr/local/,
+           directory: buildout.zeoserver-failover-production,
+           src: {
+               type: git,
+               src: "https://github.com/loechel/lmu-iuk.buildout.git",
+               rev: master,
+           },
+           config: zeoserver-failover-production.cfg,
+           python: python2.7,
+           buildout_user: plone_buildout,
+           requires_secrets: true,
+           secrets: 'templates/secrets.cfg.j2',
+           login: 'admin',
+           password: 'admin',
+           mode: '',
+        }}
+
 - hosts: zope-clients-martius4-production
   become: true
   serial: 1
