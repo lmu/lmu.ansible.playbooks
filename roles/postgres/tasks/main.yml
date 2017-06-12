@@ -17,7 +17,7 @@
     #LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
   become: yes
   become_user: postgres
-  when: "{{ database.db_user }} is defined and {{ database.db_passwd }} is defined"
+  when: "database.db_user is defined and database.db_passwd is defined"
 
 - name: "Create Database"
   postgresql_db:
@@ -38,4 +38,4 @@
     #PATH: "{{ psycopg2.path | default('/usr/local/venv-psycopg2') }}/bin:/opt/rh/rh-postgresql95/root/usr/bin:{{ lookup('env', 'PATH')}}"
     #LD_LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
     #LIBRARY_PATH: "/opt/rh/rh-postgresql95/root/usr/lib64"
-  when: "{{ database.db_name }} is defined and {{ database.db_user }} is defined and {{ database.db_passwd }} is defined"
+  when: "database.db_name is defined and database.db_user is defined and database.db_passwd is defined"
