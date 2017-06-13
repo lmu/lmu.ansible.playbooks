@@ -3,9 +3,12 @@ export DATE=`date +%F`
 export  PGPASSWORD="redmine"
 export BACKUPFILE="2016-12-19_redmine_ref-vi.5_db.sql"
 
-dropdb --if-exists -U postgres redmine-ref_vi.5
-createdb -O redmine -U postgres -E UTF-8 redmine-ref_vi.5
+dropdb --if-exists -U postgres redmine_{{ instance.db_name }}
+createdb -O redmine -U postgres -E UTF-8 redmine_{{ instance.db_name }}
+rm -r /data/redmine/{{ instance.name }}/*
 
 sleep 20s
 
-pg_restore -c /usr/local/Plone/redmine.buildout/backup/${BACKUPFILE}
+tar --gzip --create --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz" files
+chown -r redmine:redmine /data/redmine/{{ instance.name }}
+gunzip -c ${BACKUPFILE} | psql redmine_{{ instance.db_name }}

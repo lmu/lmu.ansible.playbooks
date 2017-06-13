@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-export DATE=`date +%F` 
+export DATE=`date +%F`
 export  PGPASSWORD="redmine"
 
 mkdir -p /data/redmine/backup/
 
-pg_dump --format=p --blobs --host=localhost --username "redmine" "{{ instance.name }}" | gzip > "/data/redmine/backup/${DATE}_{{ instance.name }}_db.sql.gz"
-tar --gzip --create --directory="/data/redmine/var/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz" files
-
+pg_dump --format=p --blobs --host=localhost --username "redmine" "redmine_{{ instance.db_name }}" | gzip > "/data/redmine/backup/${DATE}_{{ instance.name }}_db.sql.gz"
+tar --gzip --extract --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz" files
