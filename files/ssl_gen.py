@@ -27,16 +27,21 @@ def gen_new_key_req_pair(hostname, domain='verwaltung.uni-muenchen.de', key_leng
         'server-ssl/req/' + hostname + domain + '_req.pem'
     ])
     print("key generated")
-    # print("generate intermediate crt")
-    # subprocess.call([
-    #     'openssl',
-    #     'req',
-    #     '-x509',
-    #     '-key', 
-    #     'server-ssl/key/' + hostname + domain + '_key.pem',
-    #     '-out',
-    #     'server-ssl/crt/' + hostname + domain + '_crt.pem'
-    # ])
+    print("generate intermediate crt")
+    subprocess.call([
+        'openssl',
+        'x509',
+        '-req',
+        '-sha256',
+        '-days',
+        str(days),
+        '-in',
+        'server-ssl/req/' + hostname + domain + '_req.pem',
+        '-signkey',
+        'server-ssl/key/' + hostname + domain + '_key.pem',
+        '-out',
+        'server-ssl/crt/' + hostname + domain + '_crt.pem'
+    ])
 
 
 def gen_new_req_from_key(hostname, domain='verwaltung.uni-muenchen.de', key_length=4096, ou='VI'):
