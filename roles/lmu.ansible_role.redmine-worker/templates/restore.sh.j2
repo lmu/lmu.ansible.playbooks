@@ -13,6 +13,6 @@ rm -r /data/redmine/{{ instance.name }}/*
 
 sleep 20s
 
-tar --gzip --create --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz" files
+tar --gzip --extract --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz" files
 chown -r redmine:redmine /data/redmine/{{ instance.name }}
 gunzip -c LATEST_redmine_{{ instance.name }}_files.tar.gz | psql redmine_{{ instance.db_name }}

@@ -5,7 +5,7 @@ export  PGPASSWORD="redmine"
 mkdir -p /data/redmine/backup/
 
 pg_dump --format=p --blobs --host=localhost --username "redmine" "redmine_{{ instance.db_name }}" | gzip > "/data/redmine/backup/${DATE}_{{ instance.name }}_db.sql.gz"
-tar --gzip --extract --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz" files
+tar --gzip --create --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz" files
 
 ln -s "/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz" "/data/redmine/backup/LATEST_{{ instance.name }}_files.tar.gz"
 ln -s "/data/redmine/backup/${DATE}_{{ instance.name }}_db.sql.gz"    "/data/redmine/backup/LATEST_{{ instance.name }}_db.sql.gz"
