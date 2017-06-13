@@ -1,6 +1,7 @@
 <VirtualHost _default_:80>
     ServerAdmin Alexander.Loechel@verwaltung.uni-muenchen.de
-    ServerName {{ redmine.domain }}
+    ServerName {{ ansible_fqdn }}
+    ServerName {{ redmine.domains | join(" ") }}
 
     # DocumentRoot: The directory out of which you will serve your
     # documents. By default, all requests are taken from this directory, but
@@ -112,9 +113,10 @@
 
 
 <IfModule mod_ssl.c>
+{% for domain in redmine.domains %}
   <VirtualHost _default_:443>
       ServerAdmin webmaster@localhost
-      ServerName {{ redmine.domain }}
+      ServerName {{ domain }}
 
       DocumentRoot /var/www/html
 
@@ -145,8 +147,8 @@
       #   /usr/share/doc/apache2/README.Debian.gz for more info.
       #   If both key and certificate are stored in the same file, only the
       #   SSLCertificateFile directive is needed.
-      SSLCertificateFile      /etc/ssl/certs/{{ redmine.domain }}_crt.pem
-      SSLCertificateKeyFile   /etc/ssl/private/{{ redmine.domain }}_key.pem
+      SSLCertificateFile      /etc/ssl/certs/{{ domain }}_crt.pem
+      SSLCertificateKeyFile   /etc/ssl/private/{{ domain }}_key.pem
 
       #   Server Certificate Chain:
       #   Point SSLCertificateChainFile at a file containing the
@@ -264,4 +266,5 @@
 
       include /etc/{{ apache2_conf_dir }}/includes/redmine.d/*.conf
   </VirtualHost>
+{% endfor %}
 </IfModule>

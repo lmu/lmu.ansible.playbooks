@@ -14,7 +14,9 @@ redmine:
   ruby_semversion: "2.3"
   use_ppa: "yes"
 
-  domain: "www.scm.verwaltung.uni-muenchen.de"
+  domains:
+    - "www.scm.verwaltung.uni-muenchen.de"
+    - "redmine3.verwaltung.uni-muenchen.de"
 
 redmine_instance:
 #  - name: "ref_vi.3"
