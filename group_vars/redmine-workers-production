@@ -96,11 +96,11 @@ redmine_instance:
     themes: "{{ redmine_themes }}"
 
 redmine_plugins: {
-  "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agilepro.git" }, #, 'version': '1.4.2'},
+  "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agile_pro.git" }, #, 'version': '1.4.2'},
   "redmine_auto_watch": { 'url': "https://github.com/mephi-ut/redmine_auto_watch.git", 'version': 'master'},
   "redmine_changeauthor": { 'url': 'https://github.com/thorin/redmine_changeauthor.git', 'version': 'master'},
-  "redmine_checklists": { 'url': "ssh://git@git.alphanodes.com/redmine_checklistspro.git"}, #, 'version': '3.1.5'},
-  "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts.git" }, #, 'version': '4.0.6'},
+  "redmine_checklists": { 'url': "ssh://git@git.alphanodes.com/redmine_checklists_pro.git"}, #, 'version': '3.1.5'},
+  "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_pro.git" }, #, 'version': '4.0.6'},
   "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.5'},
   "redmine_default_custom_query": { 'url': 'https://github.com/hidakatsuya/redmine_default_custom_query', 'version': 'master'},
   "redmine_dmsf": { 'url': 'https://github.com/danmunn/redmine_dmsf.git', 'version': 'v1.5.9'},
@@ -117,6 +117,20 @@ redmine_plugins: {
   #"redmine_http_auth": { 'url': 'https://github.com/AdamLantos/redmine_http_auth.git', 'version': 'master'},
   #"redmine-plugin-recurring-tasks": { 'url': "https://github.com/nutso/redmine-plugin-recurring-tasks.git", 'version': 'v1.6.0'},
   #"redmine_issue_templates": { 'url': "https://pm.alphanodes.com/redmine_agilepro.git", 'version': '1.4.0'},
+}
+
+redmine_plugins_order:
+  - redmine_knowledgebase
+  - redmine_agile
+  - redmine_contacts
+  - redmine_contacts_helpdesk
+  - redmine_checklists
+  - redmine_issue_templates
+  - redmine_favorite_projects
+
+remove_redmine_plugins: {
+    "redmine_wiki_extensions" : {},
+    "redmine_issue_templates": {},
 }
 
 redmine_themes: {

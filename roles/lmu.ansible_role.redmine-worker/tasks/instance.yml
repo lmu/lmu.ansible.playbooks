@@ -296,7 +296,7 @@
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
     args:
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
-    with_items: "{{ instance.plugins }}"
+    with_items: "{{ redmine_plugins_order }}"
     tags:
       - redmine_setup
       - redmine_upgrade
