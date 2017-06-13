@@ -125,6 +125,7 @@
     - "config/database.yml"
     - "config/additional_environment.rb"
     - "config/configuration.yml"
+#    - "Gemfile.local"
   tags:
     - redmine_setup
     - redmine_upgrade
@@ -207,27 +208,56 @@
   become: yes
   become_user: postgres
 
-- name: "Patch Redmine / Plugins"
-  copy:
-    src="redmine/{{ item }}"
-    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
-    force=yes
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=r,o=r"
-  with_items:
-    - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
-    - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
-    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
-    - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
-    - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
-    - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
-  tags:
-    - redmine_setup
-    - redmine_upgrade
+- block:
+
+  - name: "Patch Redmine / Plugins"
+    copy:
+      src="redmine/{{ item }}"
+      dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+      force=yes
+      owner=redmine
+      group=redmine
+      mode="u=rwx,g=r,o=r"
+    with_items:
+      - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
+      - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
+      - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
+      - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
+      - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+      #- "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
+      - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
+      #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
+      #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
+  rescue:
+    - debug: msg='Error Handling Patch.'
+
+    - name: "Local Copy of Patch Redmine / Plugins"
+      copy:
+        src="/home/ansible/redmine/{{ item }}"
+        dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
+        remote_src=True
+        force=yes
+        owner=redmine
+        group=redmine
+        mode="u=rwx,g=r,o=r"
+      with_items:
+        - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
+        - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
+        - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
+        - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
+        - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
+        #- "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
+        - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
+        #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
+        #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
+      tags:
+        - redmine_setup
+        - redmine_upgrade
+
 
 - block:
 
