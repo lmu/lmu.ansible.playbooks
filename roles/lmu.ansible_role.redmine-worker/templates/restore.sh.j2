@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 export DATE=`date +%F`
 export  PGPASSWORD="redmine"
-export BACKUPFILE="2016-12-19_redmine_ref-vi.5_db.sql"
+#export BACKUPFILE="2016-12-19_redmine_ref-vi.5_db.sql"
 
+# pg_hba and pg_ident might interfere here.
+
+# Drop database is only allowed for user postgres due to security settings
 dropdb --if-exists -U postgres redmine_{{ instance.db_name }}
+# Create Database is only allowed for user postgres due to security settings
 createdb -O redmine -U postgres -E UTF-8 redmine_{{ instance.db_name }}
 rm -r /data/redmine/{{ instance.name }}/*
 
@@ -11,4 +15,4 @@ sleep 20s
 
 tar --gzip --create --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz" files
 chown -r redmine:redmine /data/redmine/{{ instance.name }}
-gunzip -c ${BACKUPFILE} | psql redmine_{{ instance.db_name }}
+gunzip -c LATEST_redmine_{{ instance.name }}_files.tar.gz | psql redmine_{{ instance.db_name }}

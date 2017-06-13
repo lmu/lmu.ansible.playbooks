@@ -1,0 +1,13 @@
+# Default setup is given for MySQL with ruby1.9.
+# Examples for PostgreSQL, SQLite3 and SQL Server can be found at the end.
+# Line indentation must be 2 spaces (no tabs).
+
+production:
+  adapter: postgresql
+  database: "redmine_vi5_webprojekte"
+  socket: "/var/run/postgresql/.s.PGSQL.5432"
+  username: "redmine"
+  password: "redmine"
+  encoding: "UTF-8"
+
+
