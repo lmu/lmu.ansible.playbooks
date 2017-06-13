@@ -17,7 +17,7 @@ redmine:
   domain: "redminetest.verwaltung.uni-muenchen.de"
 
 redmine_instance:
-#  - name: "ref_vi.3"
+# - name: "ref_vi.3"
 #    alias:
 #      - "sos"
 #    db_name: "ref_vi3"
@@ -61,18 +61,18 @@ redmine_instance:
     log_level: "debug"
     plugins: "{{ redmine_plugins }}"
     themes: "{{ redmine_themes }}"
-  - name: "dez_vii"
-    alias:
-      - "haushalt"
-    db_name: "dez_vii"
-    db_user: "{{ redmine_db.user }}"
-    db_passwd: "{{ redmine_db.passwd }}"
-    db_socket: "/var/run/postgresql/.s.PGSQL.5432"
-    lang: "de"
-    mainlang: "german"
-    log_level: "debug"
-    plugins: "{{ redmine_plugins }}"
-    themes: "{{ redmine_themes }}"
+  # - name: "dez_vii"
+  #   alias:
+  #     - "haushalt"
+  #   db_name: "dez_vii"
+  #   db_user: "{{ redmine_db.user }}"
+  #   db_passwd: "{{ redmine_db.passwd }}"
+  #   db_socket: "/var/run/postgresql/.s.PGSQL.5432"
+  #   lang: "de"
+  #   mainlang: "german"
+  #   log_level: "debug"
+  #   plugins: "{{ redmine_plugins }}"
+  #   themes: "{{ redmine_themes }}"
 
 redmine_plugins: {
   "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agile_pro.git" }, #, 'version': '1.4.2'},
