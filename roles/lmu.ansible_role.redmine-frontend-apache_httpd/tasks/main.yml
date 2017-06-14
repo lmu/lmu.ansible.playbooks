@@ -36,103 +36,99 @@
   tags:
     - setup
     - upgrade
-- block:
-  - name: "Copy SSL Private-Key"
-    copy:
-      src="files/server-ssl/key/{{ redmine.domain }}_key.pem"
-      dest="/etc/ssl/private/{{ redmine.domain }}_key.pem"
-      force=yes
-      owner=root
-      group=root
-      mode="u=r,g=r,o="
-    ignore_errors: yes
-    tags:
-      - setup
-      - upgrade
 
-  - name: "Copy SSL Public Key"
-    copy:
-      src="files/server-ssl/crt/{{ redmine.domain }}_crt.pem"
-      dest="/etc/ssl/certs/{{ redmine.domain }}_crt.pem"
-      force=yes
-      owner=root
-      group=root
-      mode="u=r,g=r,o="
-    ignore_errors: yes
-    tags:
-      - setup
-      - upgrade
+- name: "Copy SSL Private-Key"
+  copy:
+    src="files/server-ssl/key/{{ item }}_key.pem"
+    dest="/etc/ssl/private/{{ item }}_key.pem"
+    force=yes
+    owner=root
+    group=root
+    mode="u=r,g=r,o="
+  ignore_errors: yes
+  with_items: "{{ redmine.domains }}"
+  tags:
+    - setup
+    - upgrade
 
-  - name: "Ensure redmine vhosts.d folder exists"
-    file:
-      path="/etc/{{ apache2_conf_dir }}/includes/redmine.d"
-      state=directory
-      owner=root
-      group=root
-      mode="u=rwx,g=rx,o=rx"
+- name: "Copy SSL Public Key"
+  copy:
+    src="files/server-ssl/crt/{{ item }}_crt.pem"
+    dest="/etc/ssl/certs/{{ item }}_crt.pem"
+    force=yes
+    owner=root
+    group=root
+    mode="u=r,g=r,o="
+  ignore_errors: yes
+  with_items: "{{ redmine.domains }}"
+  tags:
+    - setup
+    - upgrade
 
-  - name: "Install redmine.conf"
-    template:
-      src="redmine.conf.j2"
-      dest="/etc/{{ apache2_conf_dir }}/sites-available/redmine.conf"
-      force=yes
-      mode="u=rw,g=r,o=r"
-      owner=root
-      group=root
-    ignore_errors: yes
-    notify:
-      - "Reload Apache httpd"
-    tags:
-      - redmine_setup
-      - redmine_upgrade
+- name: "Ensure redmine vhosts.d folder exists"
+  file:
+    path="/etc/{{ apache2_conf_dir }}/includes/redmine.d"
+    state=directory
+    owner=root
+    group=root
+    mode="u=rwx,g=rx,o=rx"
 
-  - name: "Generate include for Redmine instance"
-    template:
-      src="redmine_instance.conf.j2"
-      dest="/etc/{{ apache2_conf_dir }}/includes/redmine.d/{{ instance.name }}.conf"
-      force=yes
-      mode="u=rw,g=r,o=r"
-      owner=root
-      group=root
-    with_items: "{{ redmine_instance }}"
-    loop_control:
-      loop_var: instance
-    ignore_errors: yes
-    notify:
-      - "Reload Apache httpd"
-    tags:
-      - redmine_setup
-      - redmine_upgrade
+- name: "Install redmine.conf"
+  template:
+    src="redmine.conf.j2"
+    dest="/etc/{{ apache2_conf_dir }}/sites-available/redmine.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  ignore_errors: yes
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
-  - name: "Activate redmine.conf"
-    file:
-      src="/etc/{{ apache2_conf_dir }}/sites-available/redmine.conf"
-      dest="/etc/{{ apache2_conf_dir }}/sites-enabled/redmine.conf"
-      state=link
-      force=yes
-      mode="u=rw,g=r,o=r"
-      owner=root
-      group=root
-    notify:
-      - "Reload Apache httpd"
-    tags:
-      - redmine_setup
-      - redmine_upgrade
+- name: "Generate include for Redmine instance"
+  template:
+    src="redmine_instance.conf.j2"
+    dest="/etc/{{ apache2_conf_dir }}/includes/redmine.d/{{ instance.name }}.conf"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items: "{{ redmine_instance }}"
+  loop_control:
+    loop_var: instance
+  ignore_errors: yes
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
-  - name: "Generate index.html for Redmine instance"
-    template:
-      src="index.html.j2"
-      dest="/var/www/html/index.html"
-      force=yes
-      mode="u=rw,g=r,o=r"
-      owner=root
-      group=root
-    tags:
-      - redmine_setup
-      - redmine_upgrade
-  
-  rescue:
+- name: "Activate redmine.conf"
+  file:
+    src="/etc/{{ apache2_conf_dir }}/sites-available/redmine.conf"
+    dest="/etc/{{ apache2_conf_dir }}/sites-enabled/redmine.conf"
+    state=link
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  notify:
+    - "Reload Apache httpd"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
-    - meta: clear_host_errors
-
-    - debug: msg="Error Handling"
+- name: "Generate index.html for Redmine instance"
+  template:
+    src="index.html.j2"
+    dest="/var/www/html/index.html"
+    force=yes
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  tags:
+    - redmine_setup
+    - redmine_upgrade
