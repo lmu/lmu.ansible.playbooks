@@ -140,7 +140,7 @@
   - name: "Update git config"
     command: git config core.fileMode false
       chdir="{{ item.path }}"
-    with_items: src_dirs.files
+    with_items: "{{ src_dirs.files }}"
     ignore_errors: yes
 
   environment:
