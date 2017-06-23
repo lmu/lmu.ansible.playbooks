@@ -20,97 +20,9 @@
     # needed for named virtual hosts
     UseCanonicalName Off
 
-    # configures the footer on server-generated documents
-    ServerSignature On
+    Redirect / https://%{{ redmine.domains[0] }}/
 
-
-    # Optionally, include *.conf files from /etc/apache2/conf.d/
-    #
-    # For example, to allow execution of PHP scripts:
-    #
-    # Include /etc/apache2/conf.d/mod_php4.conf
-    #
-    # or, to include all configuration snippets added by packages:
-    # Include /etc/apache2/conf.d/*.conf
-
-
-    # ScriptAlias: This controls which directories contain server scripts.
-    # ScriptAliases are essentially the same as Aliases, except that
-    # documents in the realname directory are treated as applications and
-    # run by the server when requested rather than as documents sent to the client.
-    # The same rules about trailing "/" apply to ScriptAlias directives as to
-    # Alias.
-    #
-    ScriptAlias /cgi-bin/ "/var/www/html/"
-
-    # "/srv/www/cgi-bin" should be changed to whatever your ScriptAliased
-    # CGI directory exists, if you have one, and where ScriptAlias points to.
-    #
-    <Directory "/var/www/html">
-        AllowOverride None
-        Options +ExecCGI -Includes
-        Order allow,deny
-        Allow from all
-    </Directory>
-
-    #
-    # This should be changed to whatever you set DocumentRoot to.
-    #
-    <Directory "/var/www/html">
-
-        #
-        # Possible values for the Options directive are "None", "All",
-        # or any combination of:
-        #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
-        #
-        # Note that "MultiViews" must be named *explicitly* --- "Options All"
-        # doesn't give it to you.
-        #
-        # The Options directive is both complicated and important.  Please see
-        # http://httpd.apache.org/docs-2.2/mod/core.html#options
-        # for more information.
-        #
-        Options Indexes FollowSymLinks
-
-        #
-        # AllowOverride controls what directives may be placed in .htaccess files.
-        # It can be "All", "None", or any combination of the keywords:
-        #   Options FileInfo AuthConfig Limit
-        #
-        AllowOverride None
-
-        #
-        # Controls who can get stuff from this server.
-        #
-        Order allow,deny
-        Allow from all
-
-    </Directory>
-
-    #RewriteEngine on
-
-    #RewriteCond %{HTTPS} !=on
-    #RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
-    #Redirect / https://%{SERVER_NAME}/
-
-    ProxyRequests On
-    ProxyVia On
-
-    <Proxy *>
-        Order deny,allow
-        Allow from all
-    </Proxy>
-    ProxyPreserveHost on
-    RewriteEngine On
-
-    PassengerPoolIdleTime 10
-    PassengerPoolIdleTime 0
-    PassengerMaxPoolSize 16
-    PassengerDefaultRuby /usr/bin/ruby2.3
-
-    include /etc/{{ apache2_conf_dir }}/includes/redmine.d/*.conf
 </VirtualHost>
-
 
 <IfModule mod_ssl.c>
 {% for domain in redmine.domains %}
