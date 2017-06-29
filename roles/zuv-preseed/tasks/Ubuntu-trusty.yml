@@ -12,6 +12,7 @@
   apt_key:
     url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
     state=present
+  ignore_errors: yes
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Base-Packages (ZUV-common) are installed"

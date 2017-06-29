@@ -69,6 +69,7 @@
   apt_key:
     url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
     state=present
+  ignore_errors: yes
 
 - name: "Ensure Base-Packages (common) are installed"
   apt:

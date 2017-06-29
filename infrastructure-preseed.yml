@@ -20,7 +20,7 @@
   roles:
     - base-preseed
     - zuv-preseed
-    - infrastructure-preseed
+    - infrastruktur-preseed
     - { role: maintenance,
         maintenance: {
           upgrade_type: "full",
