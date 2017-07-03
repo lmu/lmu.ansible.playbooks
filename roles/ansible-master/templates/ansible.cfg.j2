@@ -220,8 +220,8 @@ bin_ansible_callbacks = True
 # You can disable this feature by setting retry_files_enabled to False
 # and you can change the location of the files by setting retry_files_save_path
 
-#retry_files_enabled = False
-#retry_files_save_path = ~/.ansible-retry
+retry_files_enabled = False
+retry_files_save_path = ~/.ansible-retry/
 
 # squash actions
 # Ansible can optimise actions that call modules with list parameters
@@ -317,6 +317,7 @@ pipelining = True
 #   * True = use scp only
 #   * False = use sftp only
 #scp_if_ssh = smart
+scp_if_ssh = True
 
 # if False, sftp will not use batch mode to transfer files. This may cause some
 # types of file transfer failures impossible to catch however, and should
