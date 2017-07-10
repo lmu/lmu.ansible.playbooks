@@ -64,7 +64,6 @@
     owner=root
     group=root
   with_items:
-    - ZUV-CA.crt
     - LMU-CA.crt
     - lmu-proxy-CA.crt
     - Verwaltungsnetz-Proxy-CA-NG.pem
