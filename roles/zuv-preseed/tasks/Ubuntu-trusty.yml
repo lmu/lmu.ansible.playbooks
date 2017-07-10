@@ -10,7 +10,7 @@
 
 - name: "Update Apt-Keys"
   apt_key:
-    url="http://yup.verwaltung.uni-muenchen.de/scripts/ubuntu/ReferatVI2.public.gpg"
+    url="http://apt.verwaltung.uni-muenchen.de/ZUV-DEB/conf/Ref.VI.2.public.gpg"
     state=present
   ignore_errors: yes
   when: ansible_os_family == "Debian"
