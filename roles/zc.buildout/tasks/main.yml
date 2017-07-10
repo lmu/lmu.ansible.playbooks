@@ -25,6 +25,7 @@
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
+    GIT_SSL_NO_VERIFY: "true"
 
 - name: "Ensure git config settings"
   command: git config core.fileMode false
