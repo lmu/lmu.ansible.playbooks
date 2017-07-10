@@ -55,6 +55,7 @@
     mode="u=rwx,g=rx,o=rx"
     owner=root
     group=root
+  when: ansible_os_family == "Debian"
 
 - name: "Copy ZUV-Proxy-CA and Chain"
   copy:
@@ -63,17 +64,43 @@
     mode="o=rw,g=r,u=r"
     owner=root
     group=root
+  when: ansible_os_family == "Debian"
+  with_items:
+    - LMU-CA.crt
+    - lmu-proxy-CA.crt
+    - Verwaltungsnetz-Proxy-CA-NG.crt
+
+- name: "Copy ZUV-Proxy-CA and Chain"
+  copy:
+    dest="/etc/pki/ca-trust/source/anchors/{{ item }}"
+    src="certs/{{ item }}"
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
+  when: ansible_os_family == "RedHat"
   with_items:
     - LMU-CA.crt
     - lmu-proxy-CA.crt
     - Verwaltungsnetz-Proxy-CA-NG.crt
 
 - name: "Install ZUV-Proxy-CA"
-  command: update-ca-certificates
+  command: update-ca-certificates --fresh --verbose
   register: ca_update_result
   changed_when: '"Updating certificates in /etc/ssl/certs... 0 added" not in ca_update_result.stdout'
   #changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
   when: ansible_os_family == "Debian"
+
+- name: "Enable Install ZUV-Proxy-CA"
+  command: update-ca-trust force-enable
+  register: ca_update_result
+  #changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
+  when: ansible_os_family == "RedHat"
+
+- name: "Install ZUV-Proxy-CA"
+  command: update-ca-trust extract
+  register: ca_update_result
+  #changed_when: '"Updating certificates in /etc/ssl/certs... 0 added, 0 removed; done." not in ca_update_result.stdout'
+  when: ansible_os_family == "RedHat"
 
 - name: "Add alias for 'pip' to always use ZUV-Proxy-CA"
   copy:
