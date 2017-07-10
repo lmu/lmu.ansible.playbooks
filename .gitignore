@@ -78,6 +78,7 @@ checked-out/
 #roles/*/
 /inventory/
 /inventory
+/inventory-enabled/*
 
 # Mac specifics
 .DS_Store
