@@ -66,7 +66,7 @@
   with_items:
     - LMU-CA.crt
     - lmu-proxy-CA.crt
-    - Verwaltungsnetz-Proxy-CA-NG.pem
+    - Verwaltungsnetz-Proxy-CA-NG.crt
 
 - name: "Install ZUV-Proxy-CA"
   command: update-ca-certificates
