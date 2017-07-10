@@ -48,7 +48,7 @@
     owner=root
     group=root
 
-- name: "Ensure the directory for LMU Certificates (/usr/share/ca-certificates/lmu/) exists"
+- name: "Ensure the directory for LMU Certificates (/usr/local/share/ca-certificates/lmu/) exists"
   file:
     name="/usr/local/share/ca-certificates/lmu/"
     state=directory
