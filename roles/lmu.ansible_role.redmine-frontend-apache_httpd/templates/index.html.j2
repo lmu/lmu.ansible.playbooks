@@ -2,12 +2,41 @@
 <html>
 <head>
   <title>Redmine / SCM</title>
+  <link rel='shortcut icon' href='/dez_vi/favicon.ico' />
+  <link href="/dez_vi/themes/redmine-theme-lmu/stylesheets/application.css" media="all" rel="stylesheet" type="text/css" />
+
 </head>
 </body>
+<header>
+    <div id="top-menu">
+        <ul>
+            <li><a href="http://www.uni-muenchen.de">LMU</a></li>
+            <li><a href="http://www.intranet.verwaltung.uni-muenchen.de">ZUV-Intranet</a></li>
+            <li><a href="http://www.serviceportal.verwaltung.uni-muenchen.de">Serviceportal</a></li>
+        </ul>
+    </div>
+    <div id="header" class="">
+        <img src="" alt="LMU">
+        <h1>SCM - Projektmanagement LMU</h1>
+    </div>
+</header>
+<main>
 <h1>Redmine Instanzen</h1>
 <ul>
 {% for elem in redmine_instance %}
-    <li><a href="/{{ elem.name }}">{{ elem.name }}</a></li>
+    <li><a href="/{{ elem.name }}">{{ elem.name }}</a>
+        {% if redmine_instance.alias %}
+        <ul>
+            {% for item in redmine_instance.alias %}
+            <li><a href="/{{ item }}">{{ item }}</a>
+            {% endfor%}
+        </ul>
+        {% endif %}
+    </li>
 {% endfor %}
+</main>
+<footer>
+
+</footer>
 </body>
 </html>

@@ -102,7 +102,7 @@ redmine_plugins: {
 
 redmine_plugins_order:
   - redmine_knowledgebase
-  - redmine_agile_pro
+  - redmine_agile
   - redmine_contacts
   - redmine_contacts_helpdesk
   - redmine_checklists
