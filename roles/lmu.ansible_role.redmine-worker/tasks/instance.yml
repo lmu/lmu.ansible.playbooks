@@ -131,22 +131,6 @@
     - redmine_setup
     - redmine_upgrade
 
-- name: "Copy local Backup of Config Files ({{ instance.name }})"
-  copy:
-    src="/home/ansible/redmine/conf_{{ instance.name }}/{{ item }}"
-    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
-    remote_src=True
-    force=yes
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=r,o=r"
-  with_items:
-    - "Gemfile.local"
-    - "config/database.yml"
-    - "config/configuration.yml"
-    - "config/additional_environment.rb"
-  when: 'conf.rc != 0'
-
 - name: "Ensure Redmine Instance directory has correct user and file modes"
   file:
     path="{{ redmine.app_base_path}}/{{ instance.name }}"
@@ -244,29 +228,6 @@
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
     #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
   ignore_errors: yes
-  tags:
-    - redmine_setup
-    - redmine_upgrade
-
-- name: "Local Copy of Patch Redmine / Plugins"
-  copy:
-    src="/home/ansible/redmine/{{ item }}"
-    dest="{{ redmine.app_base_path}}/{{ instance.name }}/{{ item }}"
-    remote_src=True
-    force=yes
-    owner=redmine
-    group=redmine
-    mode="u=rwx,g=r,o=r"
-  with_items:
-    - "plugins/redmine_agile/db/migrate/001_create_issue_status_orders.rb"
-    - "plugins/redmine_agile/db/migrate/002_create_agile_colors.rb"
-    - "plugins/redmine_agile/db/migrate/003_rename_issue_status_orders.rb"
-    - "plugins/redmine_agile/db/migrate/004_rename_agile_ranks.rb"
-    - "plugins/redmine_agile/db/migrate/005_add_story_points_to_agile_ranks.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20130513154700_add_tags_and_taggings.rb"
-    - "plugins/redmine_knowledgebase/db/migrate/20150326093104_add_missing_unique_indice.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20150326093122_add_taggings_counter_cache_to_tags.rb"
-    #- "plugins/redmine_knowledgebase/db/migrate/20150326093139_add_missing_taggable_index.rb"
   tags:
     - redmine_setup
     - redmine_upgrade
