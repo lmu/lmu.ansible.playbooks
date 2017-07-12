@@ -52,6 +52,15 @@ redmine-workers-staging
 redmine-frontends-production
 redmine-frontends-staging
 
+[redmine-production:children]
+redmine-dbs-production
+redmine-workers-production
+redmine-frontends-production
+
+[redmine-staging:children]
+redmine-dbs-staging
+redmine-workers-staging
+redmine-frontends-staging
 
 [redmine:children]
 redmine-dbs
