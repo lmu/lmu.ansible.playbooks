@@ -1,0 +1,26 @@
+#!/usr/bin/env ansible-playbook
+# vim:set nu:ft=ansible:
+
+---
+
+- hosts: cmdb
+  become: true
+
+  roles:
+    - base-preseed
+    - { role: maintenance,
+        maintenance: {
+          upgrade_type: "full",
+          allow_reboot: false
+        }
+      }
+    #- lmu.ansible_role.i-doit
+
+  vars_files:
+    - secrets.yml
+
+  pre_tasks:
+
+    #- meta: end_play
+
+...
