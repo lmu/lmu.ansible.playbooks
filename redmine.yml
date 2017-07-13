@@ -28,6 +28,10 @@
   # Transfer Backup from Host
 
   # Restore Backup
+  tasks:
+
+    - name: "Restore backup"
+      command: "/home/ansible/helper_scripts/restore.sh"
 
 
 - hosts: redmine-dbs-staging

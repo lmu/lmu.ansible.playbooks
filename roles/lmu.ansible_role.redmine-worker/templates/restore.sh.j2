@@ -14,8 +14,8 @@ sudo rm -rf /data/redmine/{{ instance.name }}
 
 sleep 20s
 
-sudo tar --gzip --extract --directory=/data/redmine --file=/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz
-gunzip -c /data/redmine/backup/${DATE}_redmine_{{ instance.name }}_db.sql.gz | sudo -u postgres psql redmine_{{ instance.db_name }}
+sudo tar --gzip --extract --directory=/data/redmine --file=/data/redmine/backup/${DATE}_{{ instance.name }}_files.tar.gz
+gunzip -c /data/redmine/backup/${DATE}_{{ instance.name }}_db.sql.gz | sudo -u postgres psql redmine_{{ instance.db_name }}
 
 sudo chown -R redmine:redmine /data/redmine/
 echo 'Restore of Redmine Instance "{{ instance.name }}" Completed'
