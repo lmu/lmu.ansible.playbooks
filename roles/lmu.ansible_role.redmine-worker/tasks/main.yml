@@ -40,6 +40,7 @@
   with_items:
     - "backup.sh"
     - "restore.sh"
+    - "cleanup_backup.sh"
   tags:
     - redmine_setup
     - redmine_upgrade

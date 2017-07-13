@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+# Assumes python 2.6 or 2.7
+from __future__ import print_function
+
+from datetime import date
+from datetime import timedelta
+from os import listdir
+
+import glob
+import logging
+import os
+import os.path
+import re
+import time
+
+
+def cleanup_backups():
+    last_7_days = date.today() - timedelta(days=7)
+    last_4_weeks = date.today() - timedelta(days=30)
+
+    # Persistent Logging
+    log = logging.getLogger('Cleanup Backup')
+    my_formatter = logging.Formatter(
+        fmt='%(name)s: %(asctime)s - %(levelname)s: %(message)s',
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    file_handler = logging.FileHandler(
+        '/backup/' + str(date.today().isoformat()) + '_cleanup-backups.log',
+        mode='a',
+        encoding='utf-8')
+    file_handler.setFormatter(my_formatter)
+    log.addHandler(file_handler)
+    log.setLevel(logging.INFO)
+
+    log.info("Start Cleanup of old Backup Files (%s)", date.today().isoformat())
+
+    backupfiles = glob.glob('/data/redmine/backup/*')
+    backupfiles.sort()
+
+    pattern = re.compile('(\d{4}-\d{2}-\d{2})(\w|-|\.)+\.gz')
+    for backupfile in backupfiles:
+        filename = os.path.basename(backupfile)
+        if os.path.isfile(backupfile) and len(filename) > 10 and pattern.match(filename):
+            file_date = os.path.basename(backupfile)[0:10]
+            file_date = time.strptime(file_date, '%Y-%m-%d')
+            file_date = date(year=file_date[0], month=file_date[1], day=file_date[2])
+            if file_date < last_4_weeks and file_date.day != 1:
+                log.info("delete file: %s", backupfile)
+                os.remove(backupfile)
+            elif file_date > last_4_weeks and file_date < last_7_days and file_date.day != 1 and file_date.isoweekday() != 1:
+                log.info("delete file: %s", backupfile)
+                os.remove(backupfile)
+            else:
+                log.debug("keep file:   %s", backupfile)
+
+    log.info("Finished Cleanup of old Backup Files (%s)\n\n", date.today().isoformat())
+
+
+if __name__ == "__main__":
+    cleanup_backups()
