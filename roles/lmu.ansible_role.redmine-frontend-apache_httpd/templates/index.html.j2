@@ -16,7 +16,6 @@
         </ul>
     </div>
     <div id="header">
-        <img src="" alt="LMU">
         <h1>SCM - Projektmanagement LMU</h1>
     </div>
 </header>
@@ -25,9 +24,9 @@
 <ul>
 {% for elem in redmine_instance %}
     <li><a href="/{{ elem.name }}">{{ elem.name }}</a>
-        {% if redmine_instance.alias %}
+        {% if elem.alias %}
         <ul>
-            {% for item in redmine_instance.alias %}
+            {% for item in elem.alias %}
             <li><a href="/{{ item }}">{{ item }}</a>
             {% endfor%}
         </ul>

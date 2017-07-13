@@ -1,23 +1,4 @@
 #!/usr/bin/env bash
-export DATE=`date +%F`
-export  PGPASSWORD="redmine"
-#export BACKUPFILE="2016-12-19_redmine_ref-vi.5_db.sql"
-
-
-# Drop database is only allowed for user postgres due to security settings
-dropdb --if-exists -U postgres redmine_{{ instance.db_name }}
-# Create Database is only allowed for user postgres due to security settings
-createdb -O redmine -U postgres -E UTF-8 redmine_{{ instance.db_name }}
-rm -r /data/redmine/{{ instance.name }}/*
-
-sleep 20s
-
-tar --gzip --extract --directory="/data/redmine/{{ instance.name }}" --file="/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz" files
-chown -r redmine:redmine /data/redmine/{{ instance.name }}
-gunzip -c LATEST_redmine_{{ instance.name }}_files.tar.gz | psql redmine_{{ instance.db_name }}
-
-
-#!/usr/bin/env bash
 export DATE="LATEST"
 #export DATE=`date +%F`
 
@@ -25,17 +6,19 @@ export DATE="LATEST"
 
 echo 'Start Restore of Redmine Instances'
 
+{% for instance in redmine_instance %}
 echo 'Restore Redmine Instance "{{ instance.name }}'
 sudo -u postgres dropdb --if-exists -U postgres redmine_{{ instance.db_name }}
 sudo -u postgres createdb -O redmine -U postgres -E UTF-8 redmine_{{ instance.db_name }}
-sudo rm -rf /data/redmine/{{ instance.name }}/*
+sudo rm -rf /data/redmine/{{ instance.name }}
 
 sleep 20s
 
-sudo tar --gzip --extract --directory=/data/redmine/{{ instance.name }} --file=/data/redmine/backup/${DATE}_redmine_{{ instance.name }_files.tar.gz
+sudo tar --gzip --extract --directory=/data/redmine --file=/data/redmine/backup/${DATE}_redmine_{{ instance.name }}_files.tar.gz
 gunzip -c /data/redmine/backup/${DATE}_redmine_{{ instance.name }}_db.sql.gz | sudo -u postgres psql redmine_{{ instance.db_name }}
 
 sudo chown -R redmine:redmine /data/redmine/
 echo 'Restore of Redmine Instance "{{ instance.name }}" Completed'
+{% endfor %}
 
 echo 'Restore of all Instances completed'

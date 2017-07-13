@@ -16,5 +16,31 @@
   loop_control:
     loop_var: instance
 
+- name: "Ensure /home/ansible/helper_scripts directory exists."
+  file:
+    path="/home/ansible/helper_scripts"
+    state=directory
+    owner=ansible
+    group=ansible
+    mode="u=rwx,g=rx,o=rx"
+    recurse=yes
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 
+- name: "Setup Backup / Restore Scripts"
+  template:
+  template:
+    src="{{ item }}.j2"
+    dest="/home/ansible/helper_scripts/{{ item }}"
+    force=yes
+    owner=ansible
+    group=ansible
+    mode="u=rwx,g=r,o=r"
+  with_items:
+    - "backup.sh"
+    - "restore.sh"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
 ...
