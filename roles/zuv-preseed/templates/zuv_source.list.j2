@@ -19,7 +19,7 @@ deb http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} unive
 deb-src http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
 deb http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates universe
 deb-src http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates universe
-deb http://apt.verwaltung.uni-muenchen.de/ubuntu {{ ansible_distribution_release }}-security universe
+deb http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe
 deb-src http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
@@ -56,4 +56,4 @@ deb-src http://de.archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-s
 {% if not apt.use_extras %}# {% endif %}deb-src http://extras.ubuntu.com/ubuntu {{ ansible_distribution_release }} main
 
 ## LMU Own Specific Archive
-deb http://apt.verwaltung.uni-muenchen.de/ZUV-DEB/ ZUV-DEB main
+#deb http://apt.verwaltung.uni-muenchen.de/ZUV-DEB/ ZUV-DEB main
