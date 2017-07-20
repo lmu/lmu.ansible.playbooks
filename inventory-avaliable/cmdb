@@ -1,5 +1,8 @@
-redmine2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (Ubuntu 14.04)"
+# CMDB Servers
 
+redmine2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (Ubuntu 14.04)"
+cmdbtest0.verwaltung.uni-muenchen.de     dtap=test comment="CentOS/7 Desktop in Room 404 that serves for a period of time as testing instance for CMDB i-doit."
 
 [cmdb]
 redmine2.verwaltung.uni-muenchen.de
+cmdbtest0.verwaltung.uni-muenchen.de
