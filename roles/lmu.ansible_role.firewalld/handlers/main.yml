@@ -1,0 +1,15 @@
+---
+
+- name: "Restart firewalld"
+  service:
+    name=firewalld
+    state=restarted
+  when: ansible_os_family == "RedHat"
+
+- name: "Reload firewalld"
+  service:
+    name=firewalld
+    state=reloaded
+  when: ansible_os_family == "RedHat"
+
+...

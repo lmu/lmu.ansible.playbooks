@@ -1,0 +1,23 @@
+---
+
+- name: "Install MariaDB"
+  debug: msg="Install MariaDB"
+
+- name:
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rh-mariadb101-mariadb-server
+    - rh-mariadb101-mariadb
+    - MySQL-python
+  when: ansible_os_family == "RedHat"
+
+- name: "Ensure MariaDB service ist started and enabled at boot time."
+  service:
+    name: "rh-mariadb101-mariadb"
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+...

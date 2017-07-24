@@ -1,0 +1,8 @@
+---
+
+dependencies:
+
+  - { role: base-preseed,
+    }
+
+...

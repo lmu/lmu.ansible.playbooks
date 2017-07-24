@@ -14,7 +14,7 @@
           allow_reboot: false
         }
       }
-    #- lmu.ansible_role.i-doit
+    - lmu.ansible_role.i_doit
 
   vars_files:
     - secrets.yml

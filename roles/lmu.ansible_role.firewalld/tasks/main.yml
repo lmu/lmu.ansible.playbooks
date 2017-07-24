@@ -1,0 +1,35 @@
+---
+
+- name: "Ensure firewalld is installed"
+  yum:
+    name: firewalld
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: "Ensure firewalld allows SSH connections"
+  firewalld:
+    service: ssh
+    permanent: true
+    state: enabled
+  notify: "Reload firewalld"
+  when: ansible_os_family == "RedHat"
+
+- name: "Ensure firewalld is enabled and started"
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+- name: "Ensure firewalld allows HTTP/HTTPS connections"
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+  with_items:
+    - http
+    - https
+  notify: "Reload firewalld"
+  when: ansible_os_family == "RedHat"
+
+...

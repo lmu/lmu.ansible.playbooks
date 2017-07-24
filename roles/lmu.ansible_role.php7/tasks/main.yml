@@ -1,0 +1,26 @@
+---
+
+- name: "Ensure php7 is installed"
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rh-php70
+    - rh-php70-php
+    - rh-php70-php-cli
+    - rh-php70-php-common
+    - rh-php70-php-gd
+    - rh-php70-php-ldap
+    - rh-php70-php-opcache
+    - rh-php70-php-mbstring
+    - rh-php70-php-mcrypt
+    - rh-php70-php-mysqlnd
+    - rh-php70-php-pdo
+    - rh-php70-php-pecl-memcached
+    - rh-php70-php-pgsql
+    - rh-php70-php-soap
+    - rh-php70-php-xml
+    - rh-php70-php-xmlrpc
+  when: ansible_os_family == "RedHat"
+
+...

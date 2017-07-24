@@ -1,0 +1,50 @@
+---
+
+- name: "Install i-doit pro"
+  debug: msg="Install i-doit pro"
+
+- name: "Ensure i-doit directory exists"
+  file:
+    path: "/var/www/html/i-doit"
+    state: directory
+    owner: apache
+    group: apache
+    mode: "u=rwX,g=rX,o=rX"
+    recurse: yes
+  tags:
+    - idoit_setup
+    - idoit_upgrade
+
+- name: "Unzip i-doit"
+  unarchive:
+    src: i-doit/idoit-1.9.1.zip
+    dest: /var/www/html/i-doit/
+    owner: apache
+    group: apache
+    #mode: "u=rwx,g=rx,o=rx"
+  tags:
+    - idoit_setup
+    - idoit_upgrade
+
+- name: "Ensure i-doit directory permissions exists"
+  file:
+    path: "/var/www/html/i-doit"
+    state: directory
+    owner: apache
+    group: apache
+    mode: "u=rwX,g=rX,o=rX"
+    recurse: yes
+  tags:
+    - idoit_setup
+    - idoit_upgrade
+
+#- name: "Ensure i-doit specific settings"
+#  template:
+
+
+
+
+  environment:
+    PATH: "/opt/rh/rh-mariadb101/root/usr/bin:/opt/rh/rh-php70/root/usr/bin:{{ ansible_env.PATH }}"
+
+...
