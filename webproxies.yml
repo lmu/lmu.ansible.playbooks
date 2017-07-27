@@ -3,6 +3,7 @@
 - hosts: webproxies
   become: true
   gather_facts: true
+  serial: "{{ SERIAL_COUNT | default('100%') }}"
 
   roles:
     - base-preseed
@@ -12,7 +13,6 @@
           allow_reboot: false
         }
       }
-#    - supervisor
     - haproxy
     - varnish
     - apache_httpd
@@ -55,7 +55,7 @@
          path=/etc/apache2/sites-enabled/000-default.conf
 
     - name: "Ensure the log directories are present"
-      file: 
+      file:
         path=/var/log/apache2/{{ item }}
         state=directory
         owner=root
@@ -66,7 +66,7 @@
         - "zuv-serviceportal"
 
     - name: "Copy includes"
-      copy: 
+      copy:
         src=files/{{ item }}
         dest=/etc/apache2/includes/{{ item }}
         force=yes
@@ -82,7 +82,7 @@
         - "Reload Apache httpd"
 
     - name: "Install vhost.confs for sites"
-      template: 
+      template:
         src=templates/{{ item }}.j2
         dest=/etc/apache2/sites-available/{{ item }}
         force=yes
