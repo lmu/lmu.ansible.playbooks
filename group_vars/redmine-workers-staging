@@ -79,7 +79,7 @@ redmine_instance:
 redmine_plugins: {
   "redmine_agile": { 'url': "ssh://git@git.alphanodes.com/redmine_agile_pro.git" }, #, 'version': '1.4.2'},
   "redmine_auto_watch": { 'url': "https://github.com/mephi-ut/redmine_auto_watch.git", 'version': 'master'},
-  "redmine_changeauthor": { 'url': 'https://github.com/thorin/redmine_changeauthor.git', 'version': 'master'},
+  #"redmine_changeauthor": { 'url': 'https://github.com/thorin/redmine_changeauthor.git', 'version': 'master'},
   "redmine_checklists": { 'url': "ssh://git@git.alphanodes.com/redmine_checklists_pro.git"}, #, 'version': '3.1.5'},
   "redmine_contacts": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_pro.git" }, #, 'version': '4.0.6'},
   "redmine_contacts_helpdesk": { 'url': "ssh://git@git.alphanodes.com/redmine_contacts_helpdesk.git" }, #, 'version': '3.0.5'},
@@ -110,8 +110,9 @@ redmine_plugins_order:
   - redmine_favorite_projects
 
 remove_redmine_plugins: {
-    "redmine_wiki_extensions" : {},
+    "redmine_wiki_extensions": {},
     "redmine_issue_templates": {},
+    "redmine_changeauthor": {},
 }
 
 redmine_themes: {
