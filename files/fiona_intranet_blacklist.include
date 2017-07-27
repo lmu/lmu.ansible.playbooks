@@ -1,4 +1,6 @@
+# Blacklist von Fionapfaden fuer Plone; diese Pfade werden nicht an Plone weiter gereicht
 RewriteRule ^/_assets - [L,NC]
+RewriteRule ^/_entwicklung - [L,NC]
 RewriteRule ^/_sync - [L,NC]
 RewriteRule ^/_include - [L,NC]
 RewriteRule ^/servlet - [L,NC]
