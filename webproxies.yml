@@ -6,16 +6,37 @@
   serial: "{{ SERIAL_COUNT | default('100%') }}"
 
 
-  pre-tasks:
-    - name: "Ensure Git Repository on Master is up to date"
-      local_action:
-        git:
-          repo: https://github.com/lmu/lmu.ansible.playbooks.git
-          dest: /opt/lmu.ansible.playbooks
-          update: yes
-          clone: no
-          recursive: yes
-          track_submodules: yes
+  pre_tasks:
+
+    - block:
+        - name: "Ensure Git Repository on Master is up to date"
+          git:
+            repo: https://github.com/lmu/lmu.ansible.playbooks.git
+            dest: /opt/lmu.ansible.playbooks
+            update: yes
+            clone: no
+            recursive: yes
+            track_submodules: yes
+          environment:
+            http_proxy: "{{ lookup('env', 'http_proxy') }}"
+            https_proxy: "{{ lookup('env', 'https_proxy') }}"
+          ignore_errors: yes
+
+        - name: "Ensure playbook directories has correct owner and group"
+          file:
+            path="/opt/lmu.ansible.playbooks"
+            state=directory
+            owner="fachadmin"
+            group="ansible"
+            mode="u=rwX,g=rwX,o=rX"
+            recurse=yes
+
+      delegate_to: localhost
+      become: true
+      become_user: fachadmin
+      connection: local
+
+
 
   roles:
     - base-preseed
