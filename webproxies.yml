@@ -22,6 +22,7 @@
             https_proxy: "{{ lookup('env', 'https_proxy') }}"
           ignore_errors: yes
           run_once: true
+          become_user: fachadmin
 
         - name: "Ensure playbook directories has correct owner and group"
           file:
@@ -32,8 +33,8 @@
             mode="u=rwX,g=rwX,o=rX"
             recurse=yes
 
-      delegate_to: localhost
-      connection: local
+      delegate_to: ansiblem0.zuv.uni-muenchen.de
+      become: true
 
 
 

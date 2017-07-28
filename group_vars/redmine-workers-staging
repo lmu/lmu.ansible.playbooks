@@ -91,7 +91,7 @@ redmine_plugins: {
   "redmine_lmu_modifications": { 'url': "https://github.com/lmu/redmine_lmu_modifications.git", 'version': 'master'},
   "redmine_local_avatars": { 'url': "https://github.com/thorin/redmine_local_avatars.git", 'version': 'master'},
   "redmine_postgresql_search": { 'url': "https://github.com/jkraemer/redmine_postgresql_search.git", 'version': 'master'},
-  "additionals": { 'url': "https://github.com/AlphaNodes/additionals.git", 'version': '2.0.1'},
+  "additionals": { 'url': "https://github.com/AlphaNodes/additionals.git", 'version': '2.0.2'},
   "redmine_wiki_extensions": { 'url': "https://github.com/alexandermeindl/redmine_wiki_extensions.git", 'version': 'master'},
   "redmine_wiki_lists": { 'url': "https://github.com/tkusukawa/redmine_wiki_lists.git", 'version': '0.0.6'},
   "sidebar_hide": { 'url': "https://github.com/bdemirkir/sidebar_hide.git", 'version': 'master'},
