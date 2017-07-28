@@ -21,6 +21,7 @@
             http_proxy: "{{ lookup('env', 'http_proxy') }}"
             https_proxy: "{{ lookup('env', 'https_proxy') }}"
           ignore_errors: yes
+          run_once: true
 
         - name: "Ensure playbook directories has correct owner and group"
           file:
