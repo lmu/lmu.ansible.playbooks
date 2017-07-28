@@ -1,0 +1,28 @@
+
+- hosts: nodemasters
+  become: true
+  gather_facts: true
+
+
+  tasks:
+    - name: "Ensure Git Repository on Master is up to date"
+      git:
+        repo: https://github.com/lmu/lmu.ansible.playbooks.git
+        dest: /opt/lmu.ansible.playbooks
+        update: yes
+        clone: no
+        recursive: yes
+        track_submodules: yes
+      environment:
+        http_proxy: "{{ lookup('env', 'http_proxy') }}"
+        https_proxy: "{{ lookup('env', 'https_proxy') }}"
+      ignore_errors: yes
+
+    - name: "Ensure playbook directories has correct owner and group"
+      file:
+        path="/opt/lmu.ansible.playbooks"
+        state=directory
+        owner="fachadmin"
+        group="ansible"
+        mode="u=rwX,g=rwX,o=rX"
+        recurse=yes
