@@ -13,13 +13,13 @@
   when: ansible_os_family == "Debian"
 
 
-- name: "Restart Apache httpd"
+- name: "Restart httpd"
   service:
     name=httpd
     state=restarted
   when: ansible_os_family == "RedHat"
 
-- name: "Reload Apache httpd"
+- name: "Reload httpd"
   service:
     name=httpd
     state=reloaded

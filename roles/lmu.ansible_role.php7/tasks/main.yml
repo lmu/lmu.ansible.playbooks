@@ -21,6 +21,7 @@
     - rh-php70-php-soap
     - rh-php70-php-xml
     - rh-php70-php-xmlrpc
+    - rh-php70-php-fpm
   when: ansible_os_family == "RedHat"
 
 ...

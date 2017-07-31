@@ -11,6 +11,7 @@
     group: apache
     mode: "u=rwX,g=rX,o=rX"
     recurse: yes
+  when: ansible_os_family == "RedHat"
   tags:
     - idoit_setup
     - idoit_upgrade
@@ -22,6 +23,7 @@
     owner: apache
     group: apache
     #mode: "u=rwx,g=rx,o=rx"
+  when: ansible_os_family == "RedHat"
   tags:
     - idoit_setup
     - idoit_upgrade
@@ -34,12 +36,26 @@
     group: apache
     mode: "u=rwX,g=rX,o=rX"
     recurse: yes
+  when: ansible_os_family == "RedHat"
   tags:
     - idoit_setup
     - idoit_upgrade
 
 #- name: "Ensure i-doit specific settings"
 #  template:
+#
+# - name: "Install mod_php / mod_php-fpm"
+#   template:
+#     dest: "/etc/httpd/conf.d/php.conf"
+#     src: "php.conf.j2"
+#     owner: root
+#     group: root
+#     mode: "u=rw,g=r,o=r"
+#   when: ansible_os_family == "RedHat"
+#   notify: "Restart httpd"
+#   tags:
+#     - idoit_setup
+#     - idoit_upgrade
 
 
 

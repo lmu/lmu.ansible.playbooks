@@ -14,7 +14,9 @@
           allow_reboot: false
         }
       }
-    - lmu.ansible_role.i_doit
+    #- lmu.ansible_role.i_doit
+    - lmu.ansible_role.firewalld
+    - apache_httpd
 
   vars_files:
     - secrets.yml
