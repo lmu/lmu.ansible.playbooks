@@ -9,6 +9,7 @@
     fachadmin_password: "$6$rounds=656000$7FWeGie/WDRfvfES$f3HA6STefV6JNgA668TFhyl2FR549VJkV7QW31/GHTWVELYT6YwWvx.C.2uIBxSp7eQvycS/b23AK7dH.QPNR/"
 
   roles:
+    - base-preseed
     - { role: zuv-preseed,
         proxy: {
           no_proxy: [
@@ -39,4 +40,3 @@
           ]
         }
       }
-    - base-preseed
