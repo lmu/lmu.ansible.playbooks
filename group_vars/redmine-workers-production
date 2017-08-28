@@ -115,8 +115,8 @@ redmine_plugins_order:
 remove_redmine_plugins: {
 #    "redmine_wiki_extensions": {},
 #    "redmine_issue_templates": {},
-    "redmine_changeauthor": {},
-    "redmine_auto_watch": {},
+#    "redmine_changeauthor": {},
+#    "redmine_auto_watch": {},
 }
 
 redmine_themes: {
