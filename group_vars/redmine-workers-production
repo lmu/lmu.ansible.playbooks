@@ -113,8 +113,8 @@ redmine_plugins_order:
   - redmine_favorite_projects
 
 remove_redmine_plugins: {
-    "redmine_wiki_extensions": {},
-    "redmine_issue_templates": {},
+#    "redmine_wiki_extensions": {},
+#    "redmine_issue_templates": {},
     "redmine_changeauthor": {},
     "redmine_auto_watch": {},
 }

@@ -66,6 +66,18 @@
     - redmine_setup
     - redmine_upgrade
 
+- name: "Ensure no plugins / themes are present before loading those"
+  file:
+    path="{{ redmine.app_base_path }}/{{ instance.name }}/{{ item }}/*/"
+    state=absent
+    recurse=yes
+  with_items:
+    - "plugins"
+    - "public/themes/"
+  tags:
+    - redmine_setup
+    - redmine_upgrade
+
 - name: "Get Redmine Plugins ({{ instance.name }})"
   git:
     repo="{{ item.value.url }}"
