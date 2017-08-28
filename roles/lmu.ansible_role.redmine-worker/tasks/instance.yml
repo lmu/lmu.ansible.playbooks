@@ -70,7 +70,6 @@
   file:
     path="{{ redmine.app_base_path }}/{{ instance.name }}/{{ item }}/*/"
     state=absent
-    recurse=yes
   with_items:
     - "plugins"
     - "public/themes/"
