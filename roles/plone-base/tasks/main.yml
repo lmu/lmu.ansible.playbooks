@@ -1,7 +1,7 @@
 ---
 
-- name: Ensure System Dependencies for Plone are installed
-  apt: 
+- name: "Ensure System Dependencies for Plone are installed"
+  apt:
     name={{ item }}
     state=present
     update_cache=no
@@ -35,7 +35,7 @@
     - libwebp-dev
     - tcl8.6-dev
     - tk8.6-dev
-    # 
+    #
     - libreadline-dev
     # Dependencies for lxml
     - libxml2-dev
@@ -53,7 +53,7 @@
     state=present
     system=yes
 
-- name: Ensure Users plone_buildout and plone_daemon with group plone_group exists
+- name: "Ensure Users plone_buildout and plone_daemon with group plone_group exists"
   user:
     name={{ item }}
     state=present
