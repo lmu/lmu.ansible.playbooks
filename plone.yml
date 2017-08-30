@@ -4,15 +4,15 @@
   become: true
 
   roles:
-    - base-preseed
-    - plone-base
-    - supervisor
-    - { role: maintenance,
-        maintenance: {
-          upgrade_type: "full",
-          allow_reboot: false
-        }
+  - base-preseed
+  - plone-base
+  - supervisor
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
       }
+    }
 
 - hosts: zope-dbs-production
   become: true
@@ -27,7 +27,7 @@
             directory: buildout.zeoserver-production,
             src: {
                 type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
                 rev: master,
             },
             config: zeoserver-production.cfg,
@@ -54,7 +54,7 @@
            directory: buildout.zeoserver-failover-production,
            src: {
                type: git,
-               src: "https://github.com/loechel/lmu-iuk.buildout.git",
+               src: "https://github.com/lmu/lmu-iuk.buildout.git",
                rev: master,
            },
            config: zeoserver-failover-production.cfg,
@@ -67,21 +67,24 @@
            mode: '',
         }}
 
-
-- hosts: zope-clients-production
+- hosts: zope-clients-martius4-production
   become: true
-
-  handlers:
-    - include: roles/supervisor/handlers/main.yml
+  serial: "{{ SERIAL_COUNT | default('100%') }}"
 
   roles:
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: false
+         }
+       }
     -  { role: zc.buildout,
          buildout: {
             path: /usr/local/,
             directory: buildout.zope-clients-production,
             src: {
                 type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
                 rev: master,
             },
             config: zope-clients-production.cfg,
@@ -89,19 +92,241 @@
             buildout_user: plone_buildout,
             requires_secrets: true,
             secrets: 'templates/secrets.cfg.j2',
-            login: 'admin',
-            password: 'admin',
-            mode: '',
+          login: 'admin',
+          password: 'admin',
+          mode: '',
          }}
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: true
+         }
+       }
 
+  pre_tasks:
+    - name: "Disable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy1"
+      haproxy:
+        state=disabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+      tags:
+        - plone_upgrade
 
-- hosts: plone
-  become: true
+    - name: "Disable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy2"
+      haproxy:
+        state=disabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+      tags:
+        - plone_upgrade
 
-  tasks:
-
-    - name: "Restart Supervisor"
+    - name: "Stop Supervisor"
       service:
         name=supervisor
-        state=restarted
-        sleep=20
+        state=stopped
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+  post_tasks:
+
+    - name: "Start Supervisor"
+      service:
+        name=supervisor
+        state=started
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+    - name: "Enable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy1"
+      haproxy:
+        state=enabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+      tags:
+        - plone_upgrade
+
+    - name: "Enable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy2"
+      haproxy:
+        state=enabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+        - { backend: 'plone-cluster-martius4', name: 'clients' }
+      tags:
+        - plone_upgrade
+
+    - name: "Set Cron Tab for deleting expired Pinnwand Entries"
+      cron:
+        name="Delete old Pinnwand Entries"
+        job="curl http://www.intranet.verwaltung.uni-muenchen.de/30_zentralbereich/30zb_zuv-intranet/pinnwand/auto_delete_view >> ~/delete.log"
+        user='ansible'
+        state=present
+        special_time=daily
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      become: false
+    tags:
+      - plone_setup
+      - plone_upgrade
+
+- hosts: zope-clients-ludwig27-production
+  become: true
+  serial: "{{ SERIAL_COUNT | default('100%') }}"
+
+  roles:
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: false
+         }
+       }
+    -  { role: zc.buildout,
+         buildout: {
+            path: /usr/local/,
+            directory: buildout.zope-clients-production,
+            src: {
+                type: git,
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
+                rev: master,
+            },
+            config: zope-clients-production.cfg,
+            python: python2.7,
+            buildout_user: plone_buildout,
+            requires_secrets: true,
+            secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          mode: '',
+         }}
+    -  { role: maintenance,
+         maintenance: {
+            upgrade_type: "full",
+            allow_reboot: true
+         }
+       }
+
+  pre_tasks:
+
+    - name: "Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy1"
+      haproxy:
+        state=disabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+      tags:
+        - plone_upgrade
+
+    - name: "Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy2"
+      haproxy:
+        state=disabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+      tags:
+        - plone_upgrade
+
+    - name: "Stop Supervisor"
+      service:
+        name=supervisor
+        state=stopped
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+  post_tasks:
+
+    - name: "Start Supervisor"
+      service:
+        name=supervisor
+        state=started
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+    - name: "Enable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy1"
+      haproxy:
+        state=enabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy1.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+      tags:
+        - plone_upgrade
+
+    - name: "Enable Disable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy2"
+      haproxy:
+        state=enabled
+        host={{ ansible_hostname }}-{{ item.name }}
+        backend={{ item.backend }}
+        wait=yes
+      delegate_to: webproxy2.verwaltung.uni-muenchen.de
+      ignore_errors: yes
+      with_items:
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client1' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client2' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client3' }
+        - { backend: '{{ ansible_hostname }}-clients', name: 'client4' }
+        - { backend: 'plone-cluster-ludwig27', name: 'clients' }
+      tags:
+        - plone_upgrade
