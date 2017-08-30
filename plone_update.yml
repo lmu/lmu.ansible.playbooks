@@ -27,7 +27,7 @@
             directory: buildout.zeoserver-production,
             src: {
                 type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
                 rev: master,
             },
             config: zeoserver-production.cfg,
@@ -54,7 +54,7 @@
            directory: buildout.zeoserver-failover-production,
            src: {
                type: git,
-               src: "https://github.com/loechel/lmu-iuk.buildout.git",
+               src: "https://github.com/lmu/lmu-iuk.buildout.git",
                rev: master,
            },
            config: zeoserver-failover-production.cfg,
@@ -84,7 +84,7 @@
             directory: buildout.zope-clients-production,
             src: {
                 type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
                 rev: master,
             },
             config: zope-clients-production.cfg,
@@ -138,28 +138,14 @@
       tags:
         - plone_upgrade
 
-    - name: "Stop Zope Clients via Supervisor"
-      supervisorctl:
-        name={{ item }}
-        state=stopped
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
-      tags:
-        - plone_upgrade
-
     - name: "Stop Supervisor"
       service:
         name=supervisor
         state=stopped
         enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
 
   post_tasks:
 
@@ -168,43 +154,8 @@
         name=supervisor
         state=started
         enabled=yes
-
-    - name: "Update Supervisorctl - Ensure Zope Clients are present"
-      supervisorctl:
-        name={{ item }}
-        state=present
-        username={{ supervisor.username }}
-        password={{ supervisor.password }}
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
       tags:
-        - plone_upgrade
-
-    - name: "Start Zope Clients via Supervisor"
-      supervisorctl:
-        name={{ item }}
-        state=started
-        username={{ supervisor.username }}
-        password={{ supervisor.password }}
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
-      tags:
+        - plone_setup
         - plone_upgrade
 
     - name: "Enable Production Server / Zope-Clients (Serverraum Martius4) on Load Balancing WebProxy1"
@@ -271,7 +222,7 @@
             directory: buildout.zope-clients-production,
             src: {
                 type: git,
-                src: "https://github.com/loechel/lmu-iuk.buildout.git",
+                src: "https://github.com/lmu/lmu-iuk.buildout.git",
                 rev: master,
             },
             config: zope-clients-production.cfg,
@@ -326,30 +277,14 @@
       tags:
         - plone_upgrade
 
-    - name: "Stop Zope Clients via Supervisor"
-      supervisorctl:
-        name={{ item }}
-        state=stopped
-        username={{ supervisor.username }}
-        password={{ supervisor.password }}
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
-      tags:
-        - plone_upgrade
-
     - name: "Stop Supervisor"
       service:
         name=supervisor
         state=stopped
         enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
 
   post_tasks:
 
@@ -358,43 +293,8 @@
         name=supervisor
         state=started
         enabled=yes
-
-    - name: "Update Supervisorctl - Ensure Zope Clients are present"
-      supervisorctl:
-        name={{ item }}
-        state=present
-        username={{ supervisor.username }}
-        password={{ supervisor.password }}
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
       tags:
-        - plone_upgrade
-
-    - name: "Start Zope Clients via Supervisor"
-      supervisorctl:
-        name={{ item }}
-        state=started
-        username={{ supervisor.username }}
-        password={{ supervisor.password }}
-      ignore_errors: yes
-      with_items:
-        - "clients:client1"
-        - "clients:client2"
-        - "clients:client3"
-        - "clients:client4"
-        - "HttpOkClient1"
-        - "HttpOkClient2"
-        - "HttpOkClient3"
-        - "HttpOkClient4"
-      tags:
+        - plone_setup
         - plone_upgrade
 
     - name: "Enable Production Server / Zope-Clients (Serverraum Ludwig27) on Load Balancing WebProxy1"
