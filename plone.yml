@@ -201,9 +201,9 @@
         special_time=daily
       delegate_to: webproxy2.verwaltung.uni-muenchen.de
       become: false
-    tags:
-      - plone_setup
-      - plone_upgrade
+      tags:
+        - plone_setup
+        - plone_upgrade
 
 - hosts: zope-clients-ludwig27-production
   become: true
