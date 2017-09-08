@@ -257,6 +257,17 @@
       - redmine_setup
       - redmine_upgrade
 
+  - name: "Update gems for Redmine ({{ instance.name }})"
+    bundler:
+      state=latest
+      chdir="{{ redmine.app_base_path}}/{{ instance.name }}/"
+      gem_path="vendor/bundle"
+      exclude_groups="test development"
+      executable=bundler
+    tags:
+      - redmine_setup
+      - redmine_upgrade
+
   - name: "Generate Session Store Secret ({{ instance.name }})"
     command: bundle exec rake generate_secret_token
       chdir="{{ redmine.app_base_path}}/{{ instance.name }}"
