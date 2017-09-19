@@ -253,6 +253,7 @@
       exclude_groups="test development"
       executable=bundler
       extra_args="--shebang={{ redmine.ruby_version }} --without xapian"
+    ignore_errors: yes
     tags:
       - redmine_setup
       - redmine_upgrade

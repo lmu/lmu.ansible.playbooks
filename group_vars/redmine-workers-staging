@@ -6,7 +6,7 @@ redmine:
   log_base_path: "/var/log/redmine"
   run_base_path: "/var/run/redmine"
 
-  git_version: "3.3-stable"
+  git_version: "3.4-stable"
 
   ruby_ppa: "ppa:brightbox/ruby-ng"
   ruby_version: "ruby2.3"
