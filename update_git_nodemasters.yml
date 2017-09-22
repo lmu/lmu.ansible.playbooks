@@ -29,8 +29,10 @@
 
     - name: "Ensure inventory files has correct file modes"
       file:
-        path="/opt/lmu.ansible.playbooks/inventory-avaliable/*"
+        path="{{ item }}"
         state=file
         owner="fachadmin"
         group="ansible"
         mode="u=rw,g=rw,o=r"
+      with_fileglob:
+        - "/opt/lmu.ansible.playbooks/inventory-avaliable/*"
