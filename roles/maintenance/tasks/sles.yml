@@ -2,30 +2,37 @@
 
 - block:
 
-  - name: "Update all Packages (Patch-Mode) (Suse/SLES)"
-    zypper:
-      name=*
-      state=latest
-      type=patch
-    notify:
-    - "Restart Server"
-    - "Wait for Server to come back"
+  - debug:
+      msg="SLES-Updates has been deactivated due to repository problems"
 
-  #- name: "Update all Packages"
-  #  zypper:
-  #    name=*
-  #    state=latest
-  #  notify:
-  #  - "Restart Server"
-  #  - "Wait for Server to come back"
+  - block:
+    - name: "Update all Packages (Patch-Mode) (Suse/SLES)"
+      zypper:
+        name=*
+        state=latest
+        type=patch
+      notify:
+      - "Restart Server"
+      - "Wait for Server to come back"
 
-  - name: "Update all Packages (Suse/SLES)"
-    command: zypper up
-    register: zypper_result
-    changed_when: "'Nothing to do.' not in zypper_result.stdout_lines"
-    notify:
-    - "Restart Server"
-    - "Wait for Server to come back"
+    - name: "Update all Packages"
+      zypper:
+        name=*
+        state=latest
+      notify:
+      - "Restart Server"
+      - "Wait for Server to come back"
+
+    - name: "Update all Packages (Suse/SLES)"
+      command: zypper up
+      register: zypper_result
+      changed_when: "'Nothing to do.' not in zypper_result.stdout_lines"
+      notify:
+      - "Restart Server"
+      - "Wait for Server to come back"
+
+    when: False  # deactivated
+
 
   when: ansible_os_family == "Suse"
   environment:
