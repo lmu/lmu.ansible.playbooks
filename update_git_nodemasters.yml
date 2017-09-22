@@ -26,3 +26,11 @@
         group="ansible"
         mode="u=rwX,g=rwX,o=rX"
         recurse=yes
+
+    - name: "Ensure inventory files has correct file modes"
+      file:
+        path="/opt/lmu.ansible.playbooks/inventory-avaliable/*"
+        state=file
+        owner="fachadmin"
+        group="ansible"
+        mode="u=rw,g=rw,o=r"

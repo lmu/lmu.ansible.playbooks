@@ -5,16 +5,16 @@ themeproxy1.verwaltung.uni-muenchen.de       dtap=production comment="Active Pro
 themeproxytest1.verwaltung.uni-muenchen.de   dtap=test comment="Test Setup of different Softwares, Mainly Diazo-Setup, but also Redmine Test"
 
 # requested instances
-themeproxy2.verwaltung.uni-muenchen.de      dtap=pre-production comment="Production Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
-themeproxy3.verwaltung.uni-muenchen.de      dtap=pre-production comment="Production Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
-themeproxytest2.verwaltung.uni-muenchen.de  dtap=test comment="Test Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
+themeproxy2.zuv.uni-muenchen.de      dtap=pre-production comment="Production Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
+themeproxy3.zuv.uni-muenchen.de      dtap=pre-production comment="Production Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
+themeproxytest2.zuv.uni-muenchen.de  dtap=test comment="Test Server for Diazo/Theme-Proxy on PrintService (Cloud-Printing) and EvaSys"
 
 [themeproxies-production]
-themeproxy2.verwaltung.uni-muenchen.de
-themeproxy3.verwaltung.uni-muenchen.de
+themeproxy2.zuv.uni-muenchen.de
+themeproxy3.zuv.uni-muenchen.de
 
 [themeproxies-staging]
-themeproxytest2.verwaltung.uni-muenchen.de
+themeproxytest2.zuv.uni-muenchen.de
 
 [themeproxies:children]
 themeproxies-production
