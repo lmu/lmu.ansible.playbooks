@@ -27,7 +27,7 @@
         mode="u=rwX,g=rwX,o=rX"
         recurse=yes
 
-    - name: "Ensure inventory files has correct file modes"
+    - name: "Ensure inventory / cmdb files has correct file modes"
       file:
         path="{{ item }}"
         state=file
@@ -36,3 +36,6 @@
         mode="u=rw,g=rw,o=r"
       with_fileglob:
         - "/opt/lmu.ansible.playbooks/inventory-avaliable/*"
+        - "/opt/lmu.ansible.playbooks/unchecked-out/*"
+        - "/opt/lmu.ansible.playbooks/checked-out/*"
+        - "/opt/lmu.ansible.playbooks/cmdb/*"
