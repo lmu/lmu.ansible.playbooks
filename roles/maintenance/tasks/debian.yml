@@ -16,20 +16,6 @@
 
   - name: "Autoremove unused Packages (Debian/Ubuntu)"
     apt: autoremove=yes
-    ignore_errors: yes
-
-  - name: "Check if anything needs autoremoving (Debian/Ubuntu)"
-    shell: apt-get autoremove -y --dry-run
-    become: True
-    register: check_autoremove
-    changed_when: "' 0 to remove' not in check_autoremove.stdout"
-    failed_when: "check_autoremove.rc != 0"
-    check_mode: no
-
-  - name: "Autoremove unused Packages (Debian/Ubuntu) "
-    command: apt-get autoremove -y
-    when: "check_autoremove.rc == 0 and ' 0 to remove' not in check_autoremove.stdout"
-    register: autoremove
 
   when: ansible_os_family == "Debian"
   environment:

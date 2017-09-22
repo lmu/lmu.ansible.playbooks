@@ -1,19 +1,19 @@
 ---
 
 - name: "Run Debian Update Process"
-  include: debian.yml
+  import_tasks: debian.yml
   when: ansible_os_family == "Debian"
 
 - name: "Run SLES Update Process"
-  include: sles.yml
+  import_tasks: sles.yml
   when: ansible_os_family == "Suse"
 
 - name: "Run CentOS / RedHat Update Process"
-  include: redhat.yml
+  import_tasks: redhat.yml
   when: ansible_os_family == "RedHat"
 
 - name: "Run Virtualenv Update Process"
-  include: virtualenv.yml
+  import_tasks: virtualenv.yml
 
 
 # Check for Reboot
