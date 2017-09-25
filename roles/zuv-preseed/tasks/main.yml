@@ -116,4 +116,17 @@
 - name: "Include Plattform specific Tasks (Hyper-V and Distribution related)"
   include: "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_release }}-fixes.yml"
 
+- name: "Copy Check_MK Agent Config"
+  copy:
+    dest="/etc/xinetd.d/{{ item }}"
+    src="{{ item }}"
+    mode="o=rw,g=r,u=r"
+    owner=root
+    group=root
+  with_items:
+    - check-mk-agent
+    - check-mk-caching-agent
+  notify:
+    - Restart xinetd
+
 ...
