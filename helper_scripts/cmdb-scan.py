@@ -49,7 +49,16 @@ def check_and_copy_ansible_setup_output(
                         data = json.load(f)
                         #import pdb; pdb.set_trace()
                         if 'unreachable' not in data:
-                            shutil.copy2(os.path.join(input_directory, server_file), output_directory)
+                            os.remove(
+                                os.path.join(output_directory, server_file),
+                            )
+                            shutil.copy2(
+                                os.path.join(
+                                    input_directory,
+                                    server_file,
+                                ),
+                                output_directory,
+                            )
 
 
 def execute_ansible_cmdb(
