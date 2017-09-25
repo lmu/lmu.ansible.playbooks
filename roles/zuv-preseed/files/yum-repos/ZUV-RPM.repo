@@ -1,0 +1,8 @@
+[ZUV-RPM]
+name=ZUV-RPM
+enabled=1
+autorefresh=1
+baseurl=http://yup.verwaltung.uni-muenchen.de/ZUV-RPM/
+repo_gpgcheck=1
+gpgkey=http://yup.verwaltung.uni-muenchen.de/ZUV-RPM/repodata/repomd.xml.key
+type=rpm-md

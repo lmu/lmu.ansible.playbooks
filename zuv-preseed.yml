@@ -2,21 +2,17 @@
 
 - hosts: all
   become: true
-  #remote_user: admin
 
   vars:
     admin_password: "$6$rounds=656000$7FWeGie/WDRfvfES$f3HA6STefV6JNgA668TFhyl2FR549VJkV7QW31/GHTWVELYT6YwWvx.C.2uIBxSp7eQvycS/b23AK7dH.QPNR/"
     fachadmin_password: "$6$rounds=656000$7FWeGie/WDRfvfES$f3HA6STefV6JNgA668TFhyl2FR549VJkV7QW31/GHTWVELYT6YwWvx.C.2uIBxSp7eQvycS/b23AK7dH.QPNR/"
 
   roles:
-    - base-preseed
     - { role: zuv-preseed,
         proxy: {
           no_proxy: [
             "www.scm.verwaltung.uni-muenchen.de",
             "pypi.verwaltung.uni-muenchen.de",
-            "www.intranet.verwaltung.uni-muenchen.de",
-            "www.serviceportal.verwaltung.uni-muenchen.de",
             "cms-live-pm1",
             "cms-live-pm1.verwaltung.uni-munechen.de",
             "cms-live-pm2",
@@ -40,3 +36,4 @@
           ]
         }
       }
+    - base-preseed

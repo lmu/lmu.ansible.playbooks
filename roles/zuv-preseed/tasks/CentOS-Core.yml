@@ -1,5 +1,26 @@
 ---
 
+- name: "Ensure Global Repository settings are set correct"
+  copy:
+    dest="/etc/yum.repos.d/{{ item }}"
+    src="yum-repos/{{ item }}"
+    mode="u=rw,g=r,o=r"
+    owner=root
+    group=root
+  with_items:
+  - "CentOS-Base.repo"
+  - "CentOS-CR.repo"
+  - "CentOS-Debuginfo.repo"
+  - "CentOS-fasttrack.repo"
+  - "CentOS-Media.repo"
+  - "CentOS-SCLo-scl-rh.repo"
+  - "CentOS-SCLo-scl.repo"
+  - "CentOS-Sources.repo"
+  - "CentOS-Vault.repo"
+  - "epel-testing.repo"
+  - "epel.repo"
+  - "ZUV-RPM.repo"
+
 - name: "Ensure Base-Packages (ZUV-common) are installed"
   yum:
     pkg="{{ item }}"
