@@ -15,10 +15,20 @@
       name=*
       state=latest
       update_cache=yes
+    async: 600
+    poll: 0
     register: yum_status
+    ignore_errors: yes
     notify:
     - "Restart Server"
     - "Wait for Server to come back"
+
+  - name: "Check Update (RedHat/CentOS)"
+    async_status:
+      jid="{{ yum_status.ansible_job_id }}"
+    register: job_result
+    until: job_result.finished
+    retries: 30
 
   - name: "Debug-Info (RedHat/CentOS)"
     debug:

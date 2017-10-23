@@ -8,8 +8,8 @@
   tasks:
 
   - name: Restart Server
-    command: shutdown -r now "Forced Reboot triggered by Ansible"
-    async: 0
+    command: sleep 2 && shutdown -r now "Forced Reboot triggered by Ansible"
+    async: 1
     poll: 0
     ignore_errors: true
 

@@ -1,6 +1,6 @@
 # CMDB Servers
 
-cmdbtest0.verwaltung.uni-muenchen.de     dtap=test comment="CentOS/7 Desktop in Room 404 that serves for a period of time as testing instance for CMDB i-doit."
+cmdbtest0.verwaltung.uni-muenchen.de     dtap=test comment="CentOS/7 Desktop in Room 404 that serves for a period of time as testing instance for CMDB i-doit." ansible_host=192.168.120.107
 cmdbtest1.verwaltung.uni-muenchen.de     dtap=test comment="Testing instance for CMDB i-doit pro."
 cmdb1.verwaltung.uni-muenchen.de         dtap=production comment="Production instance for CMDB i-doit pro."
 
