@@ -61,7 +61,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
@@ -98,16 +98,16 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
   tasks:
 
-    - name: "check if 'solr-instance' is present"
-      supervisorctl:
-        name="solr-instance"
-        state=present
+#    - name: "check if 'solr-instance' is present"
+#      supervisorctl:
+#        name="solr-instance"
+#        state=present
 
     - name: "Restart Supervisor"
       service:
@@ -126,7 +126,7 @@
     - { role: zc.buildout,
         buildout: {
           path: '/usr/local/',
-          directory: 'solr.buildout',
+          directory: 'solr.buildout-staging',
           config: 'develop.cfg', #'staging-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
@@ -136,16 +136,16 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
   tasks:
 
-    - name: "check if 'solr-instance' is present"
-      supervisorctl:
-        name="solr-instance"
-        state=present
+#    - name: "check if 'solr-instance' is present"
+#      supervisorctl:
+#        name="solr-instance"
+#        state=present
 
     - name: "Restart Supervisor"
       service:
@@ -163,7 +163,7 @@
     - { role: zc.buildout,
         buildout: {
           path: '/usr/local/',
-          directory: 'solr.buildout',
+          directory: 'solr.buildout-staging',
           config: 'develop.cfg', #'staging-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
@@ -173,16 +173,16 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
   tasks:
 
-    - name: "check if 'solr-instance' is present"
-      supervisorctl:
-        name="solr-instance"
-        state=present
+#    - name: "check if 'solr-instance' is present"
+#      supervisorctl:
+#        name="solr-instance"
+#        state=present
 
     - name: "Restart Supervisor"
       service:
