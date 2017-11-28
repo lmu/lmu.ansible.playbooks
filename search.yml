@@ -27,8 +27,12 @@
 
     - name: remove .installed.cfg
       file:
-        path='/usr/local/solr.buildout/.installed.cfg'
+        path='/usr/local/{{ item }}/.installed.cfg'
         state=absent
+      with_items:
+        - 'solr.buildout'
+#        - 'solr.buildout-production'
+        - 'solr.buildout-staging'
 
 
     - name: remove part elems
@@ -43,7 +47,6 @@
 - hosts: solr-masters-production
   become: true
 
-
   handlers:
     - include: roles/supervisor/handlers/main.yml
 
@@ -52,7 +55,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'develop.cfg', #'production-master.cfg',
+          config: 'production-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -61,16 +64,16 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
   tasks:
 
-    - name: "check if 'solr-instance' is present"
-      supervisorctl:
-        name="solr-instance"
-        state=present
+#    - name: "check if 'solr-instance' is present"
+#      supervisorctl:
+#        name="solr-instance"
+#        state=present
 
     - name: "Restart Supervisor"
       service:
@@ -89,7 +92,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout',
-          config: 'develop.cfg', #'production-slave.cfg',
+          config: 'production-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
@@ -98,7 +101,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'master'
+            rev: 'unihh-test'
           }
         }
       }
@@ -164,7 +167,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout-staging',
-          config: 'develop.cfg', #'staging-slave.cfg',
+          config: 'staging-slave.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
