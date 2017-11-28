@@ -31,9 +31,8 @@
         state=absent
       with_items:
         - 'solr.buildout'
-#        - 'solr.buildout-production'
+        - 'solr.buildout-production'
         - 'solr.buildout-staging'
-
 
     - name: remove part elems
       file:
@@ -42,6 +41,10 @@
       with_items:
         - '/usr/local/solr.buildout/parts/solr-download-stable'
         - '/usr/local/solr.buildout/parts/solr-download-latest'
+        - '/usr/local/solr.buildout-production/parts/solr-download-stable'
+        - '/usr/local/solr.buildout-production/parts/solr-download-latest'
+        - '/usr/local/solr.buildout-staging/parts/solr-download-stable'
+        - '/usr/local/solr.buildout-staging/parts/solr-download-latest'
 
 
 - hosts: solr-masters-production
@@ -130,7 +133,7 @@
         buildout: {
           path: '/usr/local/',
           directory: 'solr.buildout-staging',
-          config: 'develop.cfg', #'staging-master.cfg',
+          config: 'staging-master.cfg',
           requires_secrets: true,
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
