@@ -67,7 +67,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'unihh-test'
+            rev: 'master'
           }
         }
       }
@@ -104,7 +104,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'unihh-test'
+            rev: 'master'
           }
         }
       }
@@ -142,7 +142,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'unihh-test'
+            rev: 'master'
           }
         }
       }
@@ -179,7 +179,7 @@
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
-            rev: 'unihh-test'
+            rev: 'master'
           }
         }
       }
