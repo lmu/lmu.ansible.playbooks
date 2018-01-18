@@ -63,7 +63,7 @@
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
-          mode: '-o',
+          mode: '',
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
@@ -100,7 +100,7 @@
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
-          mode: '-o',
+          mode: '',
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
@@ -138,7 +138,7 @@
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
-          mode: '-o',
+          mode: '',
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
@@ -175,7 +175,7 @@
           secrets: 'templates/secrets.cfg.j2',
           login: 'admin',
           password: 'admin',
-          mode: '-o',
+          mode: '',
           src: {
             src: 'https://github.com/loechel/solr.buildout.git',
             type: 'git',
