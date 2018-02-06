@@ -66,10 +66,12 @@ default-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muench
 script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de; \
 style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 img-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
-media-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com; \
+media-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de; \
 font-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 object-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;\
-child-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com;
+child-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de;\
+worker-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de;\
+"
     RequestHeader append X-Forwarded-For "zuv-serviceportal.{{ ansible_fqdn | lower }}"
     RequestHeader set X-Backend-For Fiona
     RequestHeader set X-Use-ESI true
