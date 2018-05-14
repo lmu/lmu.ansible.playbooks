@@ -43,6 +43,8 @@
     # Dependencies for transformation of Binary Documents (Office, PDF)
     - wv
     - poppler-utils
+    # Dependencies for transformation of Videos --> Thumbnails
+    - ffmpegthumbnailer
   register: dependency
   #changed_when: "' 0 newly installed' not in dependency.stdout"
   when: ansible_os_family == "Debian"
