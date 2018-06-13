@@ -62,9 +62,9 @@
     Header set X-Content-Type-Options "nosniff"
     # Header set Content-Security-Policy-Report-Only "default-src 'self'; img-src *; style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval'"
     Header set Content-Security-Policy "\
-default-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de flash5.lrz.de stream.lrz.de; \
-script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de interaktiv.contilla.de; \
-style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
+default-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de flash5.lrz.de stream.lrz.de rest.contilla.de; \
+script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de interaktiv.contilla.de cdnjs.cloudflare.com; \
+style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de maxcdn.bootstrapcdn.com; \
 img-src 'self' 'unsafe-inline' data: blob: mediastream: cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de piwik-test.verwaltung.uni-muenchen.de www.uni-muenchen.de *.verwaltung.uni-muenchen.de interaktiv.contilla.de; \
 media-src 'self' 'unsafe-inline' data: blob: mediastream: cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de; \
 font-src 'self' 'unsafe-inline' data: blob: cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
