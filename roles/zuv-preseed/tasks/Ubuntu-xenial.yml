@@ -19,7 +19,7 @@
   apt:
     pkg="{{ item }}"
     state=present
-    update_cache=no
+    update_cache=yes
   with_items:
     - bginfo-ubuntu
     - certs-zuv-ubuntu
