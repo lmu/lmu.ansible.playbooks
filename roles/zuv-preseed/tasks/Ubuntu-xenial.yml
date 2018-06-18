@@ -15,6 +15,10 @@
   ignore_errors: yes
   when: ansible_os_family == "Debian"
 
+- name: "Install Check_MK Agenet"
+  apt:
+    deb=http://monitor.zuv.uni-muenchen.de/nagios/check_mk/agents/chec-mk-agent-1.4.0.p31-1_all.deb
+
 - name: "Ensure Base-Packages (ZUV-common) are installed"
   apt:
     pkg="{{ item }}"
