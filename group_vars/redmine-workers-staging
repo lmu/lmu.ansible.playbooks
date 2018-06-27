@@ -91,7 +91,7 @@ redmine_plugins: {
     "event_notifications": { 'url': "https://github.com/jrupesh/event_notifications.git", 'version': 'v3.2.0'},
     "redmine_wiki_lists": { 'url': "https://github.com/tkusukawa/redmine_wiki_lists.git", 'version': '0.0.6'},
     "redmine_issue_templates": { 'url': "https://github.com/akiko-pusu/redmine_issue_templates.git", 'version': '0.1.9'},
-    "sidebar_hide": { 'url': "https://github.com/bdemirkir/sidebar_hide.git", 'version': 'master'}, #, 'version': '0.0.8'},
+    #"sidebar_hide": { 'url': "https://github.com/bdemirkir/sidebar_hide.git", 'version': 'master'}, #, 'version': '0.0.8'},
     # Potential addons:
     #"redmine_dmsf": { 'url': 'https://github.com/danmunn/redmine_dmsf.git', 'version': 'v1.5.9'},
 
