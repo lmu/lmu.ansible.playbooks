@@ -95,6 +95,7 @@ redmine_plugins: {
     # Potential addons:
     #"redmine_dmsf": { 'url': 'https://github.com/danmunn/redmine_dmsf.git', 'version': 'v1.5.9'},
     # Dependencies
+    "bats": { 'url': 'https://github.com/sstephenson/bats.git', 'version': 'master'},
     "redmine_acts_as_taggable_on": { 'url': 'https://github.com/alexbevi/redmine_acts_as_taggable_on.git', 'version': 'master'},
 
     # Old unused Plugins kept for protocol:
