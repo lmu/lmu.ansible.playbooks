@@ -245,6 +245,9 @@
 
 - block:
 
+  - name: "Config bundle"
+    command: bundle config --global git.allow_insecure true
+
   - name: "Install Redmine ({{ instance.name }})"
     bundler:
       state=present
