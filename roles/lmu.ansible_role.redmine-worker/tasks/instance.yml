@@ -198,7 +198,8 @@
 - name: "Install local bundler"
   gem:
     name=bundler
-    state=latest
+    state=present
+    version=1.17.3
     executable="{{ redmine.app_base_path}}/{{ instance.name }}/vendor/bundle/ruby/{{ redmine.ruby_semversion }}.0/bin/gem"
     user_install=no
   environment:
