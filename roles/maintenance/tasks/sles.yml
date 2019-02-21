@@ -21,7 +21,6 @@
         state=latest
       notify:
       - "Restart Server"
-      - "Wait for Server to come back"
 
     - name: "Update all Packages (Suse/SLES)"
       command: zypper up

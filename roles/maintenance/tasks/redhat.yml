@@ -21,7 +21,6 @@
     ignore_errors: yes
     notify:
     - "Restart Server"
-    - "Wait for Server to come back"
 
   - name: "Check Update (RedHat/CentOS)"
     async_status:

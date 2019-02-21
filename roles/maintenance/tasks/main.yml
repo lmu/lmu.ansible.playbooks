@@ -34,6 +34,5 @@
   changed_when: reboot_required.stat.exists and maintenance.allow_reboot
   notify:
   - "Restart Server"
-  - "Wait for Server to come back"
 
 ...

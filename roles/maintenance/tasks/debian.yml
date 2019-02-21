@@ -12,7 +12,6 @@
     #changed_when: "'No packages will be installed, upgraded, or removed.' not in check_install.stdout"
     notify:
     - "Restart Server"
-    - "Wait for Server to come back"
 
   - name: "Autoremove unused Packages (Debian/Ubuntu)"
     apt: autoremove=yes
