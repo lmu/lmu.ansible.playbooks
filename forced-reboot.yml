@@ -13,6 +13,6 @@
       reboot_timeout: 3600
     register: result
 
-  - name: "info if Reboot was sucessful"
+  - name: "Info if Reboot was sucessful"
     debug:
       msg: "{{ inventory_hostname }} has rebooted: {{ result.rebooted }}, it has taken: {{ result.elapsed }} seconds"

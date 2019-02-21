@@ -1,22 +1,15 @@
 ---
 
 - name: "Restart Server"
-  command: shutdown -r +1 "Reboot triggered by Ansible after system updates"
-  async: 0
-  poll: 0
-  ignore_errors: true
+  reboot:
+    msg: "Reboot by Ansible-Playbook after Update"
+    reboot_timeout: 3600
+  register: result
   when: reboot_required.stat.exists and maintenance.allow_reboot
 
-- name: "Wait for Server to come back"
-  local_action:
-    wait_for
-    host={{ ansible_ssh_host | default(inventory_hostname) }}
-    port=22
-    search_regex=OpenSSH
-    state=started
-    delay=20
-    timeout=300
-  become: false
+- name: "Info if Reboot was sucessful"
+  debug:
+    msg: "{{ inventory_hostname }} has rebooted: {{ result.rebooted }}, it has taken: {{ result.elapsed }} seconds"
   when: reboot_required.stat.exists and maintenance.allow_reboot
 
 - name: "Delete reboot_required file"
