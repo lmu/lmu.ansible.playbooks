@@ -8,19 +8,10 @@
   tasks:
 
   - name: Restart Server
-    command: shutdown -r now "Forced Reboot triggered by Ansible"
-    async: 1
-    poll: 0
-    become: true
-    ignore_errors: true
+    reboot:
+      reboot_timeout: 3600
+    register: result
 
-  - name: Wait for Server to come back
-    local_action:
-      wait_for
-      host={{ ansible_ssh_host | default(inventory_hostname) }}
-      port=22
-      search_regex=OpenSSH
-      state=started
-      delay=20
-      timeout=300
-    become: false
+  - name: "info if Reboot was sucessful"
+    debug:
+      msg: "{{ inventory_hostname }} has rebooted: {{ result.rebooted }}, it has taken: {{ result.elapsed }} seconds"
