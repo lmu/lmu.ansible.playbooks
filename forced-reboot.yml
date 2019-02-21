@@ -7,8 +7,9 @@
 
   tasks:
 
-  - name: Restart Server
+  - name: "Restart Server"
     reboot:
+      msg: "Forced Reboot by Ansible-Playbook"
       reboot_timeout: 3600
     register: result
 
