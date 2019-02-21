@@ -11,6 +11,7 @@
 - name: "Info if Reboot was sucessful"
   debug:
     msg: "{{ inventory_hostname }} has rebooted: {{ result.rebooted }}, it has taken: {{ result.elapsed }} seconds"
+  when: reboot_required.stat.exists and maintenance.allow_reboot
 
 - name: "Delete reboot_required file"
   file:
