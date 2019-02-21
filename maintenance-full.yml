@@ -35,5 +35,6 @@
         - name: "Info if Reboot was sucessful"
           debug:
             msg: "{{ inventory_hostname }} has rebooted: {{ result.rebooted }}, it has taken: {{ result.elapsed }} seconds"
+          when: reboot_required.stat.exists
 
       when: allow_reboot is not defined or (allow_reboot is defined and allow_reboot == true)
