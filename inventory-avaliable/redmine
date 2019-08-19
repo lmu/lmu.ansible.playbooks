@@ -1,8 +1,8 @@
 # Inventory for Redmine
 
 # active Servers
-redmine3.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (CentOS/7)"
-redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (CentOS/7)"
+#redmine3.verwaltung.uni-muenchen.de      dtap=pre-production comment="Upcoming Production Server for Redmine (CentOS/7)"
+#redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Staging Server for Redmine (CentOS/7)"
 
 # inactive / returned / planned Servers
 #pdb-live-pg1.verwaltung.uni-muenchen.de  dtap=returned comment="Old Production Database Server for Redmine (SLES 11 SP 3) Standort: MA4"
@@ -16,32 +16,32 @@ redminetest3.verwaltung.uni-muenchen.de  dtap=test comment="Upcoming Test/Stagin
 # Service Assignment:
 [redmine-dbs-production]
 #redmine2.verwaltung.uni-muenchen.de
-redmine3.verwaltung.uni-muenchen.de
+#redmine3.verwaltung.uni-muenchen.de
 #redmine4.verwaltung.uni-muenchen.de
 
 [redmine-dbs-staging]
 #redminetest2.verwaltung.uni-muenchen.de
-redminetest3.verwaltung.uni-muenchen.de
+#redminetest3.verwaltung.uni-muenchen.de
 #redminetest4.verwaltung.uni-muenchen.de
 
 [redmine-workers-production]
 #redmine2.verwaltung.uni-muenchen.de
-redmine3.verwaltung.uni-muenchen.de
+#redmine3.verwaltung.uni-muenchen.de
 #redmine4.verwaltung.uni-muenchen.de
 
 [redmine-workers-staging]
 #redminetest2.verwaltung.uni-muenchen.de
-redminetest3.verwaltung.uni-muenchen.de
+#redminetest3.verwaltung.uni-muenchen.de
 #redminetest4.verwaltung.uni-muenchen.de
 
 [redmine-frontends-production]
 #redmine2.verwaltung.uni-muenchen.de
-redmine3.verwaltung.uni-muenchen.de
+#redmine3.verwaltung.uni-muenchen.de
 #redmine4.verwaltung.uni-muenchen.de
 
 [redmine-frontends-staging]
 #redminetest2.verwaltung.uni-muenchen.de
-redminetest3.verwaltung.uni-muenchen.de
+#redminetest3.verwaltung.uni-muenchen.de
 #redminetest4.verwaltung.uni-muenchen.de
 
 

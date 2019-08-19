@@ -1,12 +1,12 @@
 # Sentry - Live Log Aggregation
 
-sentry1.verwaltung.uni-muenchen.de   dtap=production comment="Production Server for Sentry Log/Error-Log-Aggregation and Monitoring Plattform"
+#sentry1.verwaltung.uni-muenchen.de   dtap=production comment="Production Server for Sentry Log/Error-Log-Aggregation and Monitoring Plattform"
 
 [sentry-dbs]
-sentry1.verwaltung.uni-muenchen.de
+#sentry1.verwaltung.uni-muenchen.de
 
 [sentry-workers]
-sentry1.verwaltung.uni-muenchen.de
+#sentry1.verwaltung.uni-muenchen.de
 
 [sentry]
-sentry1.verwaltung.uni-muenchen.de
+#sentry1.verwaltung.uni-muenchen.de

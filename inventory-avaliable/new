@@ -1,4 +1,1 @@
 [new_servers]
-
-#redmine3.verwaltung.uni-muenchen.de ansible_host=10.153.81.130
-#redminetest3.verwaltung.uni-muenchen.de ansible_host=10.153.81.138

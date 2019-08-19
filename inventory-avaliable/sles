@@ -1,6 +1,6 @@
 [sles]
 #pdb-live-pg1.verwaltung.uni-muenchen.de     # Comment in inventory/redmine
 #redmine1.verwaltung.uni-muenchen.de         # Comment in inventory/redmine
-piwiktest1.verwaltung.uni-muenchen.de       # Comment in inventory/analytics
-themeproxy1.verwaltung.uni-muenchen.de      # Comment in inventory/themeproxies
-themeproxytest1.verwaltung.uni-muenchen.de  # Comment in inventory/themeproxies
+#piwiktest1.verwaltung.uni-muenchen.de       # Comment in inventory/analytics
+#themeproxy1.verwaltung.uni-muenchen.de      # Comment in inventory/themeproxies
+#themeproxytest1.verwaltung.uni-muenchen.de  # Comment in inventory/themeproxies
