@@ -2,24 +2,23 @@
 
 - include: base.yml
 
-
 - name: Ensure buildout directory exists
   file:
-    path="{{ buildout.path }}{{ buildout.directory }}"
-    state=directory
-    owner=plone_buildout
-    group=plone_group
-    mode="u=rwx,g=rx,o=rx"
+    path: "{{ buildout.path }}{{ buildout.directory }}"
+    state: directory
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=rwx,g=rx,o=rx"
 
 - name: Checkout buildout from git
   git:
-    repo={{ buildout.src.src }}
-    dest="{{ buildout.path }}{{ buildout.directory }}"
-    clone=yes
-    remote=origin
-    update=yes
-    version={{ buildout.src.rev }}
-    force=yes
+    repo: "{{ buildout.src.src }}"
+    dest: "{{ buildout.path }}{{ buildout.directory }}"
+    clone: yes
+    remote: origin
+    update: yes
+    version: "{{ buildout.src.rev }}"
+    force: yes
   when: buildout.src.type|lower == "git" and buildout.src.src
   become_user: plone_buildout
   environment:
@@ -28,119 +27,134 @@
     GIT_SSL_NO_VERIFY: "true"
 
 - name: "Ensure git config settings"
-  command: git config core.fileMode false
-    chdir="{{ buildout.path }}{{ buildout.directory }}"
+  command:
+    cmd: git config core.fileMode false
+    chdir: "{{ buildout.path }}{{ buildout.directory }}"
   when: buildout.src.type|lower == "git" and buildout.src.src
 
 - name: "Checkout buildout from subversion"
   subversion:
-    repo={{ buildout.src.src }}
-    dest="{{ buildout.path }}{{ buildout.directory }}"
-    revision={{ buildout.src.rev }}
+    repo: "{{ buildout.src.src }}"
+    dest: "{{ buildout.path }}{{ buildout.directory }}"
+    revision: "{{ buildout.src.rev }}"
   when: buildout.src.type|lower == "svn" and buildout.src.src
-  become_user: plone_buildout
+  become_user: ansible
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-- name: "Ensure buildout-directory is owned by user plone_buildout"
-  file:
-    path="{{ buildout.path }}{{ buildout.directory }}"
-    mode="u=rwx,g=rx,o=rx"
-    owner=plone_buildout
-    group=plone_group
-    recurse=yes
-    state=directory
-
 - name: "Create virtualenv in buildout directory"
-  command: virtualenv --no-pip --no-setuptools --no-wheel --no-site-packages {{ buildout.path }}{{ buildout.directory }}
-    chdir="{{ buildout.path }}"
-    creates="{{ buildout.path }}{{ buildout.directory }}/bin/activate"
+  #command: virtaulenv --no-pip --no-setuptools --no-wheel --no-site-packages {{ buildout.path }}{{ buildout.directory }}
+  command:
+    cmd: python3 -m venv {{ buildout.path }}{{ buildout.directory }}
+    chdir: "{{ buildout.path }}"
+    creates: "{{ buildout.path }}{{ buildout.directory }}/bin/activate"
   #register: virtualenv_setup
   #ignore_errors: yes
   #failed_when: "'Permission denied' in virtualenv_setup.stderr"
 
 - name: "Ensure buildout-directory is owned by user plone_buildout"
   file:
-    path="{{ buildout.path }}{{ buildout.directory }}"
-    mode="u=rwx,g=rx,o=rx"
-    owner=plone_buildout
-    group=plone_group
-    recurse=yes
-    state=directory
+    path: "{{ buildout.path }}{{ buildout.directory }}"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: plone_buildout
+    group: plone_group
+    recurse: yes
+    state: directory
 
 - name: "Ensure a /data/{{buildout.directory}}/var directory owned by user plone_daemon exists"
   file:
-    path=/data/{{ buildout.directory }}/var
-    mode="u=rwx,g=rwx,o=rx"
-    owner=plone_daemon
-    group=plone_group
-    recurse=yes
-    state=directory
+    path: /data/{{ buildout.directory }}/var
+    state: directory
+    recurse: yes
+    mode: "u=rwx,g=rwx,o=rx"
+    owner: plone_daemon
+    group: plone_group
 
 - name: "Ensure buildout-var-directory is aktually a symlink to /data/{{buildout.directory}}/var owned by user plone_daemon"
   file:
-    path="{{ buildout.path }}{{ buildout.directory }}/var"
-    src=/data/{{ buildout.directory }}/var
-    owner=plone_daemon
-    group=plone_group
-    state=link
-    force=yes
+    path: "{{ buildout.path }}{{ buildout.directory }}/var"
+    src: /data/{{ buildout.directory }}/var
+    owner: plone_daemon
+    group: plone_group
+    state: link
+    force: yes
 
 - name: "Ensure buildout-var-directory is owned by user plone_daemon"
   file:
-    path="{{ buildout.path }}{{ buildout.directory }}/var/."
-    mode="u=rwx,g=rwx,o=rx"
-    owner=plone_daemon
-    group=plone_group
-    recurse=yes
-    state=directory
+    path: "{{ buildout.path }}{{ buildout.directory }}/var/."
+    state: directory
+    mode: "u=rwx,g=rwx,o=rx"
+    owner: plone_daemon
+    group: plone_group
+    recurse: yes
 
-- name: "Preset Buildout config"
+#- name: "Preset Buildout config"
+#  file:
+#    path: "{{ buildout.path }}{{ buildout.directory }}/buildout.cfg"
+#    src: "{{ buildout.path }}{{ buildout.directory }}/{{ buildout.config }}"
+#    state: link
+#    owner: plone_buildout
+#    group: plone_group
+
+- name: "Preset Buildout config (Starzel Buildout)"
   file:
-    path="{{ buildout.path }}{{ buildout.directory }}/buildout.cfg"
-    src="{{ buildout.path }}{{ buildout.directory }}/{{ buildout.config }}"
-    state=link
-    owner=plone_buildout
-    group=plone_group
+    path: "{{ buildout.path }}{{ buildout.directory }}/local.cfg"
+    src: "{{ buildout.path }}{{ buildout.directory }}/{{ buildout.config }}"
+    state: link
+    owner: plone_buildout
+    group: plone_group
 
 - name: "Copy secrets.cfg if provided"
   template:
-    dest="{{ buildout.path }}{{ buildout.directory }}/secrets.cfg"
-    src={{ buildout.secrets }}
-    owner=plone_buildout
-    group=plone_group
-    mode="u=r,g=,o="
+    dest: "{{ buildout.path }}{{ buildout.directory }}/secret.cfg"
+    src: "{{ buildout.secrets }}"
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=r,g=,o="
   when: buildout.requires_secrets
 
 - name: "ensure supervisor conf.d directory is writeable for plone_buildout"
   file:
-    path=/etc/supervisor/conf.d
-    state=directory
-    owner=plone_buildout
-    group=plone_group
-    mode="u=rwx,g=rx,o=rx"
+    path: /etc/supervisor/conf.d
+    state: directory
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=rwx,g=rx,o=rx"
+
 - block:
+  #- name: "Bootstrap buildout"
+  #  command:
+  #    cmd: python bootstrap.py --version=2.4.4 --setuptools-version=18.4
+  #    chdir: "{{ buildout.path }}{{ buildout.directory }}"
+  #    creates: "{{ buildout.path }}{{ buildout.directory }}/bin/buildout"
 
   - name: "Bootstrap buildout"
-    command: python bootstrap.py --version=2.4.4 --setuptools-version=18.4
-      chdir="{{ buildout.path }}{{ buildout.directory }}"
-      creates="{{ buildout.path }}{{ buildout.directory }}/bin/buildout"
+    pip:
+      name:
+        - zc.buildout==2.13.3
+        - setuptools==42.0.2
+      state: present
+      #virtualenv: "{{ buildout.path }}{{ buildout.directory }}"
+      executable: "{{ buildout.path }}{{ buildout.directory }}/bin/pip"
+      chdir: "{{ buildout.path }}{{ buildout.directory }}"
 
   - name: "Run buildout"
-    command: ./bin/buildout {{ buildout.mode }}
-      chdir="{{ buildout.path }}{{ buildout.directory }}"
+    command:
+      cmd: "{{ buildout.path }}{{ buildout.directory }}/bin/buildout {{ buildout.mode }}"
+      chdir: "{{ buildout.path }}{{ buildout.directory }}"
 
   - name: "Find checkout packages"
     find:
-      paths="{{ buildout.path }}{{ buildout.directory }}/src/"
-      file_type=directory
-      recurse=no
+      paths: "{{ buildout.path }}{{ buildout.directory }}/src/"
+      file_type: directory
+      recurse: no
     register: src_dirs
 
   - name: "Update git config"
-    command: git config core.fileMode false
-      chdir="{{ item.path }}"
+    command:
+      cmd: git config core.fileMode false
+      chdir: "{{ item.path }}"
     with_items: "{{ src_dirs.files }}"
     ignore_errors: yes
 
@@ -151,38 +165,45 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
   become_user: plone_buildout
 
-- block: #"Compile i18n:modules"
+- block: # "Compile i18n:modules"
 
   - name: "Delete existing mo files of buildout-cache"
-    command: find . -iname *.mo -delete
-      chdir="/usr/local/buildout-cache"
+    command:
+      cmd: find . -iname *.mo -delete
+      chdir: "/usr/local/buildout-cache"
 
   - name: "Compile po to po.mo files of buildout-cache"
-    command: find . -iname *.po -exec msgfmt {} -o {}.mo \;
-      chdir="/usr/local/buildout-cache"
+    command:
+      cmd: find . -iname *.po -exec msgfmt {} -o {}.mo \;
+      chdir: "/usr/local/buildout-cache"
 
   - name: "Rename po.mo to mo files of buildout-cache"
-    command: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
-      chdir="/usr/local/buildout-cache"
+    command:
+      cmd: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
+      chdir: "/usr/local/buildout-cache"
 
   - name: "Delete existing mo files of src"
-    command: find . -iname *.mo -delete
-      chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+    command:
+      cmd: find . -iname *.mo -delete
+      chdir: "{{ buildout.path }}{{ buildout.directory }}/src"
 
   - name: "Compile po to po.mo files of src"
-    command: find . -iname *.po -exec msgfmt {} -o {}.mo \;
-      chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+    command:
+      cmd: find . -iname *.po -exec msgfmt {} -o {}.mo \;
+      chdir: "{{ buildout.path }}{{ buildout.directory }}/src"
 
   - name: "Rename po.mo to mo files of src"
-    command: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
-      chdir="{{ buildout.path }}{{ buildout.directory }}/src"
+    command:
+      cmd: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
+      chdir: "{{ buildout.path }}{{ buildout.directory }}/src"
 
   become_user: plone_buildout
 
 - name: set normal file rights for supervisor conf.d directory
   file:
-    path=/etc/supervisor/conf.d
-    state=directory
-    owner=root
-    group=root
-    mode="u=rwx,g=rx,o=rx"
+    path: /etc/supervisor/conf.d
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"

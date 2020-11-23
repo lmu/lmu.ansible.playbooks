@@ -5,18 +5,13 @@
   gather_facts: true
 
   roles:
-    - base-preseed
-    - { role: maintenance,
-        maintenance: {
-          upgrade_type: "full",
-          allow_reboot: false
-        }
-      }
+    - "lmu.ansible_role.base-preseed"
 
-- hosts: all
-  become: true
-  gather_facts: true
+    #- { role: "lmu.ansible_role.maintenance",
+    #    maintenance: {
+    #      upgrade_type: "full",
+    #      allow_reboot: false
+    #    }
+    #  }
 
-  roles:
-    - psdash
 ...

@@ -1,19 +1,21 @@
 ---
 
 - name: "Install the Apache httpd packages"
-  apt: name={{ item }} state=present update_cache=no
-  with_items:
-    - ssl-cert
-    - apache2
-    #- apache2-mpm-worker
-    #- libapache2-mod-proxy-html
-    #- libapache2-mod
-    #- libapache2-mod-shib2
-    #- libapache2-mod-xsendfile
-    # Some additional tools for debuging and maintenance
-    - libapache2-mod-log-slow
-    - apache2-utils
-    - apachetop
+  apt:
+    pkg:
+      - ssl-cert
+      - apache2
+      #- apache2-mpm-worker
+      #- libapache2-mod-proxy-html
+      #- libapache2-mod
+      #- libapache2-mod-shib2
+      #- libapache2-mod-xsendfile
+      # Some additional tools for debuging and maintenance
+      - libapache2-mod-log-slow
+      - apache2-utils
+      - apachetop
+    state: present
+    update_cache: no
   when: ansible_os_family == "Debian"
   tags:
     - setup
@@ -21,12 +23,13 @@
 
 - name: "Enable common used Apache httpd modules"
   apache2_module:
-    name="{{ item }}"
-    state=present
-  with_items:
+    name: "{{ item }}"
+    state: present
+  loop:
     - "rewrite"
     - "ssl"
     - "proxy_http"
+    - "proxy_balancer"
     - "headers"
   ignore_errors: True
   tags:
@@ -35,12 +38,12 @@
 
 - name: "Ensure the directories (sites-available and sites-enabled) for site specific configurations are present"
   file:
-    path="/etc/apache2/{{ item }}"
-    state=directory
-    owner=root
-    group=root
-    mode="u=rwx,g=rx,o=rx"
-  with_items:
+    path: "/etc/apache2/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
+  loop:
     - "sites-available"
     - "sites-enabled"
     - "includes"
@@ -50,17 +53,16 @@
 
 - name: "Ensure default site is not avaliable"
   file:
-    path="/etc/apache2/sites-enabled/000-default.conf"
-    state=absent
+    path: "/etc/apache2/sites-enabled/000-default.conf"
+    state: absent
   tags:
     - setup
 
 - name: "Ensure the Apache httpd service is started and enable on boot"
   service:
-    name=apache2
-    state=started
-    enabled=yes
+    name: apache2
+    state: started
+    enabled: yes
   ignore_errors: True
   tags:
     - setup
-  

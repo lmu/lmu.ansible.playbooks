@@ -3,10 +3,10 @@
 - block:
   - name: "Update all Packages (Mode: {{ maintenance.upgrade_type }} on (Debian/Ubuntu))"
     apt:
-      upgrade={{ maintenance.upgrade_type }}
-      update_cache=yes
-      force=yes
-      install_recommends=yes
+      upgrade: "{{ maintenance.upgrade_type }}"
+      update_cache: yes
+      force: yes
+      install_recommends: yes
     register: check_install
     #changed_when: "'No packages will be installed' not in check_install.stdout"
     #changed_when: "'No packages will be installed, upgraded, or removed.' not in check_install.stdout"
@@ -14,7 +14,8 @@
     - "Restart Server"
 
   - name: "Autoremove unused Packages (Debian/Ubuntu)"
-    apt: autoremove=yes
+    apt:
+      autoremove: yes
 
   when: ansible_os_family == "Debian"
   environment:

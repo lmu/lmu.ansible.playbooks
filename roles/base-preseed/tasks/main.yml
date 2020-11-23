@@ -24,8 +24,8 @@
     system="{{ item.system }}"
   with_items:
     - { name: ansible, comment: "Ansible User for Provisioning with Ansible", system: yes }
-    - { name: admin, comment: "Management User - admin", system: no }
-    - { name: fachadmin, comment: "Management User - fachadmin", system: no }
+    #- { name: admin, comment: "Management User - admin", system: no }
+    #- { name: fachadmin, comment: "Management User - fachadmin", system: no }
 
 - name: "Ensure that admin-users 'ansible' can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
@@ -46,7 +46,7 @@
 - name: "Update sshd_config"
   template:
     dest="/etc/ssh/sshd_config"
-    src="sshd_config.j2"
+    src="sshd_config_debian10.j2"
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
@@ -68,23 +68,17 @@
     state=present
     update_cache=no
   with_items:
-    - aptitude
+    #- aptitude
     - ssl-cert
-    #- update-notifier-common
     - software-properties-common
     - apt-transport-https
     - facter
     - ohai
-    - python
-    - python-dev
-    - python-setuptools
-    - python-pip
-    - python-virtualenv
     - python3
     - python3-dev
     - python3-setuptools
     - python3-pip
-    # - python3-virtualenv
+    - python3-venv
     - vim
     - curl
     - wget
@@ -95,7 +89,7 @@
     - libssl-dev
     #
     - git-core
-    - language-pack-de
+    #- language-pack-de
   when: ansible_os_family == "Debian"
 
 - name: "Cleanup YUM (RedHat/CentOS)"
@@ -200,13 +194,13 @@
     #- kerneltop
   when: ansible_os_family == "RedHat"
 
-- name: "Ensure Data Directory exists"
-  file:
-    path="/data"
-    state=directory
-    owner=root
-    group=root
-    mode="u=rwx,g=rx,o=rx"
+#- name: "Ensure Data Directory exists"
+#  file:
+#    path="/data"
+#    state=directory
+#    owner=root
+#    group=root
+#    mode="u=rwx,g=rx,o=rx"
 
 - name: "Set Cron Tab for Auto Upgrade (safe) (Debian/Ubuntu)"
   cron:
@@ -228,14 +222,14 @@
   become: true
   when: ansible_os_family == "RedHat"
 
-- name: "Ensure Server knows own name in /etc/hosts"
-  lineinfile:
-    line="127.0.0.1\tlocalhost {{ ansible_hostname }} {{ ansible_fqdn }}"
-    regexp='^127\.0\.0\.1'
-    dest="/etc/hosts"
-    state=present
-    owner=root
-    group=root
-    mode="u=rw,g=r,o=r"
+#- name: "Ensure Server knows own name in /etc/hosts"
+#  lineinfile:
+#    line="127.0.0.1\tlocalhost {{ ansible_hostname }} {{ ansible_fqdn }}"
+#    regexp='^127\.0\.0\.1'
+#    dest="/etc/hosts"
+#    state=present
+#    owner=root
+#    group=root
+#    mode="u=rw,g=r,o=r"
 
 ...

@@ -13,7 +13,6 @@
         }
       }
 
-
 - hosts: all
   become: true
   serial: "{{ SERIAL_COUNT | default('100%') }}"

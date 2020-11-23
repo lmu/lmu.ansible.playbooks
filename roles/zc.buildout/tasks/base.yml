@@ -2,60 +2,56 @@
 
 - name: "Ensure git, python-dev pip and virtualenv are installed"
   apt:
-    pkg={{ item }}
-    state=present
-    update_cache=no
-  with_items:
-    - python
-    - python-dev
-    - python-setuptools
-    - python-pip
-    - python-virtualenv
-    - git-core
-    - subversion
-    - build-essential
+    pkg:
+      - python3
+      - python3-dev
+      - python3-setuptools
+      - python3-pip
+      - python3-venv
+      - git-core
+      - subversion
+      - build-essential
+    state: present
+    update_cache: no
   when: ansible_os_family == "Debian"
 
 - name: "Install latest setuptools and pip"
   pip:
-    name={{ item }}
-    state=latest
+    name:
+      - pip
+    state: latest
     #extra_args='--cert /etc/ssl/certs/Verwaltungsnetz-Proxy-PEM.pem --index-url="http://pypi.python.org/simple/"'
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
-  with_items:
-    - setuptools
-    - pip
-    - virtualenv
 
 - name: "Ensure Group plone_group exists"
   group:
-    name=plone_group
-    state=present
-    system=yes
+    name: plone_group
+    state: present
+    system: yes
 
 - name: "Ensure Users plone_buildout and plone_daemon with group plone_group exists"
   user:
-    name={{ item }}
-    state=present
-    system=yes
-    group=plone_group
-    shell=/bin/bash
-    createhome=yes
-    comment="User for Plone"
-  with_items:
+    name: "{{ item }}"
+    state: present
+    system: yes
+    group: plone_group
+    shell: /bin/bash
+    createhome: yes
+    comment: "User for Plone"
+  loop:
     - plone_buildout
     - plone_daemon
 
 - name: "Ensure buildout caches exists"
   file:
-    path={{ item }}
-    owner=plone_buildout
-    group=plone_group
-    mode="u=rwx,g=rx,o=rx"
-    state=directory
-  with_items:
+    path: "{{ item }}"
+    state: directory
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=rwx,g=rx,o=rx"
+  loop:
     - /usr/local/buildout-cache
     - /usr/local/buildout-cache/downloads
     - /usr/local/buildout-cache/eggs
@@ -64,27 +60,26 @@
 
 - name: "Copy default.cfg for plone_buildout if provided"
   copy:
-    dest="/home/plone_buildout/.buildout/default.cfg"
-    src=default.cfg
-    owner=plone_buildout
-    group=plone_group
-    mode="u=rwx,g=r,o=r"
-
+    dest: "/home/plone_buildout/.buildout/default.cfg"
+    src: default.cfg
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=rwx,g=r,o=r"
 
 - name: "Ensure .buildout of sudo user exists"
   file:
-    path={{ item }}
-    owner=ansible
-    group=ansible
-    mode="u=rwx,g=rx,o=rx"
-    state=directory
-  with_items:
-    - /home/ansible/.buildout
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "u=rwx,g=rx,o=rx"
+  loop:
+    - "/home/{{ ansible_user_id }}/.buildout"
 
 - name: "Copy default.cfg if provided"
   copy:
-    dest="/home/ansible/.buildout/default.cfg"
-    src=default.cfg
-    mode="u=rwx,g=r,o=r"
-    owner=ansible
-    group=ansible
+    dest: "/home/{{ ansible_user_id }}/.buildout/default.cfg"
+    src: default.cfg
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "u=rwx,g=r,o=r"
