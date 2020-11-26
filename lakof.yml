@@ -1,0 +1,123 @@
+---
+
+- hosts: lakof
+  become: true
+
+  roles:
+  - lmu.ansible_role.base-preseed
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
+      }
+    }
+  - plone-base
+  - supervisor
+
+- hosts: lakof
+  become: true
+
+  handlers:
+    - include: roles/supervisor/handlers/main.yml
+
+  roles:
+  -  { role: zc.buildout,
+       buildout: {
+          path: /opt/Plone,
+          directory: buildout.lakof,
+          src: {
+              type: git,
+              src: "https://github.com/lmu/lakof.git",
+              rev: master,
+          },
+          config: local_production.cfg,
+          python: python3,
+          buildout_user: plone_buildout,
+          requires_secrets: true,
+          secrets: 'templates/secrets.cfg.j2',
+          login: 'admin',
+          password: 'admin',
+          mode: '',
+        }}
+
+  pre_tasks:
+    - name: "Stop Supervisor"
+      service:
+        name=supervisor
+        state=stopped
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+  post_tasks:
+    - name: "Start Supervisor"
+      service:
+        name=supervisor
+        state=started
+        enabled=yes
+      tags:
+        - plone_setup
+        - plone_upgrade
+
+- hosts: lakof
+  become: true
+
+  roles:
+    - apache_httpd
+
+  handlers:
+    - include: roles/apache_httpd/handlers/main.yml
+
+  tasks:
+    # Apache
+    - name: "Ensure Apache2 default Enabled VHost is absent"
+      file:
+         state=absent
+         path=/etc/apache2/sites-enabled/000-default.conf
+
+    - name: "Ensure the log directories are present"
+      file:
+        path: /var/log/apache2/{{ item }}
+        state: directory
+        owner: root
+        group: adm
+        mode: "u=rwx,g=rx,o=rx"
+      loop:
+        - lakof
+
+    - name: "Copy includes"
+      copy:
+        src: "files/{{ item }}"
+        dest: "/etc/apache2/includes/{{ item }}"
+        force: yes
+        mode: "u=rw,g=r,o=r"
+        owner: root
+        group: root
+      loop:
+        - blacklist_proxy.include
+        - plone_blacklist_rewrite.include
+      notify:
+        - "Reload Apache httpd"
+
+    - name: "Install vhost.confs for sites"
+      template:
+        src: "templates/lakof.conf.j2"
+        dest: "/etc/apache2/sites-available/lakof.conf"
+        force: yes
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      notify:
+        - "Reload Apache httpd"
+
+    - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
+      file:
+        src: "/etc/apache2/sites-available/lakof.conf"
+        path: "/etc/apache2/sites-enabled/lakof.conf"
+        force: yes
+        state: link
+        owner: root
+        group: root
+      notify:
+        - "Reload Apache httpd"

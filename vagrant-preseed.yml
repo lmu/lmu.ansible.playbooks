@@ -1,0 +1,10 @@
+---
+
+- hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - "lmu.ansible_role.vagrant-preseed"
+
+...

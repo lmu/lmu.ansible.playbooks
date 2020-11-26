@@ -1,0 +1,160 @@
+<VirtualHost *:80>
+
+    # Kontaktadresse des für den Server zuständigen:
+    ServerAdmin Alexander.Loechel@verwaltung.uni-muenchen.de
+
+    # Wenn es statische Inhalte gibt,
+    # Hier das Verzeichnis angeben wo dieses liegt,
+    # wenn es keine gibt: default: /var/www/html
+    DocumentRoot /var/www/html
+
+    # Vollständiger ServerName (FQDN)
+    ServerName www.lakof-bayern.de
+    # Sonstige Namen des Server, mehrere können konfiguriert werden:
+    #ServerAlias www.lakof-bayern.de
+
+    #
+    UseCanonicalName on
+
+    # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
+    ErrorLog "/var/log/apache2/lakof/error_log"
+    # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
+    CustomLog /var/log/apache2/lakof/access_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
+    #TransferLog "/var/log/apache2/lakof/transfer.log"
+
+    # Welches Log-Detaillevel wollen wir
+    LogLevel info
+
+    # Setzt / Verändert Core Parameter des Apache httpd, wieviele Request Header Informationen er zulässt.
+    # Hohe Anzal ist wichtig wegen Shibboleth Headern
+    LimitRequestBody 0
+    LimitRequestFields 250
+    LimitRequestFieldSize 65536
+    LimitRequestLine 65536
+
+    # Das sind ein paar abgeschriebene Sachen, wird schon passen
+    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+        SSLOptions +StdEnvVars
+    </Files>
+    <Directory "/var/www/cgi-bin">
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    # Proxy-Regeln für Backend
+    ProxyVia On
+    ProxyRequests Off
+    ProxyPreserveHost On
+
+    # prevent your web server from being used as global HTTP proxy
+    <LocationMatch "^[^/]">
+        Deny from all
+    </LocationMatch>
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Strict-Transport-Security "max-age=15768000; includeSubDomains"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    # Header set Content-Security-Policy-Report-Only "default-src 'self'; img-src *; style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval'"
+    Header set Content-Security-Policy "\
+default-src 'self' cms-static.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de flash5.lrz.de stream.lrz.de rest.contilla.de; \
+script-src 'self' 'unsafe-inline' 'unsafe-eval' cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de web-analytics.uni-muenchen.de web-analytics.lmu.de piwik-test.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de interaktiv.contilla.de cdnjs.cloudflare.com; \
+style-src 'self' 'unsafe-inline' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de maxcdn.bootstrapcdn.com; \
+img-src 'self' 'unsafe-inline' data: blob: mediastream: cms-static.uni-muenchen.de www.web-analytics.uni-muenchen.de web-analytics.uni-muenchen.de web-analytics.lmu.de piwik-test.verwaltung.uni-muenchen.de www.uni-muenchen.de *.verwaltung.uni-muenchen.de interaktiv.contilla.de; \
+media-src 'self' 'unsafe-inline' data: blob: mediastream: cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de; \
+font-src 'self' 'unsafe-inline' data: blob: cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de maxcdn.bootstrapcdn.com; \
+object-src 'self' data: blob: mediastream: cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;\
+child-src 'self' cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de;\
+worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de https://*.verwaltung.uni-muenchen.de https://www.intranet.verwaltung.uni-muenchen.de https://www.serviceportal.verwaltung.uni-muenchen.de https://youtube.com https://www.youtube.com https://flash5.lrz.de https://stream.lrz.de https://interaktiv.contilla.de;\
+"
+    RequestHeader append X-Forwarded-For "zuv-intranet.{{ ansible_fqdn | lower }}"
+
+    <LocationMatch "\.(ttf|otf|eot|woff|js|css|xml|json|include|jpeg|png|gif|jpg|svg)$">
+        Header set Access-Control-Allow-Origin "*"
+    </LocationMatch>
+
+    RewriteEngine on
+
+    # Blacklist Pfade so das Plone auf Root Path / lauscht
+    include /etc/apache2/includes/plone_blacklist_rewrite.include
+    include /etc/apache2/includes/blacklist_proxy.include
+
+    RewriteRule ^/index.html - [L,NC]
+    RewriteRule ^/$ https://www.lakof-bayern.de/index.html [R=302,L]
+
+    <LocationMatch "^/(manage|manage_main|(.*)/manage(.*))" >
+        Deny from all
+    </LocationMatch>
+
+    # Rewrite everything that is not Blacklisted in fiona_intranet_blacklist.include or plone_blacklist_rewrite.include to Plone via Varnish and HAProxy
+    RewriteRule ^/(.*)$ http://127.0.0.1:6081/VirtualHostBase/https/www.intranet.verwaltung.uni-muenchen.de:443/30_zentralbereich/30zb_zuv-intranet/VirtualHostRoot/$1 [P,L]
+
+</VirtualHost>
+
+<VirtualHost  *:8080>
+
+    ServerName www.intranet.verwaltung.uni-muenchen.de
+    DocumentRoot /var/www/html
+
+    # Setzt / Verändert Core Parameter des apache, wieviele Request Header Informationen er zulässt.
+    LimitRequestBody 0
+    #Verfolgen ob der LimitRequestFields-Default-Wert von 100 ausreicht und bei Bedarf anpassen
+    #LimitRequestFields 250
+    LimitRequestFieldSize 65536
+    LimitRequestLine 65536
+
+#    # Schaltet die SSL-Maschinerie an
+#    SSLEngine on
+#
+#    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
+#    SSLProtocol all -SSLv2 -SSLv3
+#
+#    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
+#    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
+#
+#    # Datei mit dem Serverzertifikat
+#    SSLCertificateFile /shared/pki/certs/www.intranet.verwaltung.uni-muenchen.de.pem
+#    # Datei mit dem Key dazu
+#    SSLCertificateKeyFile /shared/pki/keys/www.intranet.verwaltung.uni-muenchen.de_key.pem
+#
+#    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
+#    SSLCertificateChainFile /shared/pki/certs/dfn-chain.crt
+
+    # Das sind ein paar abgeschriebene Sachen, wird schon passen
+    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+        SSLOptions +StdEnvVars
+    </Files>
+    <Directory "/var/www/cgi-bin">
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    Header set EDUPersonPrincipalName 57F65C58C10308C8@lmu.de
+    Header set UID Gisela.Mustermann
+    Header unset Strict-Transport-Security
+
+    # Proxy-Regeln für Backend
+    ProxyVia On
+    ProxyRequests Off
+    ProxyPreserveHost On
+
+    # prevent your web server from being used as global HTTP proxy
+    <LocationMatch "^[^/]">
+        Deny from all
+    </LocationMatch>
+
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    Header set X-Backend-For Fiona
+    RequestHeader set X-Backend-For Fiona
+
+    ProxyPass / http://127.0.0.1:80/
+    ProxyPassReverse / http://127.0.0.1:80/
+
+</VirtualHost>

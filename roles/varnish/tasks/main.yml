@@ -1,31 +1,34 @@
 ---
 
 - name: "Install the Varnish-Cache packages"
-  apt: name={{ item }} state=present update_cache=no
+  apt:
+    name:
+      - varnish
+    state: present
+    update_cache: no
   with_items:
-    - varnish
   when: ansible_os_family == "Debian"
 
 
 - name: "Ensure the directories (/etc/varnish/)is present"
-  file: 
-    path=/etc/varnish/
-    state=directory
-    owner=root
-    group=root
-    mode="u=rwx,g=rx,o=rx"
+  file:
+    path: /etc/varnish/
+    state: directory
+    owner: root
+    group: root
+    mode: "u=rwx,g=rx,o=rx"
 
 - name: "Copy the base default config for Varnish"
   template:
-    dest="/etc/default/varnish"
-    src="default-varnish.j2"
-    owner=root
-    group=root
-    mode="u=rw,g=r,o=r"
+    dest: "/etc/default/varnish"
+    src: "default-varnish.j2"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
 
 - name: "Ensure the Varnish-Cache service is started and enable on boot"
   service:
-    name=varnish
-    state=started
-    enabled=yes
+    name: varnish
+    state: started
+    enabled: yes
   ignore_errors: True

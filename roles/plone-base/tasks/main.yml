@@ -49,7 +49,7 @@
       # Dependencies for transformation of Videos --> Thumbnails
       - ffmpegthumbnailer
     state: present
-    update_cache: no
+    update_cache: yes
   register: dependency
   #changed_when: "' 0 newly installed' not in dependency.stdout"
   when: ansible_os_family == "Debian"

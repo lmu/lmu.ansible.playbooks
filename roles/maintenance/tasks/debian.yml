@@ -1,6 +1,12 @@
 ---
 
 - block:
+
+  - name: "Force Time sync"
+    service:
+      name: ntp
+      state: restarted
+
   - name: "Update all Packages (Mode: {{ maintenance.upgrade_type }} on (Debian/Ubuntu))"
     apt:
       upgrade: "{{ maintenance.upgrade_type }}"
