@@ -26,12 +26,12 @@
     # HAProxy
     - name: "Copy HAProxy configs"
       copy:
-        src=files/{{ item }}
-        dest=/etc/haproxy/haproxy.conf.d/{{ item }}
-        mode="u=rw,g=r,o=r"
-        owner=root
-        group=root
-      with_items:
+        src: "files/{{ item }}"
+        dest: "/etc/haproxy/haproxy.conf.d/{{ item }}"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop:
         - 09-haproxy-fiona-webproxy.cfg
         - 10-haproxy-plone-webproxy.cfg
       notify:
@@ -40,40 +40,40 @@
     # Varnish
     - name: "Copy Varnish configs"
       copy:
-        src="files/varnish-webproxy.vcl"
-        dest="/etc/varnish/default.vcl"
-        mode="u=rw,g=r,o=r"
-        owner=root
-        group=root
+        src: "files/varnish-webproxy.vcl"
+        dest: "/etc/varnish/default.vcl"
+        mode: "u=rw,g=r,o=r"
+        owner: root
+        group: root
       notify:
         - Restart Varnish
 
     # Apache
     - name: "Ensure Apache2 default Enabled VHost is absent"
       file:
-         state=absent
-         path=/etc/apache2/sites-enabled/000-default.conf
+         state: absent
+         path: /etc/apache2/sites-enabled/000-default.conf
 
     - name: "Ensure the log directories are present"
       file:
-        path=/var/log/apache2/{{ item }}
-        state=directory
-        owner=root
-        group=adm
-        mode="u=rwx,g=rx,o=rx"
-      with_items:
+        path: "/var/log/apache2/{{ item }}"
+        state: directory
+        owner: root
+        group: adm
+        mode: "u=rwx,g=rx,o=rx"
+      loop:
         - "zuv-intranet"
         - "zuv-serviceportal"
 
     - name: "Copy includes"
       copy:
-        src=files/{{ item }}
-        dest=/etc/apache2/includes/{{ item }}
-        force=yes
-        mode="u=rw,g=r,o=r"
-        owner=root
-        group=root
-      with_items:
+        src: "files/{{ item }}"
+        dest: "/etc/apache2/includes/{{ item }}"
+        force: yes
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop:
         - blacklist_proxy.include
         - fiona_intranet_blacklist.include
         - fiona_serviceportal_blacklist.include
@@ -83,13 +83,13 @@
 
     - name: "Install vhost.confs for sites"
       template:
-        src=templates/{{ item }}.j2
-        dest=/etc/apache2/sites-available/{{ item }}
-        force=yes
-        mode="u=rw,g=r,o=r"
-        owner=root
-        group=root
-      with_items:
+        src: templates/{{ item }}.j2
+        dest: /etc/apache2/sites-available/{{ item }}
+        force: yes
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o=r"
+      loop:
         - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
         - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
       notify:
@@ -97,13 +97,13 @@
 
     - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
       file:
-        src=/etc/apache2/sites-available/{{ item }}
-        path=/etc/apache2/sites-enabled/{{ item }}
-        force=yes
-        state=link
-        owner=root
-        group=root
-      with_items:
+        src: /etc/apache2/sites-available/{{ item }}
+        path: /etc/apache2/sites-enabled/{{ item }}
+        force: yes
+        state: link
+        owner: root
+        group: root
+      loop:
         - zuv-intranet.webproxy.verwaltung.uni-muenchen.de.conf
         - zuv-serviceportal.webproxy.verwaltung.uni-muenchen.de.conf
       notify:

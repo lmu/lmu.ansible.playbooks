@@ -72,3 +72,14 @@
   with_items:
     - plone_buildout
     - plone_daemon
+
+- name: Ensure buildout directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: plone_buildout
+    group: plone_group
+    mode: "u=rwx,g=rx,o=rx"
+  loop:
+    - "/opt/Plone"
+    - "/srv/Plone"
