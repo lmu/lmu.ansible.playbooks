@@ -10,7 +10,7 @@
     # Vollständiger ServerName (FQDN)
     ServerName www.lakof-bayern.de
     # Sonstige Namen des Server, mehrere können konfiguriert werden:
-    #ServerAlias www.lakof-bayern.de
+    ServerAlias lakof-bayern.de
 
     #
     UseCanonicalName on
@@ -21,6 +21,7 @@
     CustomLog /var/log/apache2/lakof/access_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
     #TransferLog "/var/log/apache2/lakof/transfer.log"
 
+    RewriteEngine on
     RewriteRule ^/(.*)$ https://www.lakof-bayern.de/$1 [redirect=302,last]
 
 </VirtualHost>
@@ -38,6 +39,12 @@
     #LimitRequestFields 250
     LimitRequestFieldSize 65536
     LimitRequestLine 65536
+
+    # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
+    ErrorLog "/var/log/apache2/lakof/error_ssl_log"
+    # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
+    CustomLog /var/log/apache2/lakof/access_ssl_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
+    #TransferLog "/var/log/apache2/lakof/transfer.log"
 
     # Schaltet die SSL-Maschinerie an
     SSLEngine on

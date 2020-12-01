@@ -126,7 +126,6 @@
       notify:
         - "Reload Apache httpd"
 
-
     - name: "Install vhost.confs for sites"
       template:
         src: "templates/lakof.conf.j2"

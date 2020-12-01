@@ -114,14 +114,6 @@
     mode: "u=r,g=,o="
   when: buildout.requires_secrets
 
-- name: "ensure supervisor conf.d directory is writeable for plone_buildout"
-  file:
-    path: /etc/supervisor/conf.d
-    state: directory
-    owner: plone_buildout
-    group: plone_group
-    mode: "u=rwx,g=rx,o=rx"
-
 - block:
   #- name: "Bootstrap buildout"
   #  command:
@@ -198,15 +190,6 @@
       chdir: "{{ buildout.program_path }}/{{ buildout.directory }}/src"
 
   become_user: plone_buildout
-
-- name: set normal file rights for supervisor conf.d directory
-  file:
-    path: /etc/supervisor/conf.d
-    state: directory
-    recurse: yes
-    owner: root
-    group: root
-    mode: "u=rwx,g=rx,o=rx"
 
 - name: "Ensure buildout-directory is owned by user plone_buildout"
   file:
