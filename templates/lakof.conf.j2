@@ -116,6 +116,11 @@ worker-src 'self' data: blob: mediastream: https://youtube.com https://www.youtu
         Header set Access-Control-Allow-Origin "*"
     </LocationMatch>
 
+    #<Proxy "balancer://zeo>
+    #    BalancerMember "http://127.0.0.1:9082"
+    #    BalancerMember "http://127.0.0.1:9083"
+    #</Proxy>
+
     RewriteEngine on
 
     # Blacklist Pfade so das Plone auf Root Path / lauscht
