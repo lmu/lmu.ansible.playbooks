@@ -83,7 +83,7 @@
 
 - name: "Ensure buildout-var-directory is owned by user plone_daemon"
   file:
-    path: "{{ buildout.data_path }}{{ buildout.directory }}/var/."
+    path: "{{ buildout.data_path }}/{{ buildout.directory }}"
     state: directory
     mode: "u=rwx,g=rwx,o=rx"
     owner: plone_daemon
@@ -161,35 +161,26 @@
 
 - block: # "Compile i18n:modules"
 
-  - name: "Delete existing mo files of buildout-cache"
+  - name: "Delete existing mo files"
     command:
-      cmd: find . -iname *.mo -delete
-      chdir: "/usr/local/buildout-cache"
+      cmd: find {{ item }} -iname *.mo -delete
+    loop:
+      - "/usr/local/buildout-cache"
+      - "{{ buildout.program_path }}/{{ buildout.directory }}/src"
 
-  - name: "Compile po to po.mo files of buildout-cache"
+  - name: "Compile po to po.mo files"
     command:
-      cmd: find . -iname *.po -exec msgfmt {} -o {}.mo \;
-      chdir: "/usr/local/buildout-cache"
+      cmd: find {{ item }} -iname *.po -exec msgfmt {} -o {}.mo \;
+    loop:
+      - "/usr/local/buildout-cache"
+      - "{{ buildout.program_path }}/{{ buildout.directory }}/src"
 
-  - name: "Rename po.mo to mo files of buildout-cache"
+  - name: "Rename po.mo to mo files"
     command:
-      cmd: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
-      chdir: "/usr/local/buildout-cache"
-
-  - name: "Delete existing mo files of src"
-    command:
-      cmd: find . -iname *.mo -delete
-      chdir: "{{ buildout.program_path }}/{{ buildout.directory }}/src"
-
-  - name: "Compile po to po.mo files of src"
-    command:
-      cmd: find . -iname *.po -exec msgfmt {} -o {}.mo \;
-      chdir: "{{ buildout.program_path }}/{{ buildout.directory }}/src"
-
-  - name: "Rename po.mo to mo files of src"
-    command:
-      cmd: find . -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
-      chdir: "{{ buildout.program_path }}/{{ buildout.directory }}/src"
+      cmd: find {{ item }} -iname *.po.mo -exec rename 's/.po.mo/.mo/' {} \;
+    loop:
+      - "/usr/local/buildout-cache"
+      - "{{ buildout.program_path }}/{{ buildout.directory }}/src"
 
   become_user: plone_buildout
 

@@ -11,6 +11,8 @@
       - git-core
       - subversion
       - build-essential
+      - rename
+      - rsync
     state: present
     update_cache: no
   when: ansible_os_family == "Debian"
