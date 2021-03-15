@@ -10,38 +10,73 @@ import sys
 
 def gen_new_key_req_pair(hostname, domain='verwaltung.uni-muenchen.de', key_length=4096, ou='VI', days=365):
     print("Generate Private Key and Request")
-    subprocess.call([
-        'openssl',
-        'req',
-        '-new',
-        '-newkey',
-        'rsa:'+str(key_length),
-        '-subj',
-        '/C=DE/ST=Bayern/L=Muenchen/O=Ludwig-Maximilians-Universitaet Muenchen/OU=' + ou + '/CN=' + hostname + "." + domain,
-        '-nodes',
-        '-days',
-        str(days),
-        '-keyout',
-        'server-ssl/key/' + hostname + "." + domain + '_key.pem',
-        '-out',
-        'server-ssl/req/' + hostname + "." + domain + '_req.pem'
-    ])
+    if domain == "":
+        subprocess.call([
+            'openssl',
+            'req',
+            '-new',
+            '-newkey',
+            'rsa:'+str(key_length),
+            '-subj',
+            '/C=DE/ST=Bayern/L=Muenchen/O=Ludwig-Maximilians-Universitaet Muenchen/OU=' + ou + '/CN=' + hostname,
+            '-nodes',
+            '-days',
+            str(days),
+            '-keyout',
+            'server-ssl/key/' + hostname + '_key.pem',
+            '-out',
+            'server-ssl/req/' + hostname + '_req.pem'
+        ])
+    else:
+        subprocess.call([
+            'openssl',
+            'req',
+            '-new',
+            '-newkey',
+            'rsa:'+str(key_length),
+            '-subj',
+            '/C=DE/ST=Bayern/L=Muenchen/O=Ludwig-Maximilians-Universitaet Muenchen/OU=' + ou + '/CN=' + hostname + "." + domain,
+            '-nodes',
+            '-days',
+            str(days),
+            '-keyout',
+            'server-ssl/key/' + hostname + "." + domain + '_key.pem',
+            '-out',
+            'server-ssl/req/' + hostname + "." + domain + '_req.pem'
+        ])
     print("key generated")
     print("generate intermediate crt")
-    subprocess.call([
-        'openssl',
-        'x509',
-        '-req',
-        '-sha256',
-        '-days',
-        str(days),
-        '-in',
-        'server-ssl/req/' + hostname + "." + domain + '_req.pem',
-        '-signkey',
-        'server-ssl/key/' + hostname + "." + domain + '_key.pem',
-        '-out',
-        'server-ssl/crt/' + hostname + "." + domain + '_crt.pem'
-    ])
+
+    if domain == "":
+        subprocess.call([
+            'openssl',
+            'x509',
+            '-req',
+            '-sha256',
+            '-days',
+            str(days),
+            '-in',
+            'server-ssl/req/' + hostname + '_req.pem',
+            '-signkey',
+            'server-ssl/key/' + hostname + '_key.pem',
+            '-out',
+            'server-ssl/crt/' + hostname + '_crt.pem'
+        ])
+    else:
+        subprocess.call([
+            'openssl',
+            'x509',
+            '-req',
+            '-sha256',
+            '-days',
+            str(days),
+            '-in',
+            'server-ssl/req/' + hostname + "." + domain + '_req.pem',
+            '-signkey',
+            'server-ssl/key/' + hostname + "." + domain + '_key.pem',
+            '-out',
+            'server-ssl/crt/' + hostname + "." + domain + '_crt.pem'
+        ])
 
 
 def gen_new_req_from_key(hostname, domain='verwaltung.uni-muenchen.de', key_length=4096, ou='VI'):
