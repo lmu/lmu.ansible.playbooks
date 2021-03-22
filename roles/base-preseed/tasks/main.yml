@@ -149,7 +149,6 @@
       - git-core
     state: present
     update_cache: no
-  with_items:
   when: ansible_os_family == "RedHat"
 
 - name: "Gobal Git Conf to use https.// instead of git:// for Github."
@@ -173,7 +172,6 @@
       - kerneltop{{ item }}
     state: present
     update_cache: no
-  with_items:
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Base-Packages (Analysis Tools / top's) are installed (RedHat/CentOS)"
@@ -191,16 +189,15 @@
     #- kerneltop
     state: present
     update_cache: no
-  with_items:
   when: ansible_os_family == "RedHat"
 
 #- name: "Ensure Data Directory exists"
 #  file:
-#    path="/data"
-#    state=directory
-#    owner=root
-#    group=root
-#    mode="u=rwx,g=rx,o=rx"
+#    path: "/data"
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: "u=rwx,g=rx,o=rx"
 
 - name: "Set Cron Tab for Auto Upgrade (safe) (Debian/Ubuntu)"
   cron:
@@ -224,12 +221,12 @@
 
 #- name: "Ensure Server knows own name in /etc/hosts"
 #  lineinfile:
-#    line="127.0.0.1\tlocalhost {{ ansible_hostname }} {{ ansible_fqdn }}"
-#    regexp='^127\.0\.0\.1'
-#    dest="/etc/hosts"
-#    state=present
-#    owner=root
-#    group=root
-#    mode="u=rw,g=r,o=r"
+#    line: "127.0.0.1\tlocalhost {{ ansible_hostname }} {{ ansible_fqdn }}"
+#    regexp: '^127\.0\.0\.1'
+#    dest: "/etc/hosts"
+#    state: present
+#    owner: root
+#    group: root
+#    mode: "u=rw,g=r,o=r"
 
 ...
