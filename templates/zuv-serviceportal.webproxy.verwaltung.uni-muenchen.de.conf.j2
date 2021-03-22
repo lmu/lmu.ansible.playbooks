@@ -108,7 +108,7 @@ worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de ht
     </LocationMatch>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude
-    <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|internationals|leitbild|leitbild-startseite|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert)/(.*))">
+    <LocationMatch "^/(index.html|(_assets|_entwicklung|servlet|aktuelles|besser-werden|bilder|die-zuv|footer|formulare|funktionen|internationals|leitbild|leitbild-startseite|meine-angebote|mitarbeitermagazin|personen|resources|services|stellenangebote|veranstaltungen|weiterbildung|wir-haben-verbessert|wissen)/(.*))">
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
         Header set X-Backend-For Fiona
