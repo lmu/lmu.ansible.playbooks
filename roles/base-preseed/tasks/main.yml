@@ -2,26 +2,26 @@
 
 - name: "Rename hostname to intended hostname"
   hostname:
-    name={{ inventory_hostname }}
+    name: {{ inventory_hostname }}
   when: 'inventory_hostname != "localhost"'
   ignore_errors: true
 
 - name: "Ensure sudo-Groups exists"
   group:
-    name="{{ item }}"
-    state=present
+    name: "{{ item }}"
+    state: present
   with_items:
     - sudo
     - wheel
 
 - name: "Ensure Management Users exists"
   user:
-    name="{{ item.name }}"
-    comment="{{ item.comment }}"
-    state=present
-    shell="/bin/bash"
-    groups="sudo,wheel"
-    system="{{ item.system }}"
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    state: present
+    shell: "/bin/bash"
+    groups: "sudo,wheel"
+    system: "{{ item.system }}"
   with_items:
     - { name: ansible, comment: "Ansible User for Provisioning with Ansible", system: yes }
     #- { name: admin, comment: "Management User - admin", system: no }
@@ -29,67 +29,69 @@
 
 - name: "Ensure that admin-users 'ansible' can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
-    user="ansible"
-    key="{{ lookup('file', '{{ item }}' )}}"
-    state=present
+    user: "ansible"
+    key: "{{ lookup('file', '{{ item }}' )}}"
+    state: present
   with_fileglob:
     - "files/ssh-keys/ansible/*.pub"
 
 - name: "Ensure that admin-users '{{ ansible_user_id }}' can login via SSH Public Key (Transfere Public Key)"
   authorized_key:
-    user="{{ ansible_user_id }}"
-    key="{{ lookup('file', '{{ item }}' )}}"
-    state=present
+    user: "{{ ansible_user_id }}"
+    key: "{{ lookup('file', '{{ item }}' )}}"
+    state: present
   with_fileglob:
     - "files/ssh-keys/ansible/*.pub"
 
 - name: "Update sshd_config"
   template:
-    dest="/etc/ssh/sshd_config"
-    src="sshd_config_debian10.j2"
-    owner=root
-    group=root
-    mode="u=rw,g=r,o=r"
+    dest: "/etc/ssh/sshd_config"
+    src: "sshd_config_debian10.j2"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
   notify:
     - "Reload sshd"
 
 - name: "Ensure that Management Users can sudo without password (Configure sudoer-file)"
   template:
-    dest="/etc/sudoers"
-    src="sudoers.j2"
-    owner=root
-    group=root
-    mode="u=r,g=r,o="
-    validate="visudo -cf %s"
+    dest: "/etc/sudoers"
+    src: "sudoers.j2"
+    owner: root
+    group: root
+    mode: "u=r,g=r,o="
+    validate: "visudo -cf %s"
 
 - name: "Ensure Base-Packages (common) are installed (Debian/Ubuntu)"
   apt:
-    pkg={{ item }}
-    state=present
-    update_cache=no
+    name:
+      #- aptitude
+      - ssl-cert
+      - software-properties-common
+      - apt-transport-https
+      - facter
+      - ohai
+      - python3
+      - python3-dev
+      - python3-setuptools
+      - python3-pip
+      - python3-venv
+      - vim
+      - curl
+      - wget
+      - bzip2
+      - gzip
+      - unzip
+      - libffi-dev
+      - libssl-dev
+      #
+      - git-core
+      #- language-pack-de
+      {{ item }}
+    state: present
+    update_cache: no
   with_items:
-    #- aptitude
-    - ssl-cert
-    - software-properties-common
-    - apt-transport-https
-    - facter
-    - ohai
-    - python3
-    - python3-dev
-    - python3-setuptools
-    - python3-pip
-    - python3-venv
-    - vim
-    - curl
-    - wget
-    - bzip2
-    - gzip
-    - unzip
-    - libffi-dev
-    - libssl-dev
-    #
-    - git-core
-    #- language-pack-de
+
   when: ansible_os_family == "Debian"
 
 - name: "Cleanup YUM (RedHat/CentOS)"
@@ -98,8 +100,8 @@
 
 - name: "Cleanup YUM Cache (RedHat/CentOS)"
   file:
-    path=/var/cache/yum
-    state=absent
+    path: /var/cache/yum
+    state: absent
   when: ansible_os_family == "RedHat" and ansible_distribution == "CentOS"
 
 # - name: "Install Repositories (RedHat/CentOS)"
@@ -117,71 +119,68 @@
 
 - name: "Ensure Base-Packages (common) are installed (RedHat/CentOS)"
   yum:
-    name={{ item }}
-    state=present
-    update_cache=no
+    name:
+      - yum-plugin-ps
+      - yum-plugin-security
+      - ca-certificates
+      #- update-notifier-common
+      #- software-properties-common
+      - facter
+      #- ohai
+      - python
+      - python-devel
+      - python-setuptools
+      - python-pip
+      - python-virtualenv
+      - python34
+      - python34-devel
+      - python34-setuptools
+      #- python34-pip
+      #- python34-virtualenv
+      - vim
+      - curl
+      - wget
+      - zlib
+      - zlib-devel
+      - bzip2
+      - gzip
+      - unzip
+      - libffi-devel
+      - openssl-devel
+      #
+      - git-core
+    state: present
+    update_cache: no
   with_items:
-    - yum-plugin-ps
-    - yum-plugin-security
-    - ca-certificates
-    #- update-notifier-common
-    #- software-properties-common
-    - facter
-    #- ohai
-    - python
-    - python-devel
-    - python-setuptools
-    - python-pip
-    - python-virtualenv
-    - python34
-    - python34-devel
-    - python34-setuptools
-    #- python34-pip
-    #- python34-virtualenv
-    - vim
-    - curl
-    - wget
-    - zlib
-    - zlib-devel
-    - bzip2
-    - gzip
-    - unzip
-    - libffi-devel
-    - openssl-devel
-    #
-    - git-core
   when: ansible_os_family == "RedHat"
 
 - name: "Gobal Git Conf to use https.// instead of git:// for Github."
   git_config:
-    name='url."https://github.com".insteadOf'
-    value="git://github.com"
-    scope=global
+    name: 'url."https://github.com".insteadOf'
+    value: "git://github.com"
+    scope: global
 
 - name: "Ensure Base-Packages (Analysis Tools / top's) are installed (Debian/Ubuntu)"
   apt:
-    pkg={{ item }}
-    state=present
-    update_cache=no
+    name:
+      - htop
+      - atop
+      - iftop
+      - itop
+      - iotop
+      - jnettop
+      - dnstop
+      - logtop
+      - powertop
+      - kerneltop{{ item }}
+    state: present
+    update_cache: no
   with_items:
-    - htop
-    - atop
-    - iftop
-    - itop
-    - iotop
-    - jnettop
-    - dnstop
-    - logtop
-    - powertop
-    - kerneltop
   when: ansible_os_family == "Debian"
 
 - name: "Ensure Base-Packages (Analysis Tools / top's) are installed (RedHat/CentOS)"
   yum:
-    name={{ item }}
-    state=present
-    update_cache=no
-  with_items:
+    name:
     - htop
     - atop
     - iftop
@@ -192,6 +191,9 @@
     #- logtop
     - powertop
     #- kerneltop
+    state: present
+    update_cache: no
+  with_items:
   when: ansible_os_family == "RedHat"
 
 #- name: "Ensure Data Directory exists"
@@ -204,21 +206,21 @@
 
 - name: "Set Cron Tab for Auto Upgrade (safe) (Debian/Ubuntu)"
   cron:
-    name="Hourly Safe Upgrades"
-    job="aptitude safe-upgrade -y"
-    user='root'
-    state=present
-    special_time=hourly
+    name: "Hourly Safe Upgrades"
+    job: "aptitude safe-upgrade -y"
+    user: 'root'
+    state: present
+    special_time: hourly
   become: true
   when: ansible_os_family == "Debian"
 
 - name: "Set Cron Tab for Auto Upgrade (safe) (RedHat/CentOS)"
   cron:
-    name="Hourly Safe Upgrades"
-    job="yum update -y --security"
-    user='root'
-    state=present
-    special_time=hourly
+    name: "Hourly Safe Upgrades"
+    job: "yum update -y --security"
+    user: 'root'
+    state: present
+    special_time: hourly
   become: true
   when: ansible_os_family == "RedHat"
 
