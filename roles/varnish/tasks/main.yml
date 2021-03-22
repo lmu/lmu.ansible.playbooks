@@ -6,7 +6,6 @@
       - varnish
     state: present
     update_cache: no
-  with_items:
   when: ansible_os_family == "Debian"
 
 
