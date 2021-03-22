@@ -2,7 +2,7 @@
 
 - name: "Rename hostname to intended hostname"
   hostname:
-    name: {{ inventory_hostname }}
+    name: "{{ inventory_hostname }}"
   when: 'inventory_hostname != "localhost"'
   ignore_errors: true
 
