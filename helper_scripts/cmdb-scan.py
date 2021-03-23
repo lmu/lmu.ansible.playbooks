@@ -79,7 +79,20 @@ def execute_ansible_cmdb(
         with open(output_file, 'w') as f:
             f.write(cmdb_data)
 
+
+def ensure_directories_exsists(
+    dirs=[
+        '/opt/lmu.ansible.playbooks/inventory-avaliable',
+        '/opt/lmu.ansible.playbooks/cmdb/',
+        '/opt/lmu.ansible.playbooks/unchecked-out/',
+        '/opt/lmu.ansible.playbooks/checked-out/']):
+    for dir in dirs:
+        if not os.path.exists(dir):
+            makedirs(dir)
+
+
 if __name__ == "__main__":
+    ensure_directories_exsists()
     execute_ansible_setup()
     check_and_copy_ansible_setup_output()
     execute_ansible_cmdb()
