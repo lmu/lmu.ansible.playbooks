@@ -1,6 +1,6 @@
 # Inventory for Webproxies (DMZ: Webproxies (Apache/Varnish/HAProxy)
 
-lmkwitg-fblmu01.srv.mwn.de     dtap=production comment="Production Instance of LaKoF-Bayer Website Standort: LRZ"
+#lmkwitg-fblmu01.srv.mwn.de     dtap=production comment="Production Instance of LaKoF-Bayer Website Standort: LRZ"
 
 [lakof]
-lmkwitg-fblmu01.srv.mwn.de
+#lmkwitg-fblmu01.srv.mwn.de
