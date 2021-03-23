@@ -7,12 +7,12 @@
 
   roles:
   #  - base-preseed
-    - { role: maintenance,
-        maintenance: {
-          upgrade_type: "full",
-          allow_reboot: false
-        }
-      }
+  #  - { role: maintenance,
+  #      maintenance: {
+  #        upgrade_type: "full",
+  #        allow_reboot: false
+  #      }
+  #    }
     - haproxy
     - varnish
     - apache_httpd
