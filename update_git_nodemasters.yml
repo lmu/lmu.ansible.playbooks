@@ -30,10 +30,10 @@
     - name: "Ensure inventory / cmdb directories has correct file modes"
       file:
         path="{{ item }}"
-        state=file
+        state=directory
         owner="fachadmin"
         group="ansible"
-        mode="u=rw,g=rw,o=r"
+        mode="u=rwx,g=rwx,o=rx"
       with_items:
         - "/opt/lmu.ansible.playbooks/inventory-avaliable"
         - "/opt/lmu.ansible.playbooks/inventory-enabled"
