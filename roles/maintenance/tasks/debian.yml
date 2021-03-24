@@ -6,6 +6,7 @@
     service:
       name: ntp
       state: restarted
+    ignore_errors: yes
 
   - name: "Update all Packages (Mode: {{ maintenance.upgrade_type }} on (Debian/Ubuntu))"
     apt:
