@@ -13,6 +13,7 @@
   with_items:
     - sudo
     - wheel
+    - ssh-login
 
 - name: "Ensure Management Users exists"
   user:
