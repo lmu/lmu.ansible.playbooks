@@ -169,7 +169,7 @@
       - dnstop
       - logtop
       - powertop
-      - kerneltop{{ item }}
+      - kerneltop
     state: present
     update_cache: no
   when: ansible_os_family == "Debian"
