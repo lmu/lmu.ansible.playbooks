@@ -10,7 +10,7 @@
 
     # Vollständiger ServerName (FQDN)
     #ServerName www.serviceportal.verwaltung.uni-muenchen.de
-    ServerName zuv-serviceportal.webproxy1.verwaltung.uni-muenchen.de
+    ServerName zuv-serviceportal.{{ ansible_fqdn | lower }}
     # Sonsitige Namen des Server, mehrere können konfiguriert werden:
     ServerAlias www.serviceportal.verwaltung.uni-muenchen.de
 
