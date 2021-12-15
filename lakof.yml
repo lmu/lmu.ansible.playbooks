@@ -61,6 +61,24 @@
         - plone_upgrade
 
   post_tasks:
+
+    - name: "Ensure buildout-directory/disbale file exsits and is owned by plone_daemon"
+      file:
+        path: "/opt/Plone/buildout.lakof/disable"
+        state: touch
+        owner: plone_daemon
+        group: plone_group
+        mode: "u=rwx,g=rwx,o=rx"
+
+    - name: "Ensure buildout-data-directory is owned by user plone_daemon"
+      file:
+        path: "/srv/Plone/"
+        state: directory
+        owner: plone_daemon
+        group: plone_group
+        mode: "u=rwx,g=rwx,o=rx"
+        recurse: yes
+
     - name: "Start Supervisor"
       service:
         name: supervisor
@@ -113,16 +131,16 @@
 
     - name: "Copy certificate"
       copy:
-        src: "files/server-ssl/{{ item.src_dir }}/{{ item.file }}"
-        dest: "/etc/ssl/{{ item.dest_dir }}/{{ item.file }}"
+        src: "files/server-ssl/{{ item.src_dir }}/{{ item.src_name }}"
+        dest: "/etc/ssl/{{ item.dest_dir }}/{{ item.dest_name }}"
         force: yes
         mode: "u=rw,g=r,o="
         owner: root
         group: root
       loop:
-        - { file: "www.lakof-bayern.de_key.pem", src_dir: "key", dest_dir: "private" }
-        - { file: "www.lakof-bayern.de_signed_crt.pem", src_dir: "crt", dest_dir: "private" }
-        - { file: "dfn-chain.crt", src_dir: "certs", dest_dir: "certs" }
+        - { src_name: "www.lakof-bayern.de_key.pem", dest_name: "www.lakof-bayern.de_key.pem", src_dir: "key", dest_dir: "private" }
+        - { src_name: "www.lakof-bayern.de_signed_2021-12-10_crt.pem", dest_name: "www.lakof-bayern.de_signed_crt.pem", src_dir: "crt", dest_dir: "private" }
+        - { src_name: "dfn-chain.crt", dest_name: "dfn-chain.crt", src_dir: "certs", dest_dir: "certs" }
       notify:
         - "Reload Apache httpd"
 

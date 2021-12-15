@@ -30,7 +30,7 @@
     version: "{{ buildout.src.rev }}"
     force: yes
   when: buildout.src.type|lower == "git" and buildout.src.src
-  become_user: plone_buildout
+  #become_user: plone_buildout
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
@@ -126,9 +126,9 @@
   - name: "Bootstrap buildout"
     pip:
       name:
-        - zc.buildout==2.13.3
+        - zc.buildout==2.13.4
         - setuptools==42.0.2
-      state: present
+      state: latest
       #virtualenv: "{{ buildout.program_path }}/{{ buildout.directory }}"
       executable: "{{ buildout.program_path }}/{{ buildout.directory }}/bin/pip"
       chdir: "{{ buildout.program_path }}/{{ buildout.directory }}"
