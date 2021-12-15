@@ -30,7 +30,7 @@
     version: "{{ buildout.src.rev }}"
     force: yes
   when: buildout.src.type|lower == "git" and buildout.src.src
-  #become_user: plone_buildout
+  become_user: plone_buildout
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
