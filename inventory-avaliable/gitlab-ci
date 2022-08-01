@@ -1,0 +1,6 @@
+# Inventory for GitLab CI-Runner
+
+gitlab-ci01.zuv.uni-muenchen.de  dtap="production" comment="GitLab-CI-Runner" ansible_user=loechel ansible_python_interpreter=/usr/bin/python3
+
+[gitlab-ci-runner]
+gitlab-ci01.zuv.uni-muenchen.de
