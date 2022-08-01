@@ -41,6 +41,7 @@
         - "/opt/lmu.ansible.playbooks/unchecked-out"
         - "/opt/lmu.ansible.playbooks/checked-out"
         - "/opt/lmu.ansible.playbooks/cmdb"
+      ignore_errors: yes
 
     - name: "Ensure inventory / cmdb files has correct file modes"
       file:
@@ -54,3 +55,4 @@
         - "/opt/lmu.ansible.playbooks/unchecked-out/*"
         - "/opt/lmu.ansible.playbooks/checked-out/*"
         - "/opt/lmu.ansible.playbooks/cmdb/*"
+      ignore_errors: yes
