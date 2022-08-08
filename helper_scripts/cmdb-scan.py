@@ -48,7 +48,7 @@ def check_and_copy_ansible_setup_output(
                 with open(os.path.join(input_directory, server_file), 'r') as f:
                         data = json.load(f)
                         #import pdb; pdb.set_trace()
-                        if 'unreachable' not in data:
+                        if 'unreachable' not in data and isfile(os.path.join(output_directory, server_file)):
                             os.remove(
                                 os.path.join(output_directory, server_file),
                             )

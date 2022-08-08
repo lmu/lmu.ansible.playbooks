@@ -1,4 +1,4 @@
 [new_servers]
 
 [arbeitsplatzrechner-zuv]
-MA4-213.zuv.uni-muenchen.de dtap=ZUV-Wand-Rechner comment="Beispielrechner für Monitoring Rechner im Raum MA4-213" ansible_host=172.23.107.66 ansible_python_interpreter=/usr/bin/python3
+#MA4-213.zuv.uni-muenchen.de dtap=ZUV-Wand-Rechner comment="Beispielrechner für Monitoring Rechner im Raum MA4-213" ansible_host=172.23.107.66 ansible_python_interpreter=/usr/bin/python3
