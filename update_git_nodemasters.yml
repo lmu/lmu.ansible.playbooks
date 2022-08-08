@@ -14,6 +14,8 @@
         clone: no
         recursive: yes
         track_submodules: yes
+      become: True
+      become_user: fachadmin
       environment:
         http_proxy: "{{ lookup('env', 'http_proxy') }}"
         https_proxy: "{{ lookup('env', 'https_proxy') }}"
@@ -27,6 +29,28 @@
         group="ansible"
         mode="u=rwX,g=rwX,o=rX"
         recurse=yes
+
+    - name: "Ensure Inventory-Enabled"
+      file:
+        dest="/opt/lmu.ansible.playbooks/inventory-enabled/{{ item }}"
+        src="/opt/lmu.ansible.playbooks/inventory-avaliable/{{ item }}"
+        state=link
+        owner="fachadmin"
+        group="ansible"
+      with_items:
+        - nodemasters
+        - plone
+        - solr
+        - webproxies
+
+    - name: "Ensure Inventory"
+      file:
+        dest="/opt/lmu.ansible.playbooks/inventory"
+        src="/opt/lmu.ansible.playbooks/inventory-enabled"
+        state=link
+        owner="fachadmin"
+        group="ansible"
+
 
     - name: "Ensure inventory / cmdb directories has correct file modes"
       file:
