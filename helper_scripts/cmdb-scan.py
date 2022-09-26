@@ -36,6 +36,7 @@ def execute_ansible_setup(
         command_set.append(scope)
     else:
         command_set.append('all')
+    print(command_set)
     return subprocess.call(command_set)
 
 
@@ -46,12 +47,16 @@ def check_and_copy_ansible_setup_output(
         for server_file in listdir(input_directory):
             if isfile(os.path.join(input_directory, server_file)):
                 with open(os.path.join(input_directory, server_file), 'r') as f:
+                        print("check File: " + input_directory + server_file)
                         data = json.load(f)
                         #import pdb; pdb.set_trace()
-                        if 'unreachable' not in data and isfile(os.path.join(output_directory, server_file)):
+                        if isfile(os.path.join(output_directory, server_file)):
+                            print("delte file: " + server_file)
                             os.remove(
                                 os.path.join(output_directory, server_file),
                             )
+                        elif 'unreachable' not in data:
+                            print("write file: " + server_file)
                             shutil.copy2(
                                 os.path.join(
                                     input_directory,
@@ -59,6 +64,8 @@ def check_and_copy_ansible_setup_output(
                                 ),
                                 output_directory,
                             )
+                        else:
+                            print("check failed, file not created: " + server_file + " : " + str(data))
 
 
 def execute_ansible_cmdb(
@@ -77,6 +84,7 @@ def execute_ansible_cmdb(
 
     if output_file:
         with open(output_file, 'w') as f:
+            print("write Data to file: " + output_file)
             f.write(cmdb_data)
 
 
