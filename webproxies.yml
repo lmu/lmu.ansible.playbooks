@@ -6,7 +6,7 @@
   serial: "{{ SERIAL_COUNT | default('100%') }}"
 
   roles:
-    - base-preseed
+    # - base-preseed
     # - { role: maintenance,
     #     maintenance: {
     #       upgrade_type: "full",
