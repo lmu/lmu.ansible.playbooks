@@ -7,7 +7,7 @@
     state: present
     update_cache: no
   when: ansible_os_family == "Debian"
-
+  ignore_errors: True
 
 - name: "Ensure the directories (/etc/varnish/)is present"
   file:

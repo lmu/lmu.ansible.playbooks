@@ -6,9 +6,10 @@
     - haproxy
     - hatop
   when: ansible_os_family == "Debian"
+  ignore_errors: True
 
 - name: "Ensure the directories (/etc/haproxy/haproxy.cfg.d)is present"
-  file: 
+  file:
     path=/etc/haproxy/haproxy.conf.d
     state=directory
     owner=root
@@ -26,7 +27,6 @@
   notify:
     - "Restart HAProxy"
 
-
 - name: "Copy the base config for HAProxy"
   template:
     dest="/etc/haproxy/haproxy.conf.d/00-base.cfg"
@@ -35,7 +35,7 @@
     owner=root
     group=root
     mode="u=rw,g=r,o=r"
-  notify: 
+  notify:
     - "Assemble HAProxy Config"
 
 - name: "Ensure the HAProxy service is started and enable on boot"
