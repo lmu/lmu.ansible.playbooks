@@ -108,6 +108,7 @@ worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de ht
         ProxyPass http://127.0.0.1:6081
         ProxyPassReverse http://127.0.0.1:6081
         Header set X-Backend-For Fiona
+        RequestHeader set Host www.intranet.verwaltung.uni-muenchen.de:8080
         RequestHeader set X-Backend-For Fiona
     </LocationMatch>
 
