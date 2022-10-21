@@ -111,6 +111,7 @@ worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de ht
         RequestHeader set Host www.intranet.verwaltung.uni-muenchen.de:8080
         RequestHeader set X-Forwarded-Host www.intranet.verwaltung.uni-muenchen.de
         RequestHeader set X-Backend-For Fiona
+        Header edit Location :8080/ /
     </LocationMatch>
 
     <LocationMatch "^/(manage|manage_main|(.*)/manage(.*))" >

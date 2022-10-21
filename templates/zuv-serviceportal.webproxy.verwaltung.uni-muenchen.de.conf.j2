@@ -115,6 +115,7 @@ worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de ht
         RequestHeader set Host www.serviceportal.verwaltung.uni-muenchen.de:8080
         RequestHeader set X-Forwarded-Host www.serviceportal.verwaltung.uni-muenchen.de
         RequestHeader set X-Backend-For Fiona
+        Header edit Location :8080/ /
     </LocationMatch>
 
     # Rewrite everything that is not Blacklisted in fiona_intranet_blcklist.include or plone_blacklist_rewrite.include to Plone via Varnish and HAProxy
