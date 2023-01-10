@@ -129,39 +129,45 @@
       notify:
         - "Reload Apache httpd"
 
-    - name: "Copy certificate"
-      copy:
-        src: "files/server-ssl/{{ item.src_dir }}/{{ item.src_name }}"
-        dest: "/etc/ssl/{{ item.dest_dir }}/{{ item.dest_name }}"
-        force: yes
-        mode: "u=rw,g=r,o="
-        owner: root
-        group: root
-      loop:
-        - { src_name: "www.lakof-bayern.de_key.pem", dest_name: "www.lakof-bayern.de_key.pem", src_dir: "key", dest_dir: "private" }
-        - { src_name: "www.lakof-bayern.de_signed_2021-12-10_crt.pem", dest_name: "www.lakof-bayern.de_signed_crt.pem", src_dir: "crt", dest_dir: "private" }
-        - { src_name: "dfn-chain.crt", dest_name: "dfn-chain.crt", src_dir: "certs", dest_dir: "certs" }
-      notify:
-        - "Reload Apache httpd"
+    # - name: "Copy certificate"
+    #   copy:
+    #     src: "files/server-ssl/{{ item.src_dir }}/{{ item.src_name }}"
+    #     dest: "/etc/ssl/{{ item.dest_dir }}/{{ item.dest_name }}"
+    #     force: yes
+    #     mode: "u=rw,g=r,o="
+    #     owner: root
+    #     group: root
+    #   loop:
+    #     - { src_name: "www.lakof-bayern.de_key.pem", dest_name: "www.lakof-bayern.de_key.pem", src_dir: "key", dest_dir: "private" }
+    #     - { src_name: "www.lakof-bayern.de_signed_2021-12-10_crt.pem", dest_name: "www.lakof-bayern.de_signed_crt.pem", src_dir: "crt", dest_dir: "private" }
+    #     - { src_name: "dfn-chain.crt", dest_name: "dfn-chain.crt", src_dir: "certs", dest_dir: "certs" }
+    #   notify:
+    #     - "Reload Apache httpd"
 
     - name: "Install vhost.confs for sites"
       template:
-        src: "templates/lakof.conf.j2"
-        dest: "/etc/apache2/sites-available/lakof.conf"
+        src: "templates/{{ item }}.j2"
+        dest: "/etc/apache2/sites-available/{{ item }}"
         force: yes
         owner: root
         group: root
         mode: "u=rw,g=r,o=r"
+      loop:
+        - lakof.conf
+        - lakof_ssl.conf
       notify:
         - "Reload Apache httpd"
 
     - name: "Activate vhost.confs (Create the link for site enabled specific configurations)"
       file:
-        src: "/etc/apache2/sites-available/lakof.conf"
-        path: "/etc/apache2/sites-enabled/lakof.conf"
+        src: "/etc/apache2/sites-available/{{ item }}"
+        path: "/etc/apache2/sites-enabled/{{ item }}"
         force: yes
         state: link
         owner: root
         group: root
+      loop:
+        - lakof.conf
+        - lakof_ssl.conf
       notify:
         - "Reload Apache httpd"

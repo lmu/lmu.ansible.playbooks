@@ -16,122 +16,12 @@
     UseCanonicalName on
 
     # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
-    ErrorLog "/var/log/apache2/lakof/error_log"
+    ErrorLog "/var/log/apache2/lakof/error.log"
     # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
-    CustomLog /var/log/apache2/lakof/access_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
+    CustomLog /var/log/apache2/lakof/access.log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
     #TransferLog "/var/log/apache2/lakof/transfer.log"
 
     RewriteEngine on
     RewriteRule ^/(.*)$ https://www.lakof-bayern.de/$1 [redirect=302,last]
-
-</VirtualHost>
-
-<VirtualHost  *:443>
-
-    ServerName www.lakof-bayern.de
-    # Kontaktadresse des für den Server zuständigen:
-    ServerAdmin Alexander.Loechel@verwaltung.uni-muenchen.de
-    DocumentRoot /var/www/html
-
-    # Setzt / Verändert Core Parameter des apache, wieviele Request Header Informationen er zulässt.
-    LimitRequestBody 0
-    #Verfolgen ob der LimitRequestFields-Default-Wert von 100 ausreicht und bei Bedarf anpassen
-    #LimitRequestFields 250
-    LimitRequestFieldSize 65536
-    LimitRequestLine 65536
-
-    # Ort der Log-Files, <kurzname> ist ein kurzer Name für den vhost (z.B. der, der auch im Firewall-Regelsatz für diese IP-Adresse verwendet wird)
-    ErrorLog "/var/log/apache2/lakof/error_ssl_log"
-    # Ort der Access-Logs, das Format kann auch je nach Anforderung variiert werden
-    CustomLog /var/log/apache2/lakof/access_ssl_log "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\" Server: %{Host}i"
-    #TransferLog "/var/log/apache2/lakof/transfer.log"
-
-    # Schaltet die SSL-Maschinerie an
-    SSLEngine on
-
-    # Legt die Unterstützten Protokollversionen fest, hier ist alles ab TLS 1.0 und höher zugelassen, also kein SSLv2 und SSLv3
-    SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
-
-    # Die Verschlüsselungsalgorithmen, mit openssl ciphers 'HIGH:!MEDIUM:!aNULL:!MD5:-RSA' kann man die sich anzeigen lassen
-    SSLCipherSuite HIGH:!MEDIUM:!aNULL:!MD5:-RSA
-
-    # Datei mit dem Serverzertifikat
-    SSLCertificateFile /etc/ssl/private/www.lakof-bayern.de_signed_crt.pem
-    # Datei mit dem Key dazu
-    SSLCertificateKeyFile /etc/ssl/private/www.lakof-bayern.de_key.pem
-
-    # Die Certificate Chain, also alle Zertifikate bis zur Wurzel-CA
-    SSLCertificateChainFile /etc/ssl/certs/dfn-chain.crt
-
-    # Das sind ein paar abgeschriebene Sachen, wird schon passen
-    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
-        SSLOptions +StdEnvVars
-    </Files>
-    <Directory "/var/www/cgi-bin">
-        SSLOptions +StdEnvVars
-    </Directory>
-
-    # Welches Log-Detaillevel wollen wir
-    LogLevel info
-
-    # Das sind ein paar abgeschriebene Sachen, wird schon passen
-    <Files ~ "\.(cgi|shtml|phtml|php3?)$">
-        SSLOptions +StdEnvVars
-    </Files>
-    <Directory "/var/www/cgi-bin">
-        SSLOptions +StdEnvVars
-    </Directory>
-
-    # Proxy-Regeln für Backend
-    ProxyVia On
-    ProxyRequests Off
-    ProxyPreserveHost On
-
-    # prevent your web server from being used as global HTTP proxy
-    <LocationMatch "^[^/]">
-        Deny from all
-    </LocationMatch>
-
-    <Proxy *>
-        Order deny,allow
-        Allow from all
-    </Proxy>
-
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set Strict-Transport-Security "max-age=15768000; includeSubDomains"
-    Header set X-XSS-Protection "1; mode=block"
-    Header set X-Content-Type-Options "nosniff"
-    # Header set Content-Security-Policy-Report-Only "default-src 'self'; img-src *; style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval'"
-    Header set Content-Security-Policy "\
-default-src 'self'  flash5.lrz.de stream.lrz.de; \
-script-src 'self' 'unsafe-inline' 'unsafe-eval'  cdnjs.cloudflare.com; \
-style-src 'self' 'unsafe-inline' maxcdn.bootstrapcdn.com; \
-img-src 'self' 'unsafe-inline' data: blob: mediastream:; \
-media-src 'self' 'unsafe-inline' data: blob: mediastream: youtube.com www.youtube.com flash5.lrz.de stream.lrz.de; \
-font-src 'self' 'unsafe-inline' data: blob:  maxcdn.bootstrapcdn.com; \
-child-src 'self'  youtube.com www.youtube.com flash5.lrz.de stream.lrz.de;\
-worker-src 'self' data: blob: mediastream: https://youtube.com https://www.youtube.com https://flash5.lrz.de https://stream.lrz.de \
-"
-    <LocationMatch "\.(ttf|otf|eot|woff|js|css|xml|json|include|jpeg|png|gif|jpg|svg)$">
-        Header set Access-Control-Allow-Origin "*"
-    </LocationMatch>
-
-    #<Proxy "balancer://zeo>
-    #    BalancerMember "http://127.0.0.1:9082"
-    #    BalancerMember "http://127.0.0.1:9083"
-    #</Proxy>
-
-    RewriteEngine on
-
-    # Blacklist Pfade so das Plone auf Root Path / lauscht
-    include /etc/apache2/includes/plone_blacklist_rewrite.include
-    include /etc/apache2/includes/blacklist_proxy.include
-
-    <LocationMatch "^/(manage|manage_main|(.*)/manage(.*))" >
-        Deny from all
-    </LocationMatch>
-
-    # Rewrite everything to Plone
-    RewriteRule ^/(.*)$ http://127.0.0.1:9082/VirtualHostBase/https/www.lakof-bayern.de:443/Plone/VirtualHostRoot/$1 [proxy,last]
 
 </VirtualHost>
