@@ -125,9 +125,7 @@
 
   - name: "Bootstrap buildout"
     pip:
-      name:
-        - zc.buildout==2.13.4
-        - setuptools==42.0.2
+      requirements: requirements.txt
       state: latest
       #virtualenv: "{{ buildout.program_path }}/{{ buildout.directory }}"
       executable: "{{ buildout.program_path }}/{{ buildout.directory }}/bin/pip"
