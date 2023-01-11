@@ -1,0 +1,6 @@
+# Inventory for the genetik website (https://www.genetik.bio.lmu.de/)
+
+lmugenetik  dtap=production comment="Production instance of the genetik website, requires lmugenetik to be configured in the .ssh/config file"
+
+[genetik]
+lmugenetik

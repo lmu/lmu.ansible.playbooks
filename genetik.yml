@@ -1,0 +1,55 @@
+---
+
+- hosts: genetik
+  become: true
+
+  roles:
+  - base-preseed
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
+      }
+    }
+  - plone-base
+  - supervisor
+
+  tasks:
+    - name: "Install virtualenv"
+      apt:
+        name: virtualenv
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+      tags:
+        - virtualenv
+
+
+- hosts: genetik
+  become: true
+
+  roles:
+    #- varnish
+    - apache_httpd
+
+  handlers:
+    - include: roles/apache_httpd/handlers/main.yml
+
+  tasks:
+    # Apache
+    - name: "Ensure Apache2 default Enabled VHost is absent"
+      file:
+         state: absent
+         path: /etc/apache2/sites-enabled/000-default.conf
+
+    - name: "Ensure the log directories are present"
+      file:
+        path: /var/log/apache2/{{ item }}
+        state: directory
+        owner: root
+        group: adm
+        mode: "u=rwx,g=rx,o=rx"
+      loop:
+        - genetik
+      tags:
+        - apache
