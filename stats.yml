@@ -1,0 +1,103 @@
+---
+
+- hosts: stats
+  become: true
+
+  roles:
+  - base-preseed
+  - { role: maintenance,
+      maintenance: {
+        upgrade_type: "full",
+        allow_reboot: false
+      }
+    }
+  - plone-base
+  - supervisor
+
+  tasks:
+    - name: "Install rsync, used to copy the data to the new server"
+      apt:
+        name: rsync
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+      tags:
+        - rsync
+
+    - name: "Install virtualenv and related packages"
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+      loop:
+        - virtualenv
+        - libpython2.7-dev
+      tags:
+        - virtualenv
+
+    - name: "Ensure dedicated buildout-data-directory is owned by user plone_daemon"
+      file:
+        path: "/srv/stats/"
+        state: directory
+        owner: plone_daemon
+        group: plone_group
+        mode: "u=rwx,g=rwx,o=rx"
+        recurse: yes
+      tags:
+        - virtualenv
+
+# I comment this role because it requires some buildout consolidation
+# - hosts: stats
+#   become: true
+#   handlers:
+#     - include: roles/supervisor/handlers/main.yml
+#   roles:
+#   -  { role: zc.buildout,
+#        buildout: {
+#           program_path: /opt/,
+#           data_path: /srv/,
+#           directory: stats,
+#           src: {
+#               type: git,
+#               src: "https://github.com/starzel/buildout.git",
+#               rev: master,
+#           },
+#           config: local_production.cfg,
+#           python: python2.7,
+#           buildout_user: plone_buildout,
+#           requires_secrets: true,
+#           secrets: 'templates/secrets.cfg.j2',
+#           login: 'admin',
+#           password: 'admin',
+#           mode: '',
+#         }}
+
+- hosts: stats
+  become: true
+
+  roles:
+    #- varnish
+    - apache_httpd
+
+  handlers:
+    - include: roles/apache_httpd/handlers/main.yml
+
+  tasks:
+    # Apache
+    - name: "Ensure Apache2 default Enabled VHost is absent"
+      file:
+         state: absent
+         path: /etc/apache2/sites-enabled/000-default.conf
+
+    - name: "Ensure the log directories are present"
+      file:
+        path: /var/log/apache2/{{ item }}
+        state: directory
+        owner: root
+        group: adm
+        mode: "u=rwx,g=rx,o=rx"
+      loop:
+        - stats
+      tags:
+        - apache

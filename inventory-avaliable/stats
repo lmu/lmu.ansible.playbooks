@@ -1,0 +1,6 @@
+# Inventory for the statistic website (https://efv-datascience.ifi.lmu.de/)
+
+lmustats  dtap=production comment="Production instance of the statistic website, requires lmustats to be configured in the .ssh/config file"
+
+[stats]
+lmustats
