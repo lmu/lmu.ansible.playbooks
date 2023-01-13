@@ -100,3 +100,11 @@
         - stats
       tags:
         - apache
+
+    - name: Enable HTTP and HTTPS Ports
+      community.general.ufw:
+        rule: allow
+        name: "WWW Full"
+        comment: HTTP and HTTPS
+      tags:
+        - apache
