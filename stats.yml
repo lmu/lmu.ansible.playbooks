@@ -108,3 +108,62 @@
         comment: HTTP and HTTPS
       tags:
         - apache
+
+    # SSH Settings
+    - name: Enable SSH Zugriff aus den LMU VPN-Netzen
+      community.general.ufw:
+        rule: allow
+        from_ip: "{{ item }}"
+        port: 22
+        proto: tcp
+        direction: in
+        comment: SSH aus LMU VPN-Netze zulassen
+      loop:
+        - 10.153.154.0/24
+        - 10.153.155.0/24
+        - 10.153.38.0/24
+        - 10.153.39.0/24
+        - 10.163.152.0/22
+        - 10.163.156.0/22
+        - 10.163.160.0/22
+        - 10.163.164.0/22
+        - 141.84.12.0/24
+        - 141.84.13.0/24
+        - 141.84.14.0/24
+        - 141.84.15.0/24
+        - 141.84.16.0/24
+        - 141.84.17.0/24
+        - 141.84.18.0/24
+        - 141.84.19.0/24
+        - 141.84.22.0/24
+        - 141.84.23.0/24
+        - 141.84.28.0/24
+        - 141.84.29.0/24
+        - 141.84.30.0/24
+        - 141.84.31.0/24
+        - 141.84.32.0/24
+        - 141.84.33.0/24
+        - 141.84.34.0/24
+        - 2001:4ca0:4fff:9:0:1::/96
+        - 2001:4ca0:4fff:9:0:2::/96
+        - 2001:4ca0:4fff::/48
+      tags:
+        - ssh
+
+    - name: Enable SSH Zugriff aus dem LMU Verwaltungsnetz
+      community.general.ufw:
+        rule: allow
+        from_ip: 141.84.44.220
+        name: SSH
+        comment: SSH aus LMU Verwaltungsnetz (Firewall-Endpoint) zulassen
+      tags:
+        - ssh
+
+    - name: Enable SSH für Zugriff aus der LRZ Compute Cloud
+      community.general.ufw:
+        rule: allow
+        from_ip: 10.195.6.210
+        name: SSH
+        comment: SSH von LRZ CC Ansible-Controller zulassen
+      tags:
+        - ssh
