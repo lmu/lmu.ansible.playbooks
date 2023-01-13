@@ -1,6 +1,6 @@
 ---
 
-- hosts: genetik
+- hosts: genetic
   become: true
 
   roles:
@@ -47,34 +47,35 @@
       tags:
         - virtualenv
 
-- hosts: genetik
-  become: true
+# I comment this role because it requires some buildout consolidation
+# - hosts: genetic
+#   become: true
+#
+#   handlers:
+#     - include: roles/supervisor/handlers/main.yml
+#
+#   roles:
+#   -  { role: zc.buildout,
+#        buildout: {
+#           program_path: /opt/,
+#           data_path: /srv/,
+#           directory: genetic,
+#           src: {
+#               type: git,
+#               src: "https://github.com/starzel/buildout.git",
+#               rev: master,
+#           },
+#           config: local_production.cfg,
+#           python: python2.7,
+#           buildout_user: plone_buildout,
+#           requires_secrets: true,
+#           secrets: 'templates/secrets.cfg.j2',
+#           login: 'admin',
+#           password: 'admin',
+#           mode: '',
+#         }}
 
-  handlers:
-    - include: roles/supervisor/handlers/main.yml
-
-  roles:
-  -  { role: zc.buildout,
-       buildout: {
-          program_path: /opt/,
-          data_path: /srv/,
-          directory: genetik,
-          src: {
-              type: git,
-              src: "https://github.com/starzel/buildout.git",
-              rev: master,
-          },
-          config: local_production.cfg,
-          python: python2.7,
-          buildout_user: plone_buildout,
-          requires_secrets: true,
-          secrets: 'templates/secrets.cfg.j2',
-          login: 'admin',
-          password: 'admin',
-          mode: '',
-        }}
-
-- hosts: genetik
+- hosts: genetic
   become: true
 
   roles:
