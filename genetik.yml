@@ -4,7 +4,6 @@
   become: true
 
   roles:
-  - base-preseed
   - { role: maintenance,
       maintenance: {
         upgrade_type: "full",
