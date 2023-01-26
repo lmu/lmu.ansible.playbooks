@@ -69,7 +69,7 @@ img-src 'self' 'unsafe-inline' data: blob: mediastream: cms-cdn.uni-muenchen.de 
 media-src 'self' 'unsafe-inline' data: blob: mediastream: cms-static.uni-muenchen.de *.itunes.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de; \
 font-src 'self' 'unsafe-inline' data: blob: cms-cdn.uni-muenchen.de cms-cdn.lmu.de cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de; \
 object-src 'self' data: blob: mediastream: cms-cdn.uni-muenchen.de cms-cdn.lmu.de cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de;\
-child-src 'self' cms-cdn.uni-muenchen.de cms-cdn.lmu.de cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de;\
+child-src 'self' cms-cdn.uni-muenchen.de cms-cdn.lmu.de cms-static.uni-muenchen.de *.verwaltung.uni-muenchen.de www.intranet.verwaltung.uni-muenchen.de www.serviceportal.verwaltung.uni-muenchen.de youtube.com www.youtube.com flash5.lrz.de stream.lrz.de anny.co anny.eu;\
 worker-src 'self' data: blob: mediastream: https://cms-static.uni-muenchen.de https://*.verwaltung.uni-muenchen.de https://www.intranet.verwaltung.uni-muenchen.de https://www.serviceportal.verwaltung.uni-muenchen.de https://youtube.com https://www.youtube.com https://flash5.lrz.de https://stream.lrz.de;\
 "
     RequestHeader append X-Forwarded-For "zuv-serviceportal.{{ ansible_fqdn | lower }}"
