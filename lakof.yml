@@ -62,7 +62,7 @@
 
   post_tasks:
 
-    - name: "Ensure buildout-directory/disbale file exsits and is owned by plone_daemon"
+    - name: "Ensure buildout-directory/disable file exsits and is owned by plone_daemon"
       file:
         path: "/opt/Plone/buildout.lakof/disable"
         state: touch
