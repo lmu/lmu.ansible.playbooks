@@ -101,6 +101,9 @@ worker-src 'self' data: blob: mediastream: https://cms-cdn.uni-muenchen.de https
     <Location />
         Header set X-Backend-For Plone
         RequestHeader set X-Backend-For Plone
+        RequestHeader set Host www.intranet.verwaltung.uni-muenchen.de:8080
+        RequestHeader set X-Forwarded-Host www.intranet.verwaltung.uni-muenchen.de
+        Header edit Location :8080/ /
     </Location>
 
     # Rewrite everything else to Fiona except blacklist_proxy.inlcude
@@ -182,7 +185,11 @@ worker-src 'self' data: blob: mediastream: https://cms-cdn.uni-muenchen.de https
     Header set X-Backend-For Fiona
     RequestHeader set X-Backend-For Fiona
 
-    ProxyPass / http://127.0.0.1:80/
-    ProxyPassReverse / http://127.0.0.1:80/
+    RequestHeader set Host www.intranet.verwaltung.uni-muenchen.de:8080
+    RequestHeader set X-Forwarded-Host www.intranet.verwaltung.uni-muenchen.de
+    Header edit Location :8080/ /
+
+    ProxyPass / http://127.0.0.1:8080/
+    ProxyPassReverse / http://127.0.0.1:8080/
 
 </VirtualHost>

@@ -28,7 +28,6 @@ sub vcl_recv {
     # Backend selection
     if (req.url ~ "^/_include/") {
         set req.backend = fiona;
-        set req.host = "www.intranet.verwaltung.uni-muenchen.de:8080"
     } else if (req.url ~ "\.include") {
         set req.backend = plone;
         set req.http.X-Theme-Disabled = true;
