@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This scripts generates a CMDB-like Overview of all Ansible managed Servers via ansible-cmdb
 
@@ -8,6 +8,7 @@ import shutil
 import subprocess
 
 from os import listdir
+from os import makedirs
 from os.path import isdir
 from os.path import isfile
 
@@ -50,19 +51,22 @@ def check_and_copy_ansible_setup_output(
                         print("check File: " + input_directory + server_file)
                         data = json.load(f)
                         #import pdb; pdb.set_trace()
-                        if isfile(os.path.join(output_directory, server_file)):
-                            print("delte file: " + server_file)
-                            os.remove(
-                                os.path.join(output_directory, server_file),
-                            )
-                        elif 'unreachable' not in data:
-                            print("write file: " + server_file)
-                            shutil.copy2(
+                        # if isfile(os.path.join(output_directory, server_file)):
+                        #    print("delete file: " + server_file)
+                        #    os.remove(
+                        #        os.path.join(output_directory, server_file),
+                        #    )
+                        if 'unreachable' not in data:
+                            print("write file: " + output_directory + server_file)
+                            shutil.copyfile(
                                 os.path.join(
                                     input_directory,
                                     server_file,
                                 ),
-                                output_directory,
+                                os.path.join(
+                                    output_directory,
+                                    server_file,
+                                )
                             )
                         else:
                             print("check failed, file not created: " + server_file + " : " + str(data))
@@ -73,19 +77,22 @@ def execute_ansible_cmdb(
         fact_directory='/opt/lmu.ansible.playbooks/checked-out/',
         output_file='/opt/lmu.ansible.playbooks/cmdb/index.html'):
     """
-    ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/checked-out/ > /opt/lmu.ansible.playbooks/cmdb/index.html
+    /opt/dev-tools/ansible-cmdb/.venv/bin/ansible-cmdb -i /opt/lmu.ansible.playbooks/inventory /opt/lmu.ansible.playbooks/checked-out/ > /opt/lmu.ansible.playbooks/cmdb/index.html
     """
-    command_set = ['ansible-cmdb']
+    command_set = ['/opt/dev-tools/ansible-cmdb/.venv/bin/ansible-cmdb']
     if inventory:
         command_set.extend(['-i', inventory])
     if fact_directory:
         command_set.append(fact_directory)
-    cmdb_data = subprocess.check_output(command_set)
+    try:
+        cmdb_data = subprocess.check_output(command_set)
 
-    if output_file:
-        with open(output_file, 'w') as f:
-            print("write Data to file: " + output_file)
-            f.write(cmdb_data)
+        if output_file:
+            with open(output_file, 'w') as f:
+                print("write Data to file: " + output_file)
+                f.write(cmdb_data)
+    except Exception as e:
+        print(e)
 
 
 def ensure_directories_exsists(
@@ -100,7 +107,11 @@ def ensure_directories_exsists(
 
 
 if __name__ == "__main__":
+    print("Ensure Directories exists")
     ensure_directories_exsists()
+    print("Collect facts")
     execute_ansible_setup()
+    print("Copy Files")
     check_and_copy_ansible_setup_output()
+    print("generate CMDB Overview")
     execute_ansible_cmdb()
